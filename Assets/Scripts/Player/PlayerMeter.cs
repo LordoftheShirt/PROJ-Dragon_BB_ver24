@@ -1,0 +1,49 @@
+using UnityEngine;
+
+public class PlayerMeter : MonoBehaviour
+{
+    public bool PauseRealtimeDecay = false;
+    private float maxWarmth = 100f;
+    private float maxHealth = 100f;
+    private float currentWarmth;
+    private float currentHealth;
+
+    [Header("Health loss per second - MAX HP: 100")]
+    [SerializeField] private float HealthDecayRate = 2f;
+
+    [Header("Warmth loss per second - MAX W: 100")]
+    [SerializeField] private float WarmthDecayRate = 1f;
+
+    void Start()
+    {
+        currentWarmth = maxWarmth;
+        currentHealth = maxHealth;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!PauseRealtimeDecay)
+        {
+            Decay();
+        }
+    }
+
+    void Decay()
+    {
+        // when DecayRate is 1, it takes 100 seconds to go from 100 to 0. when DecayRate is 2, it takes 50 seconds. when DecayRate is 0.5, it takes 200 seconds.
+        currentWarmth -= WarmthDecayRate * Time.deltaTime;
+
+        // Frost damage
+        if (currentWarmth <= 0)
+        {
+            currentWarmth = 0;
+            currentHealth -= HealthDecayRate * Time.deltaTime;
+        }
+    }
+
+    public float GetMaxWarmth() { return maxWarmth; }
+    public float GetMaxHealth() { return maxHealth; }
+    public float GetCurrentWarmth() { return currentWarmth; }
+    public float GetCurrentHealth() { return currentHealth; }
+}
