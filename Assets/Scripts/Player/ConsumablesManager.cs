@@ -54,7 +54,7 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
         if (currentFlags < maxFlags)
         {
             currentFlags++;
-            OnFlagsChanged.Invoke(currentFlags);
+            OnFlagsChanged?.Invoke(currentFlags);
         }
     }
 
@@ -63,7 +63,7 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
         if (currentTents < maxTents)
         {
             currentTents++;
-            OnTentsChanged.Invoke(currentTents);
+            OnTentsChanged?.Invoke(currentTents);
         }
     }
 
@@ -72,7 +72,7 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
         if (currentFirekits < maxFirekits)
         {
             currentFirekits++;
-            OnFirekitsChanged.Invoke(currentFirekits);
+            OnFirekitsChanged?.Invoke(currentFirekits);
         }
     }
 
@@ -81,7 +81,7 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
         if (currentFlags > 0)
         {
             currentFlags--;
-            OnFlagsChanged.Invoke(currentFlags);
+            OnFlagsChanged?.Invoke(currentFlags);
         }
     }
 
@@ -90,7 +90,7 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
         if (currentTents > 0)
         {
             currentTents--;
-            OnTentsChanged.Invoke(currentTents);
+            OnTentsChanged?.Invoke(currentTents);
         }
     }
 
@@ -99,7 +99,7 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
         if (currentFirekits > 0)
         {
             currentFirekits--;
-            OnFirekitsChanged.Invoke(currentFirekits);
+            OnFirekitsChanged?.Invoke(currentFirekits);
         }
     }
 }

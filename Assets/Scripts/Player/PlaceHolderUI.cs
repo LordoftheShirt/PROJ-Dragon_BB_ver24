@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(10)]
 public class PlaceHolderUI : MonoBehaviour
 {
     // Points slider

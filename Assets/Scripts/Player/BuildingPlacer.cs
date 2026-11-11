@@ -133,7 +133,7 @@ public class BuildingPlacer : MonoBehaviour
         {
             if (currentGhost != null)
                 Destroy(currentGhost);
-            OnGhostPresent.Invoke(false);
+            OnGhostPresent?.Invoke(false);
             return;
         }
 
@@ -141,7 +141,7 @@ public class BuildingPlacer : MonoBehaviour
         {
             if (currentGhost != null)
                 Destroy(currentGhost);
-            OnGhostPresent.Invoke(false);
+            OnGhostPresent?.Invoke(false);
             return;
         }
 
@@ -149,21 +149,21 @@ public class BuildingPlacer : MonoBehaviour
         {
             // no ghost
             currentGhost = PlaceBuild(ghost, 1);
-            OnGhostPresent.Invoke(true);
+            OnGhostPresent?.Invoke(true);
         }
         else if (!currentGhost.CompareTag(ghost.tag))
         {
             // Debug.Log("the two ghosts are different.");
             Destroy(currentGhost);
             currentGhost = PlaceBuild(ghost, 1);
-            OnGhostPresent.Invoke(true);
+            OnGhostPresent?.Invoke(true);
         }
         else if (currentGhost.CompareTag(ghost.tag))
         {
             //Debug.Log("the two ghosts are the same.");
             Destroy(currentGhost);
             currentGhost = null;
-            OnGhostPresent.Invoke(false);
+            OnGhostPresent?.Invoke(false);
         }
     }
 

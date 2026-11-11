@@ -4447,6 +4447,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Firewood
       objectReference: {fileID: 0}
+    - target: {fileID: 8689415650351826161, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
