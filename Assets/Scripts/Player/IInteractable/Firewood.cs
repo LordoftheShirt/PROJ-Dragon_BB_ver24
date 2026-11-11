@@ -8,12 +8,12 @@ public class Firewood : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        //RefrenceManager.Instance.mapManager.AddMapObject(gameObject);
+        ReferenceManager.Instance.mapManager.AddMapObject(gameObject);
     }
 
     private void OnDestroy()
     {
-        //RefrenceManager.Instance.mapManager.RemoveMapObject(gameObject);
+        ReferenceManager.Instance.mapManager.RemoveMapObject(gameObject);
     }
 
     public ResourceTypes CollectResource(int amount)
