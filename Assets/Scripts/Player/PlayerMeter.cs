@@ -29,6 +29,14 @@ public class PlayerMeter : MonoBehaviour
         }
     }
 
+    public void IncreaseWarmth(float amount)
+    {
+        Debug.Log("Increasing warmth by: " + amount);
+        currentWarmth += amount;
+        if (currentWarmth > maxWarmth)
+            currentWarmth = maxWarmth;
+    }
+
     void Decay()
     {
         // when DecayRate is 1, it takes 100 seconds to go from 100 to 0. when DecayRate is 2, it takes 50 seconds. when DecayRate is 0.5, it takes 200 seconds.
