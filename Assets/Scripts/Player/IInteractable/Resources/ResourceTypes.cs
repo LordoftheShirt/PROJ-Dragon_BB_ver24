@@ -15,13 +15,13 @@ public class ResourceTypes : MonoBehaviour
         return resourceName;
     }
 
-    //public void AddResourceAmmount(int increaseAmount)
-    //{
-    //    resourceAmount += increaseAmount;
-    //}
+    //    public void AddResourceAmmount(int increaseAmount)
+    //    {
+    //        resourceAmount += increaseAmount;
+    //    }
 
-    //public int GetResourceAmount()
-    //{
-    //    return resourceAmount;
-    //}
+    //    public int GetResourceAmount()
+    //    {
+    //        return resourceAmount;
+    //    }
 }
