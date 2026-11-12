@@ -1,37 +1,17 @@
 using Mono.Cecil;
 using UnityEngine;
 
-public class Firewood : MonoBehaviour, IInteractable
+public class Firewood : ResourceNode
 {
-    [SerializeField] private int resourceAmount = 100;
-    [SerializeField] private ResourceTypes resourceType;
-
-    private void Start()
+    override public void Interact()//kan ta bort om inte ska göra något speciellt med firewood
     {
-        ReferenceManager.Instance.mapManager.AddMapObject(gameObject);
-    }
-
-    private void OnDestroy()
-    {
-        ReferenceManager.Instance.mapManager.RemoveMapObject(gameObject);
-    }
-
-    public ResourceTypes CollectResource(int amount)
-    {
-        int collectedAmount = Mathf.Min(amount, resourceAmount);
-        resourceAmount -= collectedAmount;
-        //resourceType.AddResourceAmmount(collectedAmount); // flytta till spelaren
-        return resourceType;
-    }
-
-    public void Interact()
-    {
+        base.Interact();
         // Implementation for interacting with firewood
         Debug.Log("Interacted with firewood!");
-        CollectResource(1);
+        //CollectResource(1); //görs i resourceNode
     }
 
-    public string GetDescription()
+    override public string GetDescription()//kan ta bort om inte ska göra något speciellt med firewood
     {
         return "Collect Wood";
     }

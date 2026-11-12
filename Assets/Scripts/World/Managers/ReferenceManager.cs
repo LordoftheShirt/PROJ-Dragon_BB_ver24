@@ -3,6 +3,7 @@ using UnityEngine;
 public class ReferenceManager : MonoBehaviour
 {
     public MiniMapManager mapManager;
+    public GameObject cabbin;
 
     public static ReferenceManager Instance { get; private set; }
 

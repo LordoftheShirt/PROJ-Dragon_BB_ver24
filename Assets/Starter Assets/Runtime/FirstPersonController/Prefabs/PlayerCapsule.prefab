@@ -243,7 +243,7 @@ MonoBehaviour:
       Data2: 1185171251
       Data3: 1199870636
       Data4: -1711284229
-    Path: event:/Player/Footstep
+    Path: event:/SFX/Player/Footstep
   footstepWalkFrequency: 2.5
   footstepRunFrequency: 3.5
 --- !u!114 &1978471637655604388

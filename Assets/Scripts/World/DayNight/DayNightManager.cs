@@ -24,11 +24,6 @@ public class DayNightManager : MonoBehaviour
     private bool isNight = false;
     private float dayTimer;
 
-
-    //spawna resurser:
-    //Vector3 pos = Random.insideUnitCircle;  //+deadzone runt huset och *radien 
-
-
     private void Awake()
     {
         //can be moved to a more general script when it is created
