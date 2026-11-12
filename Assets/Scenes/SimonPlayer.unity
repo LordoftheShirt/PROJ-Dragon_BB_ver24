@@ -363,7 +363,7 @@ RectTransform:
   - {fileID: 1193119152}
   - {fileID: 2089952739}
   - {fileID: 1516725656}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 314629257}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -872,7 +872,7 @@ GameObject:
   m_Component:
   - component: {fileID: 314629257}
   m_Layer: 0
-  m_Name: Player Parts Container
+  m_Name: Player Parts Container (Player should be fully functional copying this)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -894,6 +894,7 @@ Transform:
   - {fileID: 697104930}
   - {fileID: 7288094137546172445}
   - {fileID: 5393215579111688482}
+  - {fileID: 3902625}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &436034291
@@ -2192,56 +2193,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1105546888}
   m_CullTransparentMesh: 1
---- !u!1 &1177420477
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1177420479}
-  - component: {fileID: 1177420478}
-  m_Layer: 0
-  m_Name: ConsumablesManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1177420478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177420477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8deeb9a6b30e5f9409c052bf60411bea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConsumablesManager
-  maxFlags: 5
-  currentFlags: 3
-  maxTents: 3
-  currentTents: 2
-  maxFirekits: 3
-  currentFirekits: 2
---- !u!4 &1177420479
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177420477}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.56693, y: -0, z: 6.2081}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1193119151
 GameObject:
   m_ObjectHideFlags: 0
@@ -4599,7 +4550,7 @@ MonoBehaviour:
   tentGhostPrefab: {fileID: 8845116247779368566, guid: bcb204d9bd8310f47be558f330ea6167, type: 3}
   tentPrefab: {fileID: 8845116247779368566, guid: b5a1f753ab063dc448ee4b0edc835170, type: 3}
   placeTentAction: {fileID: -6097414622629388973, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  holdToPlaceSec: 0
+  holdToPlaceSec: 2
   confirmBuildAction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cancelBuildAction: {fileID: 7099111219990646168, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!4 &7288094137546172445 stripped
@@ -4618,7 +4569,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 6318498900153189657}
   - {fileID: 314629257}
-  - {fileID: 3902625}
   - {fileID: 1968147319}
   - {fileID: 300126597}
-  - {fileID: 1177420479}

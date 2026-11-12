@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class BuildingPlacer : MonoBehaviour
 {
     [SerializeField] private float buildRange = 8f;
+    [SerializeField] private float maxSurfaceAngle = 45f; // Maximum angle from the up vector that is considered a valid surface for placement.
 
     [Header("Flag")]
     [SerializeField] private GameObject flagPrefab;
@@ -25,11 +26,12 @@ public class BuildingPlacer : MonoBehaviour
 
     [Header("Preview Build")]
 
-    [SerializeField] private float holdToPlaceSec;
+    [SerializeField] private float holdToPlaceSec = 2f;
     [SerializeField] private InputActionReference confirmBuildAction;
     [SerializeField] private InputActionReference cancelBuildAction;
 
-    private float holdTimer;
+    private bool isHoldingBuild = false;
+    private float holdTimer = 0f;
     private GameObject currentGhost;
     private Transform builderSource;
 
@@ -43,18 +45,65 @@ public class BuildingPlacer : MonoBehaviour
 
     void Update()
     {
-        if (currentGhost != null)
+        Debug.DrawRay(builderSource.position, builderSource.forward * buildRange, Color.red);
+
+        // Keeps track of the current ghost's location. Locks the location if the player begins confirming the build.
+        if (currentGhost != null && !isHoldingBuild)
         {
+
             Ray placementRange = new Ray(builderSource.position, builderSource.forward);
 
+
+            // CURRENT BUG 1: must prevent the ghost mesh from clipping into walls.
+            // CURRENT BUG 2: must prevent object stacking (need a way to tell "whatIsGround"); this is a problem for the placeBuild() function as well.
             if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
             {
-                currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
-                currentGhost.transform.position = hitinfo.point;
+                float surfaceAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
+
+                if (surfaceAngle < maxSurfaceAngle)
+                {
+                    currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
+                    currentGhost.transform.position = hitinfo.point;
+                }
+                else
+                {
+                    // CURRENT BUG 3: ghost spawns can be placed on surfaces that are too steep (during the moment wherein the ghost spawns). Must build an indicator here that shows the player they can't place the ghost on this surface: change the material to red.
+                }
             }
         }
 
-        Debug.DrawRay(builderSource.position, builderSource.forward * buildRange, Color.red);
+
+        // When preview build is active and the player is holding the confirm build button, this counts until holdToPlaceSec is reached, at which point the build is placed.
+        if (isHoldingBuild)
+        {
+            holdTimer += Time.deltaTime;
+
+            if(currentGhost == null)
+            {
+                isHoldingBuild = false;
+                holdTimer = 0f;
+                return;
+            }
+
+            if (holdTimer >= holdToPlaceSec)
+            {
+                if (currentGhost.CompareTag(fireKitGhostPrefab.tag))
+                {
+                    if (PlaceBuild(fireKitPrefab, ConsumablesManager.Instance.GetCurrentFirekits(), true) != null)
+                        ConsumablesManager.Instance.UseFirekit();
+                }
+                else if (currentGhost.CompareTag(tentGhostPrefab.tag))
+                {
+                    if (PlaceBuild(tentPrefab, ConsumablesManager.Instance.GetCurrentTents(), true) != null)
+                        ConsumablesManager.Instance.UseTent();
+                }
+                Destroy(currentGhost);
+                currentGhost = null;
+
+                isHoldingBuild = false; // Reset holding state
+                holdTimer = 0f; // Reset timer
+            }
+        }
     }
 
     // Place the flag instantly.
@@ -73,39 +122,50 @@ public class BuildingPlacer : MonoBehaviour
     }
 
 
-    // works, but want to implement a "hold to place" mechanic. Alternatively, double click.
+
+    // when a previeww build is selected,the player must hold down the confirm build button for a set amount of time to place it. If the player releases the button before the time is up, the build is not placed.
     private void OnConfirmBuild(InputAction.CallbackContext context)
     {
-
-        // TODO: FIGURE OUT HOW I LISTEN TO A HOLD OVER TIME.
-        Debug.Log("Confirmed build.");
-
-
         if (currentGhost != null)
         {
-            if (currentGhost.CompareTag(fireKitGhostPrefab.tag))
+            Debug.Log("Confirm build action triggered.");
+            if (context.started)
             {
-                if (PlaceBuild(fireKitPrefab, ConsumablesManager.Instance.GetCurrentFirekits()) != null)
-                    ConsumablesManager.Instance.UseFirekit();
+                Debug.Log("Confirm build action started.");
+                isHoldingBuild = true;
+                holdTimer = 0f;
             }
-            else if (currentGhost.CompareTag(tentGhostPrefab.tag))
+            else if (context.canceled)
             {
-                if (PlaceBuild(tentPrefab, ConsumablesManager.Instance.GetCurrentTents()) != null)
-                    ConsumablesManager.Instance.UseTent();
+                Debug.Log("Confirm build action canceled.");
+                isHoldingBuild = false;
+                holdTimer = 0f; // Reset timer if released early
             }
-            Destroy(currentGhost);
-            currentGhost = null;
         }
     }
+
+
 
     private void OnCancelBuild(InputAction.CallbackContext context)
     {
         UpdateCurrentGhost(null);
     }
 
-    // implement a surface degree limit parameter to avoid placing on walls and ceilings. Implement a "Ground" tag of sorts to identify only ground.
-    private GameObject PlaceBuild(GameObject build, int currentQuantity)
+    // returns the placed build object if successful.
+    private GameObject PlaceBuild(GameObject build, int currentQuantity, bool useGhostLocation = false)
     {
+        if (useGhostLocation)
+        {
+            if (currentGhost == null)
+            {
+                Debug.Log("No ghost to derive location from?");
+                return null;
+            }
+
+            return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation);
+        }
+
+
         Ray placementRange = new Ray(builderSource.position, builderSource.forward);
         if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
         {
@@ -129,6 +189,8 @@ public class BuildingPlacer : MonoBehaviour
     // Do no let the ghost object appear if the player has no more of that item to place.
     private void UpdateCurrentGhost(GameObject ghost, int currentQuantity = 1)
     {
+        holdTimer = 0f; // Reset the hold timer whenever the ghost is updated
+
         if (currentQuantity <= 0)
         {
             if (currentGhost != null)
@@ -180,7 +242,8 @@ public class BuildingPlacer : MonoBehaviour
         placeTentAction.action.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
 
         confirmBuildAction.action.Enable();
-        confirmBuildAction.action.performed += OnConfirmBuild;
+        confirmBuildAction.action.started += OnConfirmBuild;
+        confirmBuildAction.action.canceled += OnConfirmBuild;
 
         cancelBuildAction.action.Enable();
         cancelBuildAction.action.performed += OnCancelBuild;
@@ -198,7 +261,8 @@ public class BuildingPlacer : MonoBehaviour
         placeTentAction.action.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
 
         confirmBuildAction.action.Disable();
-        confirmBuildAction.action.performed -= OnConfirmBuild;
+        confirmBuildAction.action.started += OnConfirmBuild;
+        confirmBuildAction.action.canceled += OnConfirmBuild;
 
         cancelBuildAction.action.Disable();
         cancelBuildAction.action.performed -= OnCancelBuild;
