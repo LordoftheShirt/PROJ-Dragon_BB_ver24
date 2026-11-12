@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b35fc3ff278d7489edae51bb71f79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlagMarker
+  FlagRecollected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &2390568059586701269
 BoxCollider:
   m_ObjectHideFlags: 0
