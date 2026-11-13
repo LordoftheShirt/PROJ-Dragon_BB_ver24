@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Holds the players Resources, Items and unlocked Blueprints
+/// </summary>
 [LoadOnInit]
 public class Inventory : SingletonPersistent<Inventory>
 {
@@ -15,7 +18,7 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         if (count <= 0)
         {
-            Debug.LogWarning($"Attempted to add {count} of {resourceType.GetDisplayString()} to inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to add {count} of \"{resourceType.GetDisplayString()}\" to inventory. Count must be greater than 0.");
             return;
         }
 
@@ -33,13 +36,15 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         if (count <= 0)
         {
-            Debug.LogWarning($"Attempted to remove {count} of {resourceType.GetDisplayString()} from inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to remove {count} of \"{resourceType.GetDisplayString()}\" from inventory. Count must be greater than 0.");
             return;
         }
 
         if (_resources.ContainsKey(resourceType))
         {
             _resources[resourceType] -= count;
+
+            // Cannot fall below 0
             if (_resources[resourceType] <= 0)
             {
                 _resources[resourceType] = 0;
@@ -51,6 +56,11 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         return _resources[resourceType];
     }
+
+    public void SetResourceCount(ResourceType resourceType, int count)
+    {
+        _resources[resourceType] = Mathf.Max(count, 0);
+    }
     #endregion
 
     #region Item
@@ -61,7 +71,7 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         if (count <= 0)
         {
-            Debug.LogWarning($"Attempted to add {count} of {item.Name} to inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to add {count} of \"{item.Name}\" to inventory. Count must be greater than 0.");
             return false;
         }
 
@@ -96,7 +106,7 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         if (count <= 0)
         {
-            Debug.LogWarning($"Attempted to remove {count} of {item.Name} from inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to remove {count} of \"{item.Name}\" from inventory. Count must be greater than 0.");
             return false;
         }
 
@@ -135,6 +145,18 @@ public class Inventory : SingletonPersistent<Inventory>
         _items.Clear();
     }
 
+    public void SetItem(Item item, int count)
+    {
+        if (count <= 0)
+        {
+            _items.Remove(item);
+        }
+        else
+        {
+            _items[item] = item.UnlimitedStackSize ? count : Mathf.Min(count, item.MaxStackSize);
+        }
+    }
+
     /// <summary>
     /// Will return true as long as the player has at least 1 of the item.
     /// </summary>
@@ -157,23 +179,23 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         if (HasBlueprint(blueprint))
         {
-            Debug.Log($"Blueprint {blueprint.name} is already unlocked.");
+            Debug.Log($"Blueprint \"{blueprint.name}\" is already unlocked.");
             return;
         }
 
         blueprintsUnlocked.Add(blueprint);
-        Debug.Log($"Blueprint {blueprint.name} unlocked!");
+        Debug.Log($"Blueprint \"{blueprint.name}\" unlocked!");
     }
 
     public void LockBlueprint(Blueprint blueprint)
     {
         if (!HasBlueprint(blueprint))
         {
-            Debug.Log($"Blueprint {blueprint.name} is not unlocked.");
+            Debug.Log($"Blueprint \"{blueprint.name}\" is not unlocked.");
             return;
         }
         blueprintsUnlocked.Remove(blueprint);
-        Debug.Log($"Blueprint {blueprint.name} locked!");
+        Debug.Log($"Blueprint \"{blueprint.name}\" locked!");
     }
 
     public bool HasBlueprint(Blueprint blueprint)

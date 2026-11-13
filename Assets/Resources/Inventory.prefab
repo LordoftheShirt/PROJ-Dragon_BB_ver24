@@ -44,3 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0911a811beb05824da143d486522a899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
+  startingResources: []
+  startingItems: []
+  blueprintsUnlocked: []
