@@ -49,8 +49,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReferenceManager
   mapManager: {fileID: 3058454260273352574}
   dayNightManager: {fileID: 8243468339349818222}
+  playerResourceManager: {fileID: 0}
   playerMeter: {fileID: 0}
   cabbin: {fileID: 0}
+  resourceClusterPrefab: {fileID: 1282608504125897185, guid: 40b62df958b81d444a0468e31be2b6a8, type: 3}
+  resourceNodePrefab:
+  - {fileID: 5449498893061459164, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
+  - {fileID: 6208488965665334647, guid: 928bff5abf0eabe42bb28182a6b57ba0, type: 3}
+  resourceType: 0000000001000000
 --- !u!114 &8243468339349818222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,9 +92,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniMapManager
   cabbin: {fileID: 0}
   playerMap: {fileID: 0}
-  cabbinTokenPrefab: {fileID: 4710849148435152641, guid: bc90ddd18b58ec848820a66cdb20ecc4, type: 3}
-  mapObjectTokenPrefab: {fileID: 6477002045762660304, guid: cb90e6f8087791f488e0b38c0d4e1857, type: 3}
-  scale: 10
+  cabbinTokenPrefab: {fileID: 7052464961573610756, guid: a0a763a335f38af49a813ebc22a0f1c1, type: 3}
+  mapObjectTokenPrefab: {fileID: 7052464961573610756, guid: b7e476913d5302f45b7f3ec7f4cd0ca6, type: 3}
+  scale: 2
+  size: 100
 --- !u!114 &5046293295825093072
 MonoBehaviour:
   m_ObjectHideFlags: 0

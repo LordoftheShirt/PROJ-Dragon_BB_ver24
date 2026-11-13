@@ -567,14 +567,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: size
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: scale
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: cabbin
       value: 
       objectReference: {fileID: 1616118373}
@@ -582,14 +574,6 @@ PrefabInstance:
       propertyPath: playerMap
       value: 
       objectReference: {fileID: 1660270688}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: cabbinTokenPrefab
-      value: 
-      objectReference: {fileID: 7052464961573610756, guid: a0a763a335f38af49a813ebc22a0f1c1, type: 3}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: mapObjectTokenPrefab
-      value: 
-      objectReference: {fileID: 7052464961573610756, guid: b7e476913d5302f45b7f3ec7f4cd0ca6, type: 3}
     - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: cabbin
       value: 
@@ -598,37 +582,9 @@ PrefabInstance:
       propertyPath: playerMeter
       value: 
       objectReference: {fileID: 1660270689}
-    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: resourceClusterPrefab
-      value: 
-      objectReference: {fileID: 1282608504125897185, guid: 40b62df958b81d444a0468e31be2b6a8, type: 3}
-    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: resourceType.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'resourceType.Array.data[1]'
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: resourceNodePrefab.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'resourceNodePrefab.Array.data[0]'
-      value: 
-      objectReference: {fileID: 5449498893061459164, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
-    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'resourceNodePrefab.Array.data[1]'
-      value: 
-      objectReference: {fileID: 6208488965665334647, guid: 928bff5abf0eabe42bb28182a6b57ba0, type: 3}
     - target: {fileID: 7659324314623727060, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: m_Name
       value: Managers
-      objectReference: {fileID: 0}
-    - target: {fileID: 8243468339349818222, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: dayDuration
-      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8243468339349818222, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: directionalLight
