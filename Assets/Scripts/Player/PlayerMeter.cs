@@ -11,8 +11,8 @@ public class PlayerMeter : MonoBehaviour
     [Header("Health loss per second - MAX HP: 100")]
     [SerializeField] private float HealthDecayRate = 2f;
 
-    [Header("Warmth loss per second - MAX W: 100")]
-    [SerializeField] private float DefultWarmthDecayRate = 1f;
+    //[Header("Warmth loss per second - MAX W: 100")]
+    //[SerializeField] private float DefultWarmthDecayRate = 1f;
 
     private float warmthDecayRate;
 

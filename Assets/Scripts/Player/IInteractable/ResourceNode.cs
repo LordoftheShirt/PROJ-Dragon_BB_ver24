@@ -33,9 +33,9 @@ public class ResourceNode : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        // Implementation for interacting with firewood
         Debug.Log("Interacted with resource!");
-        CollectResource(1);
+        //kan ändra ettan till en stat på spelaren
+        ReferenceManager.Instance.playerResourceManager.AddResource(CollectResource(1), resourceType);
         if (resourceAmount <= 0) { Destroy(gameObject); }       
     }
 

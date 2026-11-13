@@ -21,8 +21,8 @@ public class ResourceClusterSpawner : MonoBehaviour
     {
         for (int i = 0; i < numberOfClusters; i++)
         {
-            currentResourceType = Random.Range(0, rnum.Length);
-            SpawnAResourceCluster(centerPosition, rnum[currentResourceType]);
+            currentResourceType = Random.Range(0, resourceType.Length);
+            SpawnAResourceCluster(centerPosition, resourceType[currentResourceType]);
         }
     }
 
@@ -40,6 +40,21 @@ public class ResourceClusterSpawner : MonoBehaviour
         resourceCluster.transform.SetParent(transform);
 
         resourceCluster.SpawnResources(resourceNodePrefab[currentResourceType], resourceType);
+    }
+
+    public void SetResourceClusterPrefab(ResourceCluster prefab)
+    {
+        resourceClusterPrefab = prefab;
+    }
+
+    public void SetResourceNodes(ResourceNode[] prefabs)
+    {
+        resourceNodePrefab = new ResourceNode[prefabs.Length];
+    }
+
+    public void SetResourceTypes(ResourceType[] types)
+    {
+        resourceType = types;
     }
 
     public void DestroyCildren()
