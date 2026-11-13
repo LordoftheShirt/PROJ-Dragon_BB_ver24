@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class CraftingUI : MonoBehaviour
+public class CraftingUI : Singleton<CraftingUI>
 {
     public bool IsOpen
     {
@@ -81,8 +80,7 @@ public class CraftingUI : MonoBehaviour
 
     public void ChangeCategory(BlueprintCategory category)
     {
-        // Logic to change the crafting category based on the category
-        Debug.Log($"Changing to category: {category.GetDisplayString()}");
+        //Debug.Log($"Changing to category: {category.GetDisplayString()}");
 
         _currentCategory = category;
         int index = category.GetIndex();
@@ -101,11 +99,6 @@ public class CraftingUI : MonoBehaviour
                 blueprint.gameObject.SetActive(enable);
             }
         }
-    }
-
-    public void CraftBlueprint(Blueprint currentBlueprint)
-    {
-
     }
 
     public void Open()
@@ -155,5 +148,7 @@ public class CraftingUI : MonoBehaviour
     public void Close()
     {
         mainPanel.SetActive(false);
+
+        InputMapManager.Instance.EnablePlayerMap();
     }
 }

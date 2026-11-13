@@ -39,11 +39,14 @@ public class Blueprint : ScriptableObject
         }
 
         // Fufill every item requirement
-        foreach (var item in itemRequirements)
+        if (ItemRequirements != null)
         {
-            if (!inv.HasItem(item))
+            foreach (var item in itemRequirements)
             {
-                return false;
+                if (!inv.HasItem(item))
+                {
+                    return false;
+                }
             }
         }
 

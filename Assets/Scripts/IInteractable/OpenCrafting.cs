@@ -9,6 +9,7 @@ public class OpenCrafting : MonoBehaviour, IInteractable
         InputMapManager.Instance.DisablePlayerMap();
 
         // Open crafting Menu here.
+        CraftingUI.Instance.Open();
     }
 
     public string GetDescription()
