@@ -39,6 +39,11 @@ public class TerrainGenerator : MonoBehaviour
     int centerPoint;
     int houseSize = 6; //måste vara ett jämnt nummer?
 
+    [SerializeField]
+    GameObject house;
+    [SerializeField]
+    GameObject resourceSpawner;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -69,6 +74,8 @@ public class TerrainGenerator : MonoBehaviour
         CreateTriangles();
         CreateColors();
         UpdateMesh();
+
+        PlaceResourceSpawners();
     }
 
 
@@ -189,6 +196,8 @@ public class TerrainGenerator : MonoBehaviour
         //skapa biomes 
         CreateBiomes();
 
+
+
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
@@ -213,7 +222,7 @@ public class TerrainGenerator : MonoBehaviour
 
                 //för mer komplex noise lägger på stuff
                 perlin += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
-                //perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
+                perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
 
 
 
@@ -263,6 +272,10 @@ public class TerrainGenerator : MonoBehaviour
                 i++;
             }
         }
+
+        //place house on correct height
+        float height = house.transform.lossyScale.y/2 + Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
+        house.transform.position = new Vector3 (0, height, 0);
 
     }
 
@@ -495,6 +508,25 @@ public class TerrainGenerator : MonoBehaviour
 
 
     }
+
+
+    private void PlaceResourceSpawners()
+    {
+        if(resourceSpawner == null)
+        {
+            Debug.LogWarning("resourceSpawner gameobject saknas på terrängen!!");
+            return;
+        }
+
+        foreach(Vector2Int pos in pointPositions)
+        {
+            Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
+            int i = (xSize * pos.y) + pos.x;
+            Instantiate(resourceSpawner, vertices[i] + offset, transform.rotation);
+        }
+
+    }
+
 
     private void PlaceResources(GameObject[] resources)
     {

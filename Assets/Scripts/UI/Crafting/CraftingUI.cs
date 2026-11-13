@@ -4,22 +4,29 @@ using UnityEngine.InputSystem;
 
 public class CraftingUI : MonoBehaviour
 {
-    [SerializeField] private List<string> categories = new();
     [SerializeField] private CraftingTab tabTemplate;
+    private GameObject[] _tab;
 
-    private Recipe[] _recipes;
+    private Blueprint[] _blueprints;
 
     private void Start()
     {
-        _recipes = AssetStorage.GetAssetsOfType<Recipe>();
+        _blueprints = AssetStorage.GetAssetsOfType<Blueprint>();
 
-        // Add each missing recipe category
-        foreach (Recipe recipe in _recipes)
+        // Create categories
+        foreach (BlueprintCategory category in System.Enum.GetValues(typeof(BlueprintCategory)))
         {
-            if (!categories.Contains(recipe.Category))
-            {
-                categories.Add(recipe.Category);
-            }
+            CraftingTab newTab = Instantiate(tabTemplate, tabTemplate.transform.parent);
+            newTab.Category = category;
         }
+
+        // Hide template
+        tabTemplate.gameObject.SetActive(false);
+    }
+
+    public void ChangeTab(BlueprintCategory category)
+    {
+        // Logic to change the crafting tab based on the category
+        Debug.Log($"Changing to tab: {category.GetDisplayString()}");
     }
 }

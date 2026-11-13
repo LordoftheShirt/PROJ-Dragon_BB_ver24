@@ -3,15 +3,15 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[CreateAssetMenu(fileName = "New Recipe", menuName = "Custom/Recipe")]
-public class Recipe : ScriptableObject
+[CreateAssetMenu(fileName = "New Blueprint", menuName = "Custom/Blueprint")]
+public class Blueprint : ScriptableObject
 {
     public Item Result => result;
-    public string Category => category;
+    public BlueprintCategory Category => category;
     public Ingredient[] Ingredients => ingredients;
 
     [SerializeField] private Item result;
-    [SerializeField] private string category;
+    [SerializeField] private BlueprintCategory category;
     [SerializeField] private Ingredient[] ingredients;
 
     [System.Serializable]

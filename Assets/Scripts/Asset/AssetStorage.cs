@@ -10,7 +10,7 @@ public class AssetStorage : SingletonPersistent<AssetStorage>
     public static readonly Type[] AssetTypes = new Type[]
     {
         typeof(Item),
-        typeof(Recipe)
+        typeof(Blueprint)
     };
 
     public static Dictionary<Type, Object[]> AssetDictionary { get; private set; } = new Dictionary<Type, Object[]>();
