@@ -11,24 +11,26 @@ public class BuildingPlacer : MonoBehaviour
 
     [Header("Flag")]
     [SerializeField] private GameObject flagPrefab;
-    [SerializeField] private InputActionReference placeFlagAction;
 
     [Header("Fire Kit")]
     [SerializeField] private GameObject fireKitGhostPrefab;
     [SerializeField] private GameObject fireKitPrefab;
-    [SerializeField] private InputActionReference placeFireKitAction;
 
     
     [Header("Tent")]
     [SerializeField] private GameObject tentGhostPrefab;
     [SerializeField] private GameObject tentPrefab;
-    [SerializeField] private InputActionReference placeTentAction;
+
 
     [Header("Preview Build")]
 
     [SerializeField] private float holdToPlaceSec = 2f;
-    [SerializeField] private InputActionReference confirmBuildAction;
-    [SerializeField] private InputActionReference cancelBuildAction;
+    
+    private InputAction confirmBuildAction;
+    private InputAction placeFireKitAction;
+    private InputAction placeTentAction;
+    private InputAction cancelBuildAction;
+    private InputAction placeFlagAction;
 
     private bool isHoldingBuild = false;
     private float holdTimer = 0f;
@@ -37,6 +39,19 @@ public class BuildingPlacer : MonoBehaviour
 
     // For Placeholder UI.
     public event Action<bool> OnGhostPresent;
+
+    private void Awake()
+    {
+        confirmBuildAction = InputSystem.actions["Confirm"];
+
+        placeFireKitAction = InputSystem.actions["Place Fire"];
+
+        placeTentAction = InputSystem.actions["Place Tent"];
+
+        cancelBuildAction = InputSystem.actions["Cancel Build"];
+
+        placeFlagAction = InputSystem.actions["Place Flag"];
+    }
 
     void Start()
     {
@@ -232,40 +247,31 @@ public class BuildingPlacer : MonoBehaviour
 
     private void OnEnable()
     {
-        placeFlagAction.action.Enable();
-        placeFlagAction.action.performed += OnPlaceFlagKey;
+        placeFlagAction.performed += OnPlaceFlagKey;
 
-        placeFireKitAction.action.Enable();
-        placeFireKitAction.action.performed += OnPlaceFireKitKey;
 
-        placeTentAction.action.Enable();
-        placeTentAction.action.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        placeFireKitAction.performed += OnPlaceFireKitKey;
 
-        confirmBuildAction.action.Enable();
-        confirmBuildAction.action.started += OnConfirmBuild;
-        confirmBuildAction.action.canceled += OnConfirmBuild;
+        placeTentAction.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
 
-        cancelBuildAction.action.Enable();
-        cancelBuildAction.action.performed += OnCancelBuild;
+        confirmBuildAction.started += OnConfirmBuild;
+        confirmBuildAction.canceled += OnConfirmBuild;
+
+        cancelBuildAction.performed += OnCancelBuild;
     }
 
     private void OnDisable()
     {
-        placeFlagAction.action.Disable();
-        placeFlagAction.action.performed -= OnPlaceFlagKey;
+        placeFlagAction.performed -= OnPlaceFlagKey;
 
-        placeFireKitAction.action.Disable();
-        placeFireKitAction.action.performed -= OnPlaceFireKitKey;
+        placeFireKitAction.performed -= OnPlaceFireKitKey;
 
-        placeTentAction.action.Disable();
-        placeTentAction.action.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        placeTentAction.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
 
-        confirmBuildAction.action.Disable();
-        confirmBuildAction.action.started += OnConfirmBuild;
-        confirmBuildAction.action.canceled += OnConfirmBuild;
+        confirmBuildAction.started += OnConfirmBuild;
+        confirmBuildAction.canceled += OnConfirmBuild;
 
-        cancelBuildAction.action.Disable();
-        cancelBuildAction.action.performed -= OnCancelBuild;
+        cancelBuildAction.performed -= OnCancelBuild;
     }
 
     public float GetHoldTimer()

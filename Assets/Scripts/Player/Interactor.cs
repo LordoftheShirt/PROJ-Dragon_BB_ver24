@@ -14,7 +14,6 @@ public class Interactor : MonoBehaviour
 {
     [Header("Essential")]
     [SerializeField] private float interactRange = 5f;
-    [SerializeField] private InputActionReference interactAction;
 
     // UI Text pop up
     [Header("Non-essential, for UI display only")]
@@ -22,7 +21,14 @@ public class Interactor : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionText;
 
     private Transform interactorSource;
+    private InputAction interactAction;
     private IInteractable currentInteractable;
+
+
+    private void Awake()
+    {
+        interactAction = InputSystem.actions["Interact"];
+    }
 
     void Start()
     {
@@ -78,14 +84,12 @@ public class Interactor : MonoBehaviour
 
     private void OnEnable()
     {
-        interactAction.action.Enable();
-        interactAction.action.performed += OnInteractPressed;
+        interactAction.performed += OnInteractPressed;
     }
 
     private void OnDisable()
     {
-        interactAction.action.Disable();
-        interactAction.action.performed -= OnInteractPressed;
+        interactAction.performed -= OnInteractPressed;
     }
 
     public void SetInteractRange(float range)
