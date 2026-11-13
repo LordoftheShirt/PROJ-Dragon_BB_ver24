@@ -47,7 +47,7 @@ MonoBehaviour:
   resourceIcons:
   - {fileID: 21300000, guid: b5835d70857da9b4bacb830236fee290, type: 3}
   - {fileID: 21300000, guid: db6b4e87cfdd6b44eb7c4fceb8e26067, type: 3}
-  recipeCategoryIcons:
+  blueprintCategoryIcons:
   - {fileID: 21300000, guid: 8959367d62272ac49af3b25fb8283106, type: 3}
   - {fileID: 21300000, guid: 924d07a2191f79c41982bf319b0e8044, type: 3}
   - {fileID: 21300000, guid: 1ee0da7eb78fbf345bb4fb37206f3953, type: 3}

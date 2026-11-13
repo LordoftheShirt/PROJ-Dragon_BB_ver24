@@ -15,12 +15,17 @@ public static class ResourceTypeExtensions
 {
     public static string GetDisplayString(this ResourceType resourceType)
     {
-        return resourceType switch
+        switch (resourceType)
         {
-            ResourceType.Wood => "Wood",
-            ResourceType.Scrap => "Metal Scrap",
-            _ => "Unknown"
-        };
+            case ResourceType.Wood:
+                return "Wood";
+
+            case ResourceType.Scrap:
+                return "Metal Scrap";
+
+            default:
+                return "Unknown";
+        }
     }
 
     public static int GetIndex(this ResourceType resourceType)
