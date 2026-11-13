@@ -11,6 +11,8 @@ public class CraftingInspector : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descriptionText;
+    [SerializeField] private TMP_Text requirementsText;
+    [SerializeField] private TMP_Text amountText;
 
     [Space]
     [SerializeField] private Button craftButton;
@@ -43,13 +45,56 @@ public class CraftingInspector : MonoBehaviour
         nameText.text = item == null ? blueprint.name : item.Name;
         descriptionText.text = item == null ? "<MISSING DESCRIPTION>" : item.Description;
 
-        craftButton.interactable = blueprint.CanCraft();
+        UpdateInteractable();
     }
 
     public void Craft()
     {
         if (_currentBlueprint == null || !craftButton.interactable) return;
 
-        _craftingUI.CraftBlueprint(_currentBlueprint);
+        //Debug.Log("CRAFT!");
+
+        Inventory inv = Inventory.Instance;
+
+        foreach (var pair in _currentBlueprint.Ingredients)
+        {
+            inv.RemoveResource(pair.Type, pair.Amount);
+        }
+
+        inv.AddItem(_currentBlueprint.Result, _currentBlueprint.ResultAmount);
+
+        UpdateInteractable();
+    }
+
+    private void UpdateInteractable()
+    {
+        if (_currentBlueprint == null) return;
+
+        Inventory inv = Inventory.Instance;
+
+        // THIS IS A PLACEHOLDER WAY TO DISPLAY THE REQUIREMENTS FOR NOW
+        string text = "Requirements:\n";
+
+        foreach (var pair in _currentBlueprint.Ingredients)
+        {
+            int amount = inv.GetResourceCount(pair.Type);
+            text += $"{pair.Type.GetDisplayString()} <color={(amount >= pair.Amount ? "green" : "red")}>{amount}/{pair.Amount}</color>\n";
+        }
+
+        if (_currentBlueprint.ItemRequirements != null)
+        {
+            foreach (var item in _currentBlueprint.ItemRequirements)
+            {
+                bool hasItem = inv.HasItem(item);
+                text += $"{item.Name} <color={(hasItem ? "green>1/1" : "red>0/1")}</color>\n";
+            }
+        }
+
+        requirementsText.text = text;
+
+        Item result = _currentBlueprint.Result;
+        amountText.text = result == null || result.UnlimitedStackSize ? "" : $"You have:\n{inv.GetItemCount(result)}/{result.MaxStackSize}";
+
+        craftButton.interactable = _currentBlueprint.CanCraft();
     }
 }
