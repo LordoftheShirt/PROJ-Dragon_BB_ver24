@@ -3,6 +3,10 @@ using UnityEngine;
 public class ReferenceManager : MonoBehaviour
 {
     public MiniMapManager mapManager;
+    public DayNightManager dayNightManager;
+    public PlayerResourceManager playerResourceManager;
+    public PlayerMeter playerMeter;
+    public GameObject cabbin;
 
     public static ReferenceManager Instance { get; private set; }
 
@@ -19,3 +23,4 @@ public class ReferenceManager : MonoBehaviour
         }
     }
 }
+

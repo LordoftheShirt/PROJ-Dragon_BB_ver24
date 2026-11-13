@@ -2,14 +2,23 @@ using UnityEngine;
 
 public class WarmthEmitter : MonoBehaviour
 {
-    [SerializeField] private int effectivateRange = 4;
-    [SerializeField] private float warmthIncreaseRate = 5.0f;
-    [SerializeField] private float effectivateWarmthIncreaseRate = 10.0f;
+    [SerializeField] private int warmthRangeRadius = 3;
+    [SerializeField] private int effectivateRange = 1;
+    [SerializeField] private float warmthIncreaseRate = 1.0f;
+    [SerializeField] private float effectivateWarmthIncreaseRate = 2.0f;
     private PlayerMeter warmthMeter;
+    private SphereCollider sphereCollider;
+
+    private void Start()
+    {
+        sphereCollider = gameObject.AddComponent<SphereCollider>();
+        sphereCollider.radius = warmthRangeRadius;
+        sphereCollider.isTrigger = true;
+    }
 
     protected virtual void FixedUpdate()
     {
-        if (warmthMeter != null)
+        if (warmthMeter)
             warmthMeter.IncreaseWarmth(CalculateWarmthIncreaseRate());
     }
 

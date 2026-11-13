@@ -10,22 +10,24 @@ public class DayNightManager : MonoBehaviour
     [SerializeField] private float lightStartRotation = 200f;
     [Tooltip("The threshold at which a new day is triggered. Negative values is extra time before the day ends.")]
     [SerializeField] private float newDayThreshold = -1f;
+    [SerializeField] private float dayDivide = 4;
+    [SerializeField] private float lowTempraturePreset = 5;
+    [SerializeField] private float mediumTempraturePreset = 10;
+    [SerializeField] private float highTempraturePreset = 40;
     [Header("References")]
     [SerializeField] private Light directionalLight;
 
+    private float coldMultiplyer;
+
     private bool paused = false;
+    private bool isNight = false;
     private float dayTimer;
 
-    private void Awake()
-    {
-        //can be moved to a more general script when it is created
-        QualitySettings.vSyncCount = 1;
-        Application.targetFrameRate = 90;
-    }
+
 
     void Start()
     {
-        //Remove when resources are created in runtime, weird stacking issue with map creation
+        //Remove when resources are created in runtime, weird stacking issue with map creation'
         Newday();
     }
 
@@ -33,28 +35,66 @@ public class DayNightManager : MonoBehaviour
     {
         if (paused) return;
 
+
         dayTimer -= Time.fixedDeltaTime;
-        if (dayTimer <= newDayThreshold)
-        {
-            Newday();
-        }
+        if (dayTimer <= newDayThreshold)        
+            Newday();        
+
+        CheckTempratureChange();
+
         directionalLight.transform.rotation = Quaternion.Euler(CalculateLightRotation());
     }
 
-    private Vector3 CalculateLightRotation()
-    {
-        float rotationAngle = (dayTimer / dayDuration) * rotationDegrees;
-        return new Vector3(rotationAngle, 0, 0);
-    }
-
-    private void Newday()
+    public void Newday()
     {
         //ReferenceManager.Instance.mapManager.ClearMapObjects();//comment this out to test the day night cycle without clearing the map objects
 
         dayTimer = dayDuration;
         directionalLight.transform.Rotate(new Vector3(lightStartRotation, 0, 0));
 
-        ReferenceManager.Instance.mapManager.CreateMap();//Maybe move this to pcg script so its called when the map is finished generating
+        ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
+        coldMultiplyer = mediumTempraturePreset;
+
+        ReferenceManager.Instance.mapManager.CreateMap();
+    }
+
+    private void CheckTempratureChange()
+    {
+        Debug.Log("coldMult: " + coldMultiplyer);
+        if(isNight)
+        {
+            ChangeTemprature(coldMultiplyer, highTempraturePreset);
+            coldMultiplyer = highTempraturePreset;
+            return;
+        }
+
+        if (dayTimer <= 3 * (dayDuration / dayDivide))
+        {
+            if (dayTimer <= dayDuration / dayDivide)
+            {
+                ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
+                coldMultiplyer = mediumTempraturePreset;
+                Debug.Log("asikldfgjopiasgj");
+                return;
+            }
+            ChangeTemprature(coldMultiplyer, lowTempraturePreset);
+            coldMultiplyer = lowTempraturePreset;
+        }
+    }
+
+    private void ChangeTemprature(float oldChange, float newChange)
+    {
+        if (oldChange != newChange)
+        {
+            ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);
+            Debug.Log("changed to " + newChange);
+        }
+    }
+
+    private Vector3 CalculateLightRotation()
+    {
+        float rotationAngle = (dayTimer / dayDuration) * rotationDegrees;
+        return new Vector3(rotationAngle, 0, 0);
     }
 
     public void PauseDayCycle()

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using FMOD;
+using FMODUnity;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -54,6 +56,12 @@ namespace StarterAssets
         public string JumpActionName = "Player/Jump";
         public string SprintActionName = "Player/Sprint";
 
+        [Header("SFX")]
+        [SerializeField] private EventReference footstepSFX;
+        [SerializeField] private float footstepWalkFrequency = 1;
+        [SerializeField] private float footstepRunFrequency = 1;
+        private float _footstepTimer = 1;
+
         // cinemachine
         private float _cinemachineTargetPitch;
 
@@ -87,6 +95,16 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
         }
+		[Header("Player Grounded")]
+		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+		public bool Grounded = true;
+        private bool _oldGrounded;
+        [Tooltip("Useful for rough ground")]
+		public float GroundedOffset = -0.14f;
+		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+		public float GroundedRadius = 0.5f;
+		[Tooltip("What layers the character uses as ground")]
+		public LayerMask GroundLayers;
 
         private void Start()
         {
@@ -112,11 +130,12 @@ namespace StarterAssets
             _fallTimeoutDelta = FallTimeout;
         }
 
-        private void Update()
-        {
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
+		private void Update()
+		{
+			JumpAndGravity();
+			GroundedCheck();
+			Move();
+			SFX();
         }
 
         private void LateUpdate()
@@ -194,9 +213,69 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
             bool jumpPressed = _jumpAction != null && _jumpAction.WasPressedThisFrame();
 
-            if (Grounded)
+		private void SFX()
+        {
+			if (_oldGrounded != Grounded)
+			{
+				_oldGrounded = Grounded;
+
+				if (Grounded)
+                {
+					// LAND SFX HERE INSTEAD
+                    _footstepTimer = 0;
+                }
+			}
+
+            if (!Grounded)
             {
-                _fallTimeoutDelta = FallTimeout;
+                _footstepTimer = 1;
+                return;
+            }
+
+            float moveDelta = _speed / MoveSpeed;
+
+            // Determine how frequently the footsteps should play
+            float frequency;
+
+            if (moveDelta > 1)
+            {
+                moveDelta = _speed / SprintSpeed;
+
+                frequency = Mathf.LerpUnclamped(footstepWalkFrequency, footstepRunFrequency, moveDelta);
+            }
+            else
+            {
+                frequency = footstepWalkFrequency * moveDelta;
+            }
+
+            _footstepTimer -= Time.deltaTime * frequency;
+
+            if (_footstepTimer <= 0)
+            {
+                _footstepTimer = 1;
+
+				PlayFootstepSFX();
+            }
+        }
+
+		private void PlayFootstepSFX()
+		{
+            var instance = RuntimeManager.CreateInstance(footstepSFX);
+
+            // TODO: Different ground materials should have different footstep sounds. This is a placeholder for now.
+            instance.setParameterByName("GroundType", 1);
+
+            instance.start();
+            instance.release();
+            instance.clearHandle();
+        }
+
+		private void JumpAndGravity()
+		{
+			if (Grounded)
+			{
+				// reset the fall timeout timer
+				_fallTimeoutDelta = FallTimeout;
 
                 if (_verticalVelocity < 0.0f)
                 {
