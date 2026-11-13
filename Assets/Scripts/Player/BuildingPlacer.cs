@@ -143,16 +143,16 @@ public class BuildingPlacer : MonoBehaviour
     {
         if (currentGhost != null)
         {
-            Debug.Log("Confirm build action triggered.");
+            //Debug.Log("Confirm build action triggered.");
             if (context.started)
             {
-                Debug.Log("Confirm build action started.");
+                //Debug.Log("Confirm build action started.");
                 isHoldingBuild = true;
                 holdTimer = 0f;
             }
             else if (context.canceled)
             {
-                Debug.Log("Confirm build action canceled.");
+                //Debug.Log("Confirm build action canceled.");
                 isHoldingBuild = false;
                 holdTimer = 0f; // Reset timer if released early
             }

@@ -1,13 +1,14 @@
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class OpenCrafting : MonoBehaviour, IInteractable
 {
-
     public void Interact()
     {
-        // Disable Player ActionMap
         InputMapManager.Instance.DisablePlayerMap();
+
+        // Open crafting Menu here.
     }
 
     public string GetDescription()

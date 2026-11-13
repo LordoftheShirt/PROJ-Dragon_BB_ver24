@@ -74,7 +74,7 @@ public class Interactor : MonoBehaviour
     private void OnInteractPressed(InputAction.CallbackContext context)
     {
 
-            Debug.Log("Interact Pressed");
+            //Debug.Log("Interact Pressed");
 
             if (currentInteractable != null)
             {
