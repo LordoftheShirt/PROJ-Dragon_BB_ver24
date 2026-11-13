@@ -55,7 +55,7 @@ public class BuildingPlacer : MonoBehaviour
 
     void Start()
     {
-        builderSource = gameObject.transform;
+        builderSource = Camera.main.transform;
     }
 
     void Update()
@@ -202,7 +202,7 @@ public class BuildingPlacer : MonoBehaviour
 
     // Update the current ghost object based on the provided ghost prefab (ghost: a pre-build, when you want to preview the build location).
     // Do no let the ghost object appear if the player has no more of that item to place.
-    private void UpdateCurrentGhost(GameObject ghost, int currentQuantity = 1)
+    public void UpdateCurrentGhost(GameObject ghost, int currentQuantity = 1)
     {
         holdTimer = 0f; // Reset the hold timer whenever the ghost is updated
 

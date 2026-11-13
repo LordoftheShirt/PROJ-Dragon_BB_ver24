@@ -32,7 +32,7 @@ public class Interactor : MonoBehaviour
 
     void Start()
     {
-        interactorSource = gameObject.transform;
+        interactorSource = Camera.main.transform;
     }
 
     // Update is called once per frame

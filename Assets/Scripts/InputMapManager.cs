@@ -8,18 +8,28 @@ public class InputMapManager : Singleton<InputMapManager>
     private StarterAssetsInputs starterAssetsInputs;
     private GameObject worldUI;
 
+    //
+    private BuildingPlacer buildingPlacer;
+
 
     private void Start()
     {
         playerMap = InputSystem.actions.FindActionMap("Player");
 
         GameObject player = GameObject.FindWithTag("Player");
-        if(player != null && player.TryGetComponent<StarterAssetsInputs>(out StarterAssetsInputs comp))
+        if(player != null)
         {
-            starterAssetsInputs = comp;
+            if (player.TryGetComponent<StarterAssetsInputs>(out StarterAssetsInputs sai))
+            starterAssetsInputs = sai;
+
+            if (player.TryGetComponent<BuildingPlacer>(out BuildingPlacer bp))
+                buildingPlacer = bp;
         }
 
-        GameObject worldUI = GameObject.FindWithTag("WorldUI");
+        worldUI = GameObject.FindWithTag("WorldUI");
+
+        //Debug.Log("WorldUI: " + worldUI.name);
+        //Debug.Log("BP: " + buildingPlacer.name);
     }
 
     public void EnablePlayerMap()
@@ -53,6 +63,11 @@ public class InputMapManager : Singleton<InputMapManager>
         if (worldUI != null)
         {
             worldUI.SetActive(false);
+        }
+
+        if (buildingPlacer != null)
+        {
+            buildingPlacer.UpdateCurrentGhost(null);
         }
     }
 
