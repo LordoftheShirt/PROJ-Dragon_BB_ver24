@@ -5,7 +5,7 @@ public class ResourceCluster : MonoBehaviour
     [SerializeField] private float clusterRadius = 5f;
     [SerializeField] private int maxResourceCount = 10;
     [SerializeField] private int minResourceCount = 5;
-    [SerializeField] private int maxResourceAmount = 100;
+    [SerializeField] private int maxResourceAmount = 30;
 
     public void SpawnResources(ResourceNode resourcePrefab, ResourceType resourceType)
 
@@ -21,6 +21,8 @@ public class ResourceCluster : MonoBehaviour
             //Se till så att y matchar heightmappen
             //Sets the spawn position in relation to the cluster's position
             Vector3 spawnPosition = transform.position + new Vector3(randomPosition.x, 0f, randomPosition.y);
+
+           
 
             // Se till så att rotationen matchar normalen i heightmappen, ev gör metod som ser till att normalen är realistisk
             ResourceNode resource = Instantiate(resourcePrefab, spawnPosition, Quaternion.identity);

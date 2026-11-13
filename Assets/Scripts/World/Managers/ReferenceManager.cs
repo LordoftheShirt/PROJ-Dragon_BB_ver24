@@ -7,6 +7,9 @@ public class ReferenceManager : MonoBehaviour
     public PlayerResourceManager playerResourceManager;
     public PlayerMeter playerMeter;
     public GameObject cabbin;
+    public ResourceCluster resourceClusterPrefab;
+    public ResourceNode[] resourceNodePrefab;
+    public ResourceType[] resourceType;
 
     public static ReferenceManager Instance { get; private set; }
 

@@ -49,8 +49,6 @@ MonoBehaviour:
   numberOfClusters: 5
   resourceClusterPrefab: {fileID: 1282608504125897185, guid: 40b62df958b81d444a0468e31be2b6a8, type: 3}
   resourceNodePrefab:
-  - {fileID: 3520873517718029402, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
-  - {fileID: 3520873517718029402, guid: 928bff5abf0eabe42bb28182a6b57ba0, type: 3}
-  resourceType:
-  - {fileID: 1864901483701160807, guid: 28f920d7a0c2d2140a70d5f9dc87bf89, type: 3}
-  - {fileID: 1864901483701160807, guid: 679fa3437288e134dadcac2802a80846, type: 3}
+  - {fileID: 5449498893061459164, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
+  - {fileID: 6208488965665334647, guid: 928bff5abf0eabe42bb28182a6b57ba0, type: 3}
+  resourceType: 0000000001000000

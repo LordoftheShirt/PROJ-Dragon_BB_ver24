@@ -12,6 +12,7 @@ public class MiniMapManager : MonoBehaviour
     [Header("Settings")]
     [Tooltip("The scale factor for the minimap. If its a larger value, the minimap will be more zoomed out. Ex: 5 means a map in 1:5 scale")]
     [SerializeField] private float scale = 5;
+    [SerializeField] private float size = 5;
 
     private List<GameObject> mapObjects = new List<GameObject>();
 
@@ -42,12 +43,13 @@ public class MiniMapManager : MonoBehaviour
 
     public void CreateMap()
     {
-        Instantiate(cabbinTokenPrefab, playerMap.localPosition, playerMap.rotation, playerMap);
+        Instantiate(cabbinTokenPrefab, playerMap.position, playerMap.rotation, playerMap);
 
         foreach (GameObject mapObject in mapObjects)
         {
-            Vector3 mapObjectPosition = new Vector3(CalculateObjectCordinate(playerMap.localPosition.x, cabbin.position.x, mapObject.transform.position.x), CalculateObjectCordinate(playerMap.localPosition.y, cabbin.position.z, mapObject.transform.position.z), playerMap.localPosition.z);
-            Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);
+            Vector3 mapObjectPosition = new Vector3(CalculateObjectCordinate(playerMap.position.x, cabbin.position.x, mapObject.transform.position.x), CalculateObjectCordinate(playerMap.position.y, cabbin.position.z, mapObject.transform.position.z), playerMap.localPosition.z);
+            if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
+                Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);
         }
     }
 

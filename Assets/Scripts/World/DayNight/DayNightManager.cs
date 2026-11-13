@@ -60,7 +60,6 @@ public class DayNightManager : MonoBehaviour
 
     private void CheckTempratureChange()
     {
-        Debug.Log("coldMult: " + coldMultiplyer);
         if(isNight)
         {
             ChangeTemprature(coldMultiplyer, highTempraturePreset);
@@ -74,7 +73,6 @@ public class DayNightManager : MonoBehaviour
             {
                 ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
                 coldMultiplyer = mediumTempraturePreset;
-                Debug.Log("asikldfgjopiasgj");
                 return;
             }
             ChangeTemprature(coldMultiplyer, lowTempraturePreset);
@@ -84,11 +82,8 @@ public class DayNightManager : MonoBehaviour
 
     private void ChangeTemprature(float oldChange, float newChange)
     {
-        if (oldChange != newChange)
-        {
-            ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);
-            Debug.Log("changed to " + newChange);
-        }
+        if (oldChange != newChange)        
+            ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);        
     }
 
     private Vector3 CalculateLightRotation()

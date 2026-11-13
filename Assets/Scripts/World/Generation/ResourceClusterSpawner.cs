@@ -14,7 +14,9 @@ public class ResourceClusterSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnResourceClusters(ReferenceManager.Instance.cabbin.transform.position);
+        ReferenceManager refe = ReferenceManager.Instance;
+        DefineClusterSpawner(30, 5, refe.resourceClusterPrefab, refe.resourceNodePrefab, refe.resourceType);
+        SpawnResourceClusters(transform.position);
     }
 
     public void SpawnResourceClusters(Vector3 centerPosition)
@@ -26,7 +28,7 @@ public class ResourceClusterSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnAResourceCluster(Vector3 centerPosition, ResourceType resourceType)
+    private void SpawnAResourceCluster(Vector3 centerPosition, ResourceType resourceType)
     { 
         //Selects position
         Vector2 randomPosition = Random.insideUnitCircle * (spawnRadius + centerOffset);
@@ -42,19 +44,13 @@ public class ResourceClusterSpawner : MonoBehaviour
         resourceCluster.SpawnResources(resourceNodePrefab[currentResourceType], resourceType);
     }
 
-    public void SetResourceClusterPrefab(ResourceCluster prefab)
+    public void DefineClusterSpawner(float newSpawnRadius, int newNumberOfclusters, ResourceCluster newResourceClusterPrefab, ResourceNode[] newResourceNodePrefabsInOrder, ResourceType[] newResourceTypes)
     {
-        resourceClusterPrefab = prefab;
-    }
-
-    public void SetResourceNodes(ResourceNode[] prefabs)
-    {
-        resourceNodePrefab = new ResourceNode[prefabs.Length];
-    }
-
-    public void SetResourceTypes(ResourceType[] types)
-    {
-        resourceType = types;
+        spawnRadius = newSpawnRadius;
+        numberOfClusters = newNumberOfclusters;
+        resourceClusterPrefab = newResourceClusterPrefab;
+        resourceNodePrefab = newResourceNodePrefabsInOrder;
+        resourceType = newResourceTypes;
     }
 
     public void DestroyCildren()
