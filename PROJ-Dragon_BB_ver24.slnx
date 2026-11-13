@@ -9,4 +9,5 @@
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="FMODUnityResonance.csproj" />
   <Project Path="URPWizard.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
 </Solution>

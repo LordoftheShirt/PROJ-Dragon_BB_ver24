@@ -4,7 +4,7 @@ using UnityEngine;
 public class ResourceNode : MonoBehaviour, IInteractable
 {
     [SerializeField] private int resourceAmount = 100;
-    [SerializeField] private ResourceTypes resourceType;
+    [SerializeField] private ResourceType resourceType;
 
     private void Start()
     {
@@ -16,7 +16,7 @@ public class ResourceNode : MonoBehaviour, IInteractable
         ReferenceManager.Instance.mapManager.RemoveMapObject(gameObject);
     }
 
-    public void SetResourceType(ResourceTypes newResourceType, int newResourceAmount)
+    public void SetResourceType(ResourceType newResourceType, int newResourceAmount)
     {
         resourceType = newResourceType;
         resourceAmount = newResourceAmount;
@@ -37,9 +37,9 @@ public class ResourceNode : MonoBehaviour, IInteractable
         CollectResource(1);
     }
 
-    public virtual string GetResourceType()
+    public virtual ResourceType GetResourceType()
     {
-        return resourceType.GetResourceName();
+        return resourceType;
     }
 
     public virtual string GetDescription()
