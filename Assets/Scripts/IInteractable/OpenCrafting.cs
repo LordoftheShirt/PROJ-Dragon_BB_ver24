@@ -4,11 +4,11 @@ using UnityEngine.Events;
 
 public class OpenCrafting : MonoBehaviour, IInteractable
 {
+    [SerializeField] private CraftingUI craftingUI;
     public void Interact()
     {
         InputMapManager.Instance.DisablePlayerMap();
-
-        // Open crafting Menu here.
+        craftingUI.Open();
     }
 
     public string GetDescription()

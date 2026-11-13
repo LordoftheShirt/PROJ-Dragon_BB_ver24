@@ -154,6 +154,7 @@ public class CraftingUI : MonoBehaviour
 
     public void Close()
     {
+        InputMapManager.Instance.EnablePlayerMap();
         mainPanel.SetActive(false);
     }
 }

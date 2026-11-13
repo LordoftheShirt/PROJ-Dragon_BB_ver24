@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class DayNightManager : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class DayNightManager : MonoBehaviour
     private float dayTimer;
 
 
+    bool createdMap = false;
+    float trimer = 1;
+
 
     void Start()
     {
@@ -34,6 +38,17 @@ public class DayNightManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (paused) return;
+
+        if(!createdMap)
+        {
+            if(trimer < 0)
+            {
+                ReferenceManager.Instance.mapManager.CreateMap();
+                createdMap = true;
+            }
+            trimer -= Time.fixedDeltaTime;                
+        }
+
 
 
         dayTimer -= Time.fixedDeltaTime;
@@ -54,8 +69,6 @@ public class DayNightManager : MonoBehaviour
 
         ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
         coldMultiplyer = mediumTempraturePreset;
-
-        ReferenceManager.Instance.mapManager.CreateMap();
     }
 
     private void CheckTempratureChange()
