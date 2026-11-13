@@ -12,7 +12,9 @@ public class PlayerMeter : MonoBehaviour
     [SerializeField] private float HealthDecayRate = 2f;
 
     [Header("Warmth loss per second - MAX W: 100")]
-    [SerializeField] private float WarmthDecayRate = 1f;
+    [SerializeField] private float DefultWarmthDecayRate = 1f;
+
+    private float warmthDecayRate;
 
     void Start()
     {
@@ -31,7 +33,6 @@ public class PlayerMeter : MonoBehaviour
 
     public void IncreaseWarmth(float amount)
     {
-        Debug.Log("Increasing warmth by: " + amount);
         currentWarmth += amount;
         if (currentWarmth > maxWarmth)
             currentWarmth = maxWarmth;
@@ -40,7 +41,7 @@ public class PlayerMeter : MonoBehaviour
     void Decay()
     {
         // when DecayRate is 1, it takes 100 seconds to go from 100 to 0. when DecayRate is 2, it takes 50 seconds. when DecayRate is 0.5, it takes 200 seconds.
-        currentWarmth -= WarmthDecayRate * Time.deltaTime;
+        currentWarmth -= warmthDecayRate * Time.deltaTime;
 
         // Frost damage
         if (currentWarmth <= 0)
@@ -48,6 +49,13 @@ public class PlayerMeter : MonoBehaviour
             currentWarmth = 0;
             currentHealth -= HealthDecayRate * Time.deltaTime;
         }
+    }
+
+    public void ChangeWarmthDecayrate(float newRate)
+    {
+        //resetts decayrate
+        warmthDecayRate = newRate;
+        Debug.Log("rate: " + warmthDecayRate);
     }
 
     public float GetMaxWarmth() { return maxWarmth; }

@@ -5,7 +5,6 @@ public class DayNightManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [Header("Settings")]
     [SerializeField] private float dayDuration = 60f;
-    [SerializeField] private float nightDuration = 30f;
     [SerializeField] private float rotationDegrees = 200f;
     [Tooltip("The initial rotation of the directional light at the start of a new day.")]
     [SerializeField] private float lightStartRotation = 200f;
@@ -18,22 +17,17 @@ public class DayNightManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Light directionalLight;
 
-    private float coldMultiplyer = 5;
+    private float coldMultiplyer;
 
     private bool paused = false;
     private bool isNight = false;
     private float dayTimer;
 
-    private void Awake()
-    {
-        //can be moved to a more general script when it is created
-        QualitySettings.vSyncCount = 1;
-        Application.targetFrameRate = 90;
-    }
+
 
     void Start()
     {
-        //Remove when resources are created in runtime, weird stacking issue with map creation
+        //Remove when resources are created in runtime, weird stacking issue with map creation'
         Newday();
     }
 
@@ -51,15 +45,17 @@ public class DayNightManager : MonoBehaviour
         directionalLight.transform.rotation = Quaternion.Euler(CalculateLightRotation());
     }
 
-    private void Newday()
+    public void Newday()
     {
         //ReferenceManager.Instance.mapManager.ClearMapObjects();//comment this out to test the day night cycle without clearing the map objects
 
         dayTimer = dayDuration;
         directionalLight.transform.Rotate(new Vector3(lightStartRotation, 0, 0));
-        coldMultiplyer = 5;
 
-        ReferenceManager.Instance.mapManager.CreateMap();//Maybe move this to pcg script so its called when the map is finished generating
+        ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
+        coldMultiplyer = mediumTempraturePreset;
+
+        ReferenceManager.Instance.mapManager.CreateMap();
     }
 
     private void CheckTempratureChange()
@@ -67,6 +63,7 @@ public class DayNightManager : MonoBehaviour
         Debug.Log("coldMult: " + coldMultiplyer);
         if(isNight)
         {
+            ChangeTemprature(coldMultiplyer, highTempraturePreset);
             coldMultiplyer = highTempraturePreset;
             return;
         }
@@ -75,10 +72,22 @@ public class DayNightManager : MonoBehaviour
         {
             if (dayTimer <= dayDuration / dayDivide)
             {
-                coldMultiplyer = lowTempraturePreset;
+                ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
+                coldMultiplyer = mediumTempraturePreset;
+                Debug.Log("asikldfgjopiasgj");
                 return;
             }
-            coldMultiplyer = mediumTempraturePreset;
+            ChangeTemprature(coldMultiplyer, lowTempraturePreset);
+            coldMultiplyer = lowTempraturePreset;
+        }
+    }
+
+    private void ChangeTemprature(float oldChange, float newChange)
+    {
+        if (oldChange != newChange)
+        {
+            ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);
+            Debug.Log("changed to " + newChange);
         }
     }
 

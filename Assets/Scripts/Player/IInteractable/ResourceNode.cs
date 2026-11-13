@@ -1,10 +1,11 @@
 using Mono.Cecil;
+using System;
 using UnityEngine;
 
 public class ResourceNode : MonoBehaviour, IInteractable
 {
     [SerializeField] private int resourceAmount = 100;
-    [SerializeField] private ResourceTypes resourceType;
+    [SerializeField] private ResourceTypeEnum resourceType;
 
     private void Start()
     {
@@ -13,10 +14,10 @@ public class ResourceNode : MonoBehaviour, IInteractable
 
     private void OnDestroy()
     {
-        ReferenceManager.Instance.mapManager.RemoveMapObject(gameObject);
+        //ReferenceManager.Instance.mapManager.RemoveMapObject(gameObject);
     }
 
-    public void SetResourceType(ResourceTypes newResourceType, int newResourceAmount)
+    public void SetResourceType(ResourceTypeEnum newResourceType, int newResourceAmount)
     {
         resourceType = newResourceType;
         resourceAmount = newResourceAmount;
@@ -35,11 +36,12 @@ public class ResourceNode : MonoBehaviour, IInteractable
         // Implementation for interacting with firewood
         Debug.Log("Interacted with resource!");
         CollectResource(1);
+        if (resourceAmount <= 0) { Destroy(gameObject); }       
     }
 
-    public virtual string GetResourceType()
+    public virtual ResourceTypeEnum GetResourceType()
     {
-        return resourceType.GetResourceName();
+        return resourceType;
     }
 
     public virtual string GetDescription()
