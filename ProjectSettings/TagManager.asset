@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - GhostFireKit
   - GhostTent
+  - WorldUI
   layers:
   - Default
   - TransparentFX

@@ -14,7 +14,6 @@ public class Interactor : MonoBehaviour
 {
     [Header("Essential")]
     [SerializeField] private float interactRange = 5f;
-    [SerializeField] private InputActionReference interactAction;
 
     // UI Text pop up
     [Header("Non-essential, for UI display only")]
@@ -22,11 +21,18 @@ public class Interactor : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionText;
 
     private Transform interactorSource;
+    private InputAction interactAction;
     private IInteractable currentInteractable;
+
+
+    private void Awake()
+    {
+        interactAction = InputSystem.actions["Interact"];
+    }
 
     void Start()
     {
-        interactorSource = gameObject.transform;
+        interactorSource = Camera.main.transform;
     }
 
     // Update is called once per frame
@@ -68,7 +74,7 @@ public class Interactor : MonoBehaviour
     private void OnInteractPressed(InputAction.CallbackContext context)
     {
 
-            Debug.Log("Interact Pressed");
+            //Debug.Log("Interact Pressed");
 
             if (currentInteractable != null)
             {
@@ -78,14 +84,12 @@ public class Interactor : MonoBehaviour
 
     private void OnEnable()
     {
-        interactAction.action.Enable();
-        interactAction.action.performed += OnInteractPressed;
+        interactAction.performed += OnInteractPressed;
     }
 
     private void OnDisable()
     {
-        interactAction.action.Disable();
-        interactAction.action.performed -= OnInteractPressed;
+        interactAction.performed -= OnInteractPressed;
     }
 
     public void SetInteractRange(float range)

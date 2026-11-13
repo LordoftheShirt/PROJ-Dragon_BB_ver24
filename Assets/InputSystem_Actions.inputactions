@@ -27,7 +27,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "Attack / (Confirm Build)",
+                    "name": "Confirm",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
                     "expectedControlType": "",
@@ -107,7 +107,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "Place Fireplace",
+                    "name": "Place Fire",
                     "type": "Button",
                     "id": "de1fe441-b60a-4d67-80e3-ed43b4627357",
                     "expectedControlType": "",
@@ -310,7 +310,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Attack / (Confirm Build)",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -321,7 +321,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Attack / (Confirm Build)",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -332,7 +332,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "Attack / (Confirm Build)",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -343,7 +343,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Attack / (Confirm Build)",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -354,7 +354,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Attack / (Confirm Build)",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -365,7 +365,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Attack / (Confirm Build)",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -541,7 +541,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Place Fireplace",
+                    "action": "Place Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
