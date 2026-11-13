@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// simply tracks the max and current counts of consumables. Does not communicate out to other scripts.
 public class ConsumablesManager : Singleton<ConsumablesManager>
 {
     [Header("Flags")]
