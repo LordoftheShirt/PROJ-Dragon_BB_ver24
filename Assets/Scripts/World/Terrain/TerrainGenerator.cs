@@ -41,6 +41,8 @@ public class TerrainGenerator : MonoBehaviour
 
     [SerializeField]
     GameObject house;
+    [SerializeField]
+    GameObject resourceSpawner;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -72,6 +74,8 @@ public class TerrainGenerator : MonoBehaviour
         CreateTriangles();
         CreateColors();
         UpdateMesh();
+
+        PlaceResourceSpawners();
     }
 
 
@@ -504,6 +508,25 @@ public class TerrainGenerator : MonoBehaviour
 
 
     }
+
+
+    private void PlaceResourceSpawners()
+    {
+        if(resourceSpawner == null)
+        {
+            Debug.LogWarning("resourceSpawner gameobject saknas på terrängen!!");
+            return;
+        }
+
+        foreach(Vector2Int pos in pointPositions)
+        {
+            Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
+            int i = (xSize * pos.y) + pos.x;
+            Instantiate(resourceSpawner, vertices[i] + offset, transform.rotation);
+        }
+
+    }
+
 
     private void PlaceResources(GameObject[] resources)
     {
