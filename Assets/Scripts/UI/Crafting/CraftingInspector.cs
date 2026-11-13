@@ -12,6 +12,7 @@ public class CraftingInspector : MonoBehaviour
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text requirementsText;
+    [SerializeField] private TMP_Text amountText;
 
     [Space]
     [SerializeField] private Button craftButton;
@@ -51,7 +52,7 @@ public class CraftingInspector : MonoBehaviour
     {
         if (_currentBlueprint == null || !craftButton.interactable) return;
 
-        Debug.Log("CRAFT!");
+        //Debug.Log("CRAFT!");
 
         Inventory inv = Inventory.Instance;
 
@@ -90,6 +91,9 @@ public class CraftingInspector : MonoBehaviour
         }
 
         requirementsText.text = text;
+
+        Item result = _currentBlueprint.Result;
+        amountText.text = result == null || result.UnlimitedStackSize ? "" : $"You have:\n{inv.GetItemCount(result)}/{result.MaxStackSize}";
 
         craftButton.interactable = _currentBlueprint.CanCraft();
     }

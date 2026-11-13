@@ -173,6 +173,16 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         return Items.ContainsKey(item) && Items[item] >= count;
     }
+
+    public int GetItemCount(Item item)
+    {
+        if (Items.TryGetValue(item, out int result))
+        {
+            return result;
+        }
+
+        return 0;
+    }
     #endregion
 
     #region Blueprints
