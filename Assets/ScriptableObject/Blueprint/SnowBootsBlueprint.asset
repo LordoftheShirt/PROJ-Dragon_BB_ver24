@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be5e87555a9682340840bc06f14b89f5, type: 3}
-  m_Name: SnowBootsRecipe
+  m_Name: SnowBootsBlueprint
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   result: {fileID: 11400000, guid: 0673b85629455b44c989b3b3a0735f39, type: 2}
   category: Mobility
