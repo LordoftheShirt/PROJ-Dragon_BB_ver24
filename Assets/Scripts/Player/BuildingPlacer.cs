@@ -24,7 +24,7 @@ public class BuildingPlacer : MonoBehaviour
 
     [Header("Preview Build")]
 
-    [SerializeField] private float holdToPlaceSec = 2f;
+    private float holdToPlaceSec = 1f;
     
     private InputAction confirmBuildAction;
     private InputAction placeFireKitAction;

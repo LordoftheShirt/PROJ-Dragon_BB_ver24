@@ -463,6 +463,7 @@ MonoBehaviour:
   placeResources: 0
   resources: []
   house: {fileID: 1616118369}
+  resourceSpawner: {fileID: 0}
 --- !u!64 &100107751
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -857,6 +858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490b89319b07d9149bc5187da3ecaf58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarmthEmitter
+  warmthRangeRadius: 3
   effectivateRange: 4
   warmthIncreaseRate: 50
   effectivateWarmthIncreaseRate: 10
@@ -4715,7 +4717,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMeter
   PauseRealtimeDecay: 0
   HealthDecayRate: 10
-  WarmthDecayRate: 10
 --- !u!4 &5393215579111688482 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
@@ -4901,7 +4902,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactor
   interactRange: 5
-  interactAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   interactionUI: {fileID: 563022025}
   interactionText: {fileID: 206971539}
 --- !u!114 &7288094137546172441
@@ -4917,17 +4917,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlagPlacer
   buildRange: 8
+  maxSurfaceAngle: 45
   flagPrefab: {fileID: 1143922573743967422, guid: a2c4809533aee094a93ac1e2763f39ed, type: 3}
-  placeFlagAction: {fileID: 6433279188666639842, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   fireKitGhostPrefab: {fileID: 2120276930775436328, guid: 105e0c7074071db40b5a54c9b19441df, type: 3}
   fireKitPrefab: {fileID: 2120276930775436328, guid: c27fda38277a0ea478e6d52eb82ea29c, type: 3}
-  placeFireKitAction: {fileID: -6133751751239128878, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   tentGhostPrefab: {fileID: 8845116247779368566, guid: bcb204d9bd8310f47be558f330ea6167, type: 3}
   tentPrefab: {fileID: 8845116247779368566, guid: b5a1f753ab063dc448ee4b0edc835170, type: 3}
-  placeTentAction: {fileID: -6097414622629388973, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  holdToPlaceSec: 0
-  confirmBuildAction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  cancelBuildAction: {fileID: 7099111219990646168, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!4 &7288094137546172445 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
