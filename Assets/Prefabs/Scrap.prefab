@@ -126,4 +126,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Firewood
   resourceAmount: 100
-  resourceType: {fileID: 0}
+  resourceType: 1
