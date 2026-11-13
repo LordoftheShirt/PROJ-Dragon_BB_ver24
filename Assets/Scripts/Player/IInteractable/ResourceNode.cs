@@ -1,0 +1,51 @@
+using Mono.Cecil;
+using System;
+using UnityEngine;
+
+public class ResourceNode : MonoBehaviour, IInteractable
+{
+    [SerializeField] private int resourceAmount = 100;
+    [SerializeField] private ResourceType resourceType;
+
+    private void Start()
+    {
+        ReferenceManager.Instance.mapManager.AddMapObject(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        //ReferenceManager.Instance.mapManager.RemoveMapObject(gameObject);
+    }
+
+    public void SetResourceType(ResourceType newResourceType, int newResourceAmount)
+    {
+        resourceType = newResourceType;
+        resourceAmount = newResourceAmount;
+    }
+
+    public int CollectResource(int amount)
+    {
+        int collectedAmount = Mathf.Min(amount, resourceAmount);
+        resourceAmount -= collectedAmount;
+        //resourceType.AddResourceAmmount(collectedAmount); // flytta till spelaren
+        return collectedAmount;
+    }
+
+    public virtual void Interact()
+    {
+        Debug.Log("Interacted with resource!");
+        //kan ändra ettan till en stat på spelaren
+        ReferenceManager.Instance.playerResourceManager.AddResource(CollectResource(1), resourceType);
+        if (resourceAmount <= 0) { Destroy(gameObject); }       
+    }
+
+    public virtual ResourceType GetResourceType()
+    {
+        return resourceType;
+    }
+
+    public virtual string GetDescription()
+    {
+        return "Collect Resource";
+    }
+}
