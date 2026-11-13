@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingTab : MonoBehaviour
+public class CraftingCategory : MonoBehaviour
 {
     public BlueprintCategory Category
     {
@@ -18,6 +18,11 @@ public class CraftingTab : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private TMP_Text text;
 
+    [Space]
+    [SerializeField] private Image bg;
+    [SerializeField] private Color selectedColor = Color.white;
+    [SerializeField] private Color unselectedColor = Color.white;
+
     private CraftingUI _craftingUI;
 
     private void Awake()
@@ -25,8 +30,13 @@ public class CraftingTab : MonoBehaviour
         _craftingUI = GetComponentInParent<CraftingUI>(true);
     }
 
-    public void ChangeTab()
+    public void OnClick()
     {
-        _craftingUI.ChangeTab(Category);
+        _craftingUI.ChangeCategory(Category);
+    }
+
+    public void SetState(bool selected)
+    {
+        bg.color = selected ? selectedColor : unselectedColor;
     }
 }

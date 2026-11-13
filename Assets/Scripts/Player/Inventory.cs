@@ -7,8 +7,9 @@ using UnityEngine;
 [LoadOnInit]
 public class Inventory : SingletonPersistent<Inventory>
 {
-    private Dictionary<ResourceType, int> _resources = new();
-    private Dictionary<Item, int> _items = new();
+    public static readonly Dictionary<ResourceType, int> Resources = new();
+    public static readonly Dictionary<Item, int> Items = new();
+    public static List<Blueprint> BlueprintsUnlocked => Instance.blueprintsUnlocked;
     [SerializeField] private List<SerializableItemAndAmount<ResourceType>> startingResources = new();
     [SerializeField] private List<SerializableItemAndAmount<Item>> startingItems = new();
     [SerializeField] private List<Blueprint> blueprintsUnlocked = new();
@@ -22,13 +23,13 @@ public class Inventory : SingletonPersistent<Inventory>
             return;
         }
 
-        if (_resources.ContainsKey(resourceType))
+        if (Resources.ContainsKey(resourceType))
         {
-            _resources[resourceType] += count;
+            Resources[resourceType] += count;
         }
         else
         {
-            _resources[resourceType] = count;
+            Resources[resourceType] = count;
         }
     }
 
@@ -40,26 +41,26 @@ public class Inventory : SingletonPersistent<Inventory>
             return;
         }
 
-        if (_resources.ContainsKey(resourceType))
+        if (Resources.ContainsKey(resourceType))
         {
-            _resources[resourceType] -= count;
+            Resources[resourceType] -= count;
 
             // Cannot fall below 0
-            if (_resources[resourceType] <= 0)
+            if (Resources[resourceType] <= 0)
             {
-                _resources[resourceType] = 0;
+                Resources[resourceType] = 0;
             }
         }
     }
 
     public int GetResourceCount(ResourceType resourceType)
     {
-        return _resources[resourceType];
+        return Resources[resourceType];
     }
 
     public void SetResourceCount(ResourceType resourceType, int count)
     {
-        _resources[resourceType] = Mathf.Max(count, 0);
+        Resources[resourceType] = Mathf.Max(count, 0);
     }
     #endregion
 
@@ -75,26 +76,26 @@ public class Inventory : SingletonPersistent<Inventory>
             return false;
         }
 
-        if (_items.ContainsKey(item))
+        if (Items.ContainsKey(item))
         {
-            if (!item.UnlimitedStackSize && _items[item] >= item.MaxStackSize)
+            if (!item.UnlimitedStackSize && Items[item] >= item.MaxStackSize)
             {
                 return false;
             }
 
-            _items[item] += count;
+            Items[item] += count;
 
             // Clamp if necessary
-            if (!item.UnlimitedStackSize && _items[item] > item.MaxStackSize)
+            if (!item.UnlimitedStackSize && Items[item] > item.MaxStackSize)
             {
-                _items[item] = item.MaxStackSize;
+                Items[item] = item.MaxStackSize;
             }
 
             return true;
         }
         else
         {
-            _items[item] = count;
+            Items[item] = count;
             return true;
         }
     }
@@ -110,12 +111,12 @@ public class Inventory : SingletonPersistent<Inventory>
             return false;
         }
 
-        if (_items.ContainsKey(item))
+        if (Items.ContainsKey(item))
         {
-            _items[item] -= count;
-            if (_items[item] <= 0)
+            Items[item] -= count;
+            if (Items[item] <= 0)
             {
-                _items.Remove(item);
+                Items.Remove(item);
             }
 
             return true;
@@ -129,9 +130,9 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool RemoveAllItem(Item item)
     {
-        if (_items.ContainsKey(item))
+        if (Items.ContainsKey(item))
         {
-            _items.Remove(item);
+            Items.Remove(item);
             return true;
         }
         return false;
@@ -142,18 +143,18 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public void ClearAllItems()
     {
-        _items.Clear();
+        Items.Clear();
     }
 
     public void SetItem(Item item, int count)
     {
         if (count <= 0)
         {
-            _items.Remove(item);
+            Items.Remove(item);
         }
         else
         {
-            _items[item] = item.UnlimitedStackSize ? count : Mathf.Min(count, item.MaxStackSize);
+            Items[item] = item.UnlimitedStackSize ? count : Mathf.Min(count, item.MaxStackSize);
         }
     }
 
@@ -162,7 +163,7 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool HasItem(Item item)
     {
-        return _items.ContainsKey(item);
+        return Items.ContainsKey(item);
     }
 
     /// <summary>
@@ -170,7 +171,7 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool HasAmountOfItem(Item item, int count)
     {
-        return _items.ContainsKey(item) && _items[item] >= count;
+        return Items.ContainsKey(item) && Items[item] >= count;
     }
     #endregion
 
@@ -208,12 +209,17 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         base.Awake();
 
+        foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
+        {
+            Resources[type] = 0;
+        }
+
         foreach (SerializableItemAndAmount<ResourceType> pair in startingResources)
         {
             ResourceType resource = pair.Item;
             int count = pair.Count;
 
-            _resources[resource] = count;
+            Resources[resource] = count;
         }
 
         foreach (SerializableItemAndAmount<Item> pair in startingItems)

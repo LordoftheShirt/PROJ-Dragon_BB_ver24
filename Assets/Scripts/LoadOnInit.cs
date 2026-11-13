@@ -24,7 +24,6 @@ public static class LoadOnInitManager
                 {
                     string path = string.IsNullOrEmpty(attr.Path) ? type.Name : attr.Path;
 
-                    Debug.Log(path);
                     GameObject resource = Resources.Load<GameObject>(path);
 
                     if (resource != null)

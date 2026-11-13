@@ -46,4 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   startingResources: []
   startingItems: []
-  blueprintsUnlocked: []
+  blueprintsUnlocked:
+  - {fileID: 11400000, guid: da4c0846a62a85e4a81f34e9b603b5e7, type: 2}
+  - {fileID: 11400000, guid: 198f58c0930dd7c44a36491461fe13bc, type: 2}
+  - {fileID: 11400000, guid: 33d36fafd301c9e4d91187e90e41f7ec, type: 2}

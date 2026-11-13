@@ -46,4 +46,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AssetStorage
   assets:
   - {fileID: 11400000, guid: 0673b85629455b44c989b3b3a0735f39, type: 2}
+  - {fileID: 11400000, guid: 780b5a52e4b081f4ca75150fbbf8e6c8, type: 2}
+  - {fileID: 11400000, guid: 612f48cb78a2b5a43a18639aca16a97f, type: 2}
+  - {fileID: 11400000, guid: 14ffdfe7188e7ea4aaadc89043c723f9, type: 2}
+  - {fileID: 11400000, guid: 9ffaa6b2e16f6c447925806a40deb447, type: 2}
+  - {fileID: 11400000, guid: 77f7274e92a40fc4ca6f0c1793aaf0a6, type: 2}
+  - {fileID: 11400000, guid: 933dbfa65accfef47b2c3530f4093b96, type: 2}
+  - {fileID: 11400000, guid: 49153b27eac19014fa4c5ca69e999103, type: 2}
+  - {fileID: 11400000, guid: ed8e5f8028bcad04bb06911238d01c90, type: 2}
   - {fileID: 11400000, guid: b15065059a7d3754ca0c6e5e91891fe2, type: 2}

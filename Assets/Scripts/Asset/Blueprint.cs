@@ -1,4 +1,8 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -7,12 +11,44 @@ using UnityEditor;
 public class Blueprint : ScriptableObject
 {
     public Item Result => result;
+    public int ResultAmount => resultAmount;
     public BlueprintCategory Category => category;
     public Ingredient[] Ingredients => ingredients;
+    public Item[] ItemRequirements => itemRequirements;
+    public int SortingOrder => sortingOrder;
 
     [SerializeField] private Item result;
+    [SerializeField] private int resultAmount = 1;
     [SerializeField] private BlueprintCategory category;
     [SerializeField] private Ingredient[] ingredients;
+    [SerializeField] private Item[] itemRequirements;
+    [SerializeField] private int sortingOrder;
+
+    public bool CanCraft()
+    {
+        Inventory inv = Inventory.Instance;
+
+        // Fufill every ingredient requirement
+        foreach (var ingredient in ingredients)
+        {
+            int count = inv.GetResourceCount(ingredient.Type);
+            if (count < ingredient.Amount)
+            {
+                return false;
+            }
+        }
+
+        // Fufill every item requirement
+        foreach (var item in itemRequirements)
+        {
+            if (!inv.HasItem(item))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     [System.Serializable]
     public class Ingredient
@@ -48,5 +84,21 @@ public class Blueprint : ScriptableObject
             }
         }
 #endif
+    }
+}
+
+public class BlueprintComparer : IComparer<Blueprint>
+{
+    public int Compare(Blueprint x, Blueprint y)
+    {
+        int xCategory = x.Category.GetIndex();
+        int yCategory = y.Category.GetIndex();
+
+        if (xCategory == yCategory)
+        {
+            return x.SortingOrder.CompareTo(y.SortingOrder);
+        }
+
+        return xCategory.CompareTo(yCategory);
     }
 }
