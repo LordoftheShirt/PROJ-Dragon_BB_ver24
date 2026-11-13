@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be5e87555a9682340840bc06f14b89f5, type: 3}
+  m_Name: SnowBootsRecipe
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  result: {fileID: 11400000, guid: 0673b85629455b44c989b3b3a0735f39, type: 2}
+  category: Mobility
+  ingredients:
+  - type: 0
+    amount: 1
+  - type: 1
+    amount: 2

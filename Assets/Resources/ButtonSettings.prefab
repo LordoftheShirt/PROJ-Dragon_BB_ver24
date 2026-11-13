@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8177526094554495199
+--- !u!1 &5897136849617328020
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3427262359117915885}
-  - component: {fileID: 1864901483701160807}
+  - component: {fileID: 8927502781036057425}
+  - component: {fileID: 6733780436492550060}
   m_Layer: 0
-  m_Name: FireWood
+  m_Name: ButtonSettings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3427262359117915885
+--- !u!4 &8927502781036057425
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8177526094554495199}
+  m_GameObject: {fileID: 5897136849617328020}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.67101, y: 0, z: 22.40621}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1864901483701160807
+--- !u!114 &6733780436492550060
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8177526094554495199}
+  m_GameObject: {fileID: 5897136849617328020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ce9563acb6b12f46a4d41187535fb9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 14a682eb290bdf244b658d420e2d99a2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ResourceTypes
-  resourceName: FireWood
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSettings
+  clickSFX:
+    Guid:
+      Data1: -730186698
+      Data2: 1241102252
+      Data3: 542383766
+      Data4: -703544745
+    Path: event:/UI/Click

@@ -7,8 +7,8 @@ public class ResourceCluster : MonoBehaviour
     [SerializeField] private int minResourceCount = 5;
     [SerializeField] private int maxResourceAmount = 100;
 
+    public void SpawnResources(ResourceNode resourcePrefab, ResourceType resourceType)
 
-    public void SpawnResources(ResourceNode resourcePrefab, ResourceTypeEnum resourceType)
     {
         for (int i = 0; i < Random.Range(minResourceCount, maxResourceCount + 1); i++)
         {

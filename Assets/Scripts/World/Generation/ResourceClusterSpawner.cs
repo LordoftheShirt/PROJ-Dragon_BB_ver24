@@ -8,7 +8,7 @@ public class ResourceClusterSpawner : MonoBehaviour
     [SerializeField] private int numberOfClusters = 5;
     [SerializeField] private ResourceCluster resourceClusterPrefab;
     [SerializeField] private ResourceNode[] resourceNodePrefab;
-    [SerializeField] private ResourceTypeEnum[] rnum;
+    [SerializeField] private ResourceType[] resourceType;
 
     private int currentResourceType;
 
@@ -26,7 +26,7 @@ public class ResourceClusterSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnAResourceCluster(Vector3 centerPosition, ResourceTypeEnum resourceType)
+    public void SpawnAResourceCluster(Vector3 centerPosition, ResourceType resourceType)
     { 
         //Selects position
         Vector2 randomPosition = Random.insideUnitCircle * (spawnRadius + centerOffset);
