@@ -35,6 +35,7 @@ namespace StarterAssets
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
+        public bool _oldGrounded = true;
         [Tooltip("Useful for rough ground")]
         public float GroundedOffset = -0.14f;
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
@@ -95,20 +96,11 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
         }
-		[Header("Player Grounded")]
-		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-		public bool Grounded = true;
-        private bool _oldGrounded;
-        [Tooltip("Useful for rough ground")]
-		public float GroundedOffset = -0.14f;
-		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-		public float GroundedRadius = 0.5f;
-		[Tooltip("What layers the character uses as ground")]
-		public LayerMask GroundLayers;
 
         private void Start()
         {
             _controller = GetComponent<CharacterController>();
+        
 
 #if ENABLE_INPUT_SYSTEM
             if (InputSystem.actions != null)
@@ -120,7 +112,7 @@ namespace StarterAssets
             }
             else
             {
-                Debug.LogError("No Project-wide Input Actions asset is assigned in Project Settings > Input System Package.");
+                //Debug.Log("No Project-wide Input Actions asset is assigned in Project Settings > Input System Package.");
             }
 #else
 			Debug.LogError("New Input System is not enabled in Player Settings.");
@@ -208,10 +200,8 @@ namespace StarterAssets
 #endif
         }
 
-        private void JumpAndGravity()
-        {
+
 #if ENABLE_INPUT_SYSTEM
-            bool jumpPressed = _jumpAction != null && _jumpAction.WasPressedThisFrame();
 
 		private void SFX()
         {
@@ -272,7 +262,8 @@ namespace StarterAssets
 
 		private void JumpAndGravity()
 		{
-			if (Grounded)
+            bool jumpPressed = _jumpAction != null && _jumpAction.WasPressedThisFrame();
+            if (Grounded)
 			{
 				// reset the fall timeout timer
 				_fallTimeoutDelta = FallTimeout;
