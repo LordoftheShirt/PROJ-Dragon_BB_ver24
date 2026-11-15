@@ -43,6 +43,7 @@ public class TerrainGenerator : MonoBehaviour
     GameObject house;
     [SerializeField]
     GameObject resourceSpawner;
+    private GameObject spawnerContainer;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -74,6 +75,8 @@ public class TerrainGenerator : MonoBehaviour
         CreateTriangles();
         CreateColors();
         UpdateMesh();
+
+        PlaceThings();
 
         PlaceResourceSpawners();
     }
@@ -197,7 +200,6 @@ public class TerrainGenerator : MonoBehaviour
         CreateBiomes();
 
 
-
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
@@ -218,11 +220,11 @@ public class TerrainGenerator : MonoBehaviour
                 }
 
                 //float perlinSeed = noise.pnoise(new float2(x * .03f, z * .03f), seed) *25f;
-                float perlin = Mathf.PerlinNoise((x + newNoise) * .03f, (z + newNoise) * .03f) * scale;  //där * .03f zoomar in på the noise, och * 25f gör hjöjdskilnaderna tydligare!!
+                float perlin = Mathf.PerlinNoise((x + newNoise) * .01f, (z + newNoise) * .01f) * scale;  //där * .03f zoomar in på the noise, och * 25f gör hjöjdskilnaderna tydligare!!
 
                 //för mer komplex noise lägger på stuff
-                perlin += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
-                perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
+                // perlin += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
+               // perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
 
 
 
@@ -260,12 +262,18 @@ public class TerrainGenerator : MonoBehaviour
 
 
                 //kolla om det är i center zonen
-                if (centerPoint >= x - houseSize && centerPoint <= x + houseSize && centerPoint >= z - houseSize && centerPoint <= z + houseSize)
+                /*if (centerPoint >= x - houseSize && centerPoint <= x + houseSize && centerPoint >= z - houseSize && centerPoint <= z + houseSize)
                 {
                     y = Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
+                }*/
+
+
+                if(x == centerPoint && z == centerPoint)
+                {
+                    Debug.Log("transform house");
+                    house.transform.position = new Vector3(0, y+ house.transform.lossyScale.y/2, 0);
                 }
-
-
+                
 
                 //läger till offset för att hålla kartans mitt i origo
                 vertices[i] = new Vector3(x + offsetX, y, z + offsetZ);
@@ -274,8 +282,8 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         //place house on correct height
-        float height = house.transform.lossyScale.y/2 + Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
-        house.transform.position = new Vector3 (0, height, 0);
+        //float height = house.transform.lossyScale.y + Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
+        //house.transform.position = new Vector3 (0, height, 0);
 
     }
 
@@ -470,18 +478,35 @@ public class TerrainGenerator : MonoBehaviour
 
 
 
+                //olika saker beroende på biome   PLACHOLDER SKA SE FINARE UT!!!!!
+                GameObject obj = objToPlace;
+
+                //sätter ut träd beroende på höjdskillnad
+                //idee för biom där dips är gröna
+                
+                if (vertices[i].y < minTerrainHeight + (maxTerrainHeight/3))
+                {
+                    //25% ish Chans
+                    if (UnityEngine.Random.Range(1, 101) < 2)
+                        Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
+
+                }
+
+                /*
                 float perlin = Mathf.PerlinNoise(x * .3f, z * .3f);
 
 
-                //olika saker beroende på biome   PLACHOLDER SKA SE FINARE UT!!!!!
-                GameObject obj = objToPlace;
+                
                 if (biomeMap[i] == 2)
                 {
                     obj = objToPlace2;
 
                     if (perlin > 0.85f)
                     {
-                        Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
+
+                        //2% ish Chans
+                        if(UnityEngine.Random.Range(1, 101) < 2)
+                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
                     }
                 }
                 else if (biomeMap[i] == 3)
@@ -490,17 +515,21 @@ public class TerrainGenerator : MonoBehaviour
 
                     if (perlin > 0.55f)
                     {
-                        Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
+                        //2% ish Chans
+                        if (UnityEngine.Random.Range(1, 101) < 2)
+                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
                     }
                 }
                 else
                 {
                     if (perlin > 0.75f)
                     {
-                        Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
+                        //25% ish Chans
+                        if (UnityEngine.Random.Range(1, 101) < 25)
+                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
                     }
                 }
-
+                */
 
                 i++;
             }
@@ -512,17 +541,21 @@ public class TerrainGenerator : MonoBehaviour
 
     private void PlaceResourceSpawners()
     {
-        if(resourceSpawner == null)
+        Destroy(spawnerContainer);
+        if (resourceSpawner == null)
         {
             Debug.LogWarning("resourceSpawner gameobject saknas på terrängen!!");
             return;
         }
 
+        spawnerContainer = new GameObject("spawnerContainer");
+
+
         foreach(Vector2Int pos in pointPositions)
         {
             Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
             int i = (xSize * pos.y) + pos.x;
-            Instantiate(resourceSpawner, vertices[i] + offset, transform.rotation);
+            Instantiate(resourceSpawner, vertices[i] + offset, transform.rotation, spawnerContainer.transform);
         }
 
     }
