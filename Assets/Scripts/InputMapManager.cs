@@ -2,7 +2,8 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputMapManager : Singleton<InputMapManager>
+[LoadOnInit]
+public class InputMapManager : SingletonPersistent<InputMapManager>
 {
     private InputActionMap playerMap;
     private StarterAssetsInputs starterAssetsInputs;
