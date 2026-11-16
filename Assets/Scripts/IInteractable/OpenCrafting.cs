@@ -6,6 +6,7 @@ public class OpenCrafting : MonoBehaviour, IInteractable
 {
     public void Interact()
     {
+        gameObject.GetComponent<SquashAndStretch>().Animate();
         InputMapManager.Instance.DisablePlayerMap();
 
         // Open crafting Menu here.

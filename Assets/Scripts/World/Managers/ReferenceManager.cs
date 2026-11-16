@@ -12,6 +12,7 @@ public class ReferenceManager : MonoBehaviour
     public GameManager gameManager;
     public PlayerMeter playerMeter;
     public GameObject cabbin;
+
     public ResourceCluster resourceClusterPrefab;
     public ResourceNode[] resourceNodePrefab;
     public ResourceType[] resourceType;

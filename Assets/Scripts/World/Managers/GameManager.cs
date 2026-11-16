@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,18 +7,49 @@ public class GameManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 90;
-    } 
+    }
+
+    private void Start()
+    {
+        ResetWorld();
+    }
 
     public void ResetPlayer()
     {
-        //ReferenceManager.Instance.player.Gravity = 0;
         GameObject cab = ReferenceManager.Instance.cabbin;
+        ReferenceManager.Instance.playerMeter.ResetMeter();
         ReferenceManager.Instance.player.GetComponent<CharacterController>().enabled = false;
         ReferenceManager.Instance.player.gameObject.transform.position = new Vector3(cab.transform.position.x, cab.transform.position.y + cab.transform.lossyScale.y, cab.transform.position.z);
         ReferenceManager.Instance.player.GetComponent<CharacterController>().enabled = true;
+    }
+
+    public void ResetResources()
+    {
+        Inventory.Instance.SetResource(ResourceType.Scrap, 0);
+        Inventory.Instance.SetResource(ResourceType.Wood, 0);
+        Inventory.Instance.SetResource(ResourceType.Fabric, 0);
+        Inventory.Instance.SetResource(ResourceType.Magnet, 0);
+        Inventory.Instance.SetResource(ResourceType.Crystal, 0);
+        Inventory.Instance.SetResource(ResourceType.Tech, 0);
+    }
+
+    public void ResetWorld()
+    {
+        // Reset PCGeneration from here.
+        ReferenceManager.Instance.terrainGenerator.NewSeed();
+        ReferenceManager.Instance.terrainGenerator.CreateNewMap();
         ReferenceManager.Instance.dayNightManager.Newday();
-        //ReferenceManager.Instance.player.Gravity = -15;
-        Debug.Log("new pos = " + new Vector3(cab.transform.position.x, cab.transform.position.y + cab.transform.lossyScale.y, cab.transform.position.z));
+
+        StartCoroutine(CreateMapLate());
+        //RESET PLAYER
+        ReferenceManager.Instance.gameManager.ResetPlayer();
+    }
+
+    IEnumerator CreateMapLate()
+    {
+        yield return new WaitForSeconds(0.2f);
+        ReferenceManager.Instance.mapManager.CreateMap();
+        
     }
 
 }

@@ -18,7 +18,7 @@ public class PlayerMeter : MonoBehaviour
 
     void Start()
     {
-        ResetMeter();
+        //ResetMeter();
     }
 
     // Update is called once per frame
@@ -63,15 +63,13 @@ public class PlayerMeter : MonoBehaviour
         Debug.Log("rate: " + warmthDecayRate);
     }
 
-    private void Die()
+    public void Die()
     {
-        ReferenceManager.Instance.terrainGenerator.NewSeed();
-        ReferenceManager.Instance.terrainGenerator.CreateNewMap();
-        ResetMeter();
-        //ReferenceManager.Instance.gameManager.ResetPlayer();
+        ReferenceManager.Instance.gameManager.ResetWorld();
+        ReferenceManager.Instance.gameManager.ResetResources();
     }
 
-    private void ResetMeter()
+    public void ResetMeter()
     {
         currentWarmth = maxWarmth;
         currentHealth = maxHealth;
