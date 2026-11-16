@@ -229,6 +229,7 @@ MonoBehaviour:
   JumpTimeout: 0.1
   FallTimeout: 0.15
   Grounded: 1
+  _oldGrounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.5
   GroundLayers:
@@ -237,6 +238,11 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 4135013735270702863}
   TopClamp: 89
   BottomClamp: -89
+  MoveActionName: Player/Move
+  LookActionName: Player/Look
+  JumpActionName: Player/Jump
+  SprintActionName: Player/Sprint
+  camModifier: {fileID: 0}
   footstepSFX:
     Guid:
       Data1: 894989723
@@ -244,8 +250,8 @@ MonoBehaviour:
       Data3: 1199870636
       Data4: -1711284229
     Path: event:/SFX/Player/Footstep
-  footstepWalkFrequency: 2.5
-  footstepRunFrequency: 3.5
+  footstepWalkFrequency: 2
+  footstepRunFrequency: 3
 --- !u!114 &1978471637655604388
 MonoBehaviour:
   m_ObjectHideFlags: 0

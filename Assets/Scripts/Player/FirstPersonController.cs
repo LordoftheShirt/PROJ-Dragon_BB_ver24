@@ -1,5 +1,6 @@
 ﻿using FMOD;
 using FMODUnity;
+using System;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -19,6 +20,7 @@ namespace StarterAssets
         public float RotationSpeed = 1.0f;
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
+        private Vector2 _moveInput;
 
         [Space(10)]
         [Tooltip("The height the player can jump")]
@@ -56,6 +58,9 @@ namespace StarterAssets
         public string LookActionName = "Player/Look";
         public string JumpActionName = "Player/Jump";
         public string SprintActionName = "Player/Sprint";
+
+        [Header("Visuals/VFX")]
+        [SerializeField] private PlayerCameraModifier camModifier;
 
         [Header("SFX")]
         [SerializeField] private EventReference footstepSFX;
@@ -124,9 +129,12 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			JumpAndGravity();
+            _moveInput = _moveAction != null ? _moveAction.ReadValue<Vector2>() : Vector2.zero;
+
+            JumpAndGravity();
 			GroundedCheck();
 			Move();
+            CamModifier();
 			SFX();
         }
 
@@ -166,17 +174,16 @@ namespace StarterAssets
         private void Move()
         {
 #if ENABLE_INPUT_SYSTEM
-            Vector2 moveInput = _moveAction != null ? _moveAction.ReadValue<Vector2>() : Vector2.zero;
             bool isSprinting = _sprintAction != null && _sprintAction.IsPressed();
 
             float targetSpeed = isSprinting ? SprintSpeed : MoveSpeed;
 
-            if (moveInput == Vector2.zero) targetSpeed = 0.0f;
+            if (_moveInput == Vector2.zero) targetSpeed = 0.0f;
 
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = moveInput.magnitude > 1f ? 1f : moveInput.magnitude;
+            float inputMagnitude = _moveInput.magnitude > 1f ? 1f : _moveInput.magnitude;
             if (inputMagnitude == 0f) inputMagnitude = 1f;
 
             if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -189,11 +196,11 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
-            Vector3 inputDirection = new Vector3(moveInput.x, 0.0f, moveInput.y).normalized;
+            Vector3 inputDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
 
-            if (moveInput != Vector2.zero)
+            if (_moveInput != Vector2.zero)
             {
-                inputDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+                inputDirection = transform.right * _moveInput.x + transform.forward * _moveInput.y;
             }
 
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -201,9 +208,21 @@ namespace StarterAssets
         }
 
 
-#if ENABLE_INPUT_SYSTEM
+        private void CamModifier()
+        {
+            if (camModifier == null) return;
 
-		private void SFX()
+            camModifier.RevertBobbing = _moveInput == Vector2.zero || !Grounded;
+            camModifier.RevertSway = !Grounded;
+
+            // Our current move speed is our bobbing modifier
+            // Divide by walk speed to make the walk speed the regular 1 modifier value
+            float modifier = _speed / MoveSpeed;
+            camModifier.BobbingModifier = modifier;
+            camModifier.SwayModifier = modifier;
+        }
+
+        private void SFX()
         {
 			if (_oldGrounded != Grounded)
 			{
@@ -261,7 +280,8 @@ namespace StarterAssets
         }
 
 		private void JumpAndGravity()
-		{
+        {
+#if ENABLE_INPUT_SYSTEM
             bool jumpPressed = _jumpAction != null && _jumpAction.WasPressedThisFrame();
             if (Grounded)
 			{
