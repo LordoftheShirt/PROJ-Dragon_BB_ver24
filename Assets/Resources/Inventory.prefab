@@ -48,8 +48,6 @@ MonoBehaviour:
   startingItems:
   - item: {fileID: 11400000, guid: 06c8a16f3bd240e44844fdc1d428b560, type: 2}
     count: 3
-  - item: {fileID: 11400000, guid: 6b57f17ab53110e4ba77951943a7b226, type: 2}
-    count: 0
   - item: {fileID: 11400000, guid: ad830811d290cec4e988a47b4db9759d, type: 2}
     count: 1
   blueprintsUnlocked:

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingBlueprint : MonoBehaviour
+public class CraftingUIBlueprint : MonoBehaviour
 {
     public Blueprint Blueprint
     {

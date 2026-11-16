@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingInspector : MonoBehaviour
+public class CraftingUIInspector : MonoBehaviour
 {
     [SerializeField] private GameObject noBlueprintView;
     [SerializeField] private GameObject normalView;
@@ -77,7 +77,7 @@ public class CraftingInspector : MonoBehaviour
 
         foreach (var pair in _currentBlueprint.Ingredients)
         {
-            int amount = inv.GetResourceCount(pair.Type);
+            int amount = inv.GetResource(pair.Type);
             text += $"{pair.Type.GetDisplayString()} <color={(amount >= pair.Amount ? "green" : "red")}>{amount}/{pair.Amount}</color>\n";
         }
 
@@ -93,7 +93,7 @@ public class CraftingInspector : MonoBehaviour
         requirementsText.text = text;
 
         Item result = _currentBlueprint.Result;
-        amountText.text = result == null || result.UnlimitedStackSize ? "" : $"You have:\n{inv.GetItemCount(result)}/{result.MaxStackSize}";
+        amountText.text = result == null || result.UnlimitedStackSize ? "" : $"You have:\n{inv.GetItem(result)}/{result.MaxStackSize}";
 
         craftButton.interactable = _currentBlueprint.CanCraft();
     }

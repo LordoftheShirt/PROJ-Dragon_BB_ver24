@@ -37,58 +37,63 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
     public int GetCurrentFlags() => GetItemCount(flagItem);
     public int GetCurrentTents() => GetItemCount(tentItem);
     public int GetCurrentFirekits() => GetItemCount(firekitItem);
-    public int GetItemCount(Item item) => _inv.GetItemCount(item);
+    public int GetItemCount(Item item) => _inv.GetItem(item);
 
     private void Start()
     {
         _inv = Inventory.Instance;
+
+        Inventory.OnItemChanged += OnItemChanged;
     }
 
-    public void AddFlag()
+    private void OnDestroy()
     {
-        AddItem(flagItem, OnFlagsChanged);
+        Inventory.OnItemChanged -= OnItemChanged;
     }
-    public void AddTent()
+
+    private void OnItemChanged(Item item, int count, int change)
     {
-        AddItem(tentItem, OnTentsChanged);
+        if (item == flagItem) OnFlagsChanged?.Invoke(count);
+        else if (item == tentItem) OnTentsChanged?.Invoke(count);
+        else if (item == firekitItem) OnFirekitsChanged?.Invoke(count);
     }
-    public void AddFirekit()
+
+    public bool AddFlag()
     {
-        AddItem(firekitItem, OnFirekitsChanged);
+        return AddItem(flagItem);
     }
-    private void AddItem(Item item, Action<int> action)
+    public bool AddTent()
     {
-        int count = GetItemCount(item);
-        if (count < GetMaxStack(item))
+        return AddItem(tentItem);
+    }
+    public bool AddFirekit()
+    {
+        return AddItem(firekitItem);
+    }
+    private bool AddItem(Item item)
+    {
+        if (GetItemCount(item) < GetMaxStack(item))
         {
-            _inv.AddItem(item);
-
-            count++;
-            action?.Invoke(count);
+            return _inv.AddItem(item);
         }
+
+        return false;
     }
 
-    public void UseFlag()
+    public bool UseFlag()
     {
-        UseItem(flagItem, OnFlagsChanged);
+        return UseItem(flagItem);
     }
-    public void UseTent()
+    public bool UseTent()
     {
-        UseItem(tentItem, OnTentsChanged);
+        return UseItem(tentItem);
     }
-    public void UseFirekit()
+    public bool UseFirekit()
     {
-        UseItem(firekitItem, OnFirekitsChanged);
+        return UseItem(firekitItem);
     }
-    private void UseItem(Item item, Action<int> action)
+    private bool UseItem(Item item)
     {
-        int count = GetItemCount(item);
-        if (count > 0)
-        {
-            _inv.RemoveItem(item);
-
-            count--;
-            action?.Invoke(count);
-        }
+        return _inv.RemoveItem(item);
     }
 }

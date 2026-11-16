@@ -31,14 +31,14 @@ public class CraftingUI : Singleton<CraftingUI>
     [SerializeField] private bool debugMode;
 #endif
     [SerializeField] private GameObject mainPanel;
-    [SerializeField] private CraftingCategory categoryTemplate;
-    private CraftingCategory[] _categories;
-    [SerializeField] private CraftingBlueprint blueprintTemplate;
-    private Dictionary<BlueprintCategory, List<CraftingBlueprint>> _blueprintUIMap = new();
+    [SerializeField] private CraftingUICategory categoryTemplate;
+    private CraftingUICategory[] _categories;
+    [SerializeField] private CraftingUIBlueprint blueprintTemplate;
+    private Dictionary<BlueprintCategory, List<CraftingUIBlueprint>> _blueprintUIMap = new();
 
     [Space]
     [SerializeField] private ScrollRect scrollRect;
-    [SerializeField] private CraftingInspector inspector;
+    [SerializeField] private CraftingUIInspector inspector;
 
     private BlueprintCategory _currentCategory;
     private int _categoryAmount;
@@ -59,13 +59,13 @@ public class CraftingUI : Singleton<CraftingUI>
         // Create categories
         Array array = Enum.GetValues(typeof(BlueprintCategory));
         _categoryAmount = array.Length;
-        _categories = new CraftingCategory[_categoryAmount];
+        _categories = new CraftingUICategory[_categoryAmount];
 
         for (int i = 0; i < _categoryAmount; i++)
         {
             BlueprintCategory category = (BlueprintCategory)array.GetValue(i);
 
-            CraftingCategory newCategory = Instantiate(categoryTemplate, categoryTemplate.transform.parent);
+            CraftingUICategory newCategory = Instantiate(categoryTemplate, categoryTemplate.transform.parent);
             newCategory.Category = category;
 
             _categories[i] = newCategory;
@@ -130,7 +130,7 @@ public class CraftingUI : Singleton<CraftingUI>
         {
             if (blueprint == null) continue;
 
-            CraftingBlueprint newBlueprint = Instantiate(blueprintTemplate, blueprintTemplate.transform.parent);
+            CraftingUIBlueprint newBlueprint = Instantiate(blueprintTemplate, blueprintTemplate.transform.parent);
             newBlueprint.Blueprint = blueprint;
 
             if (!_blueprintUIMap.ContainsKey(blueprint.Category))

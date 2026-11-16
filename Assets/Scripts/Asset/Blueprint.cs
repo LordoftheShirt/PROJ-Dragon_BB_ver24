@@ -28,7 +28,7 @@ public class Blueprint : ScriptableObject
     {
         Inventory inv = Inventory.Instance;
 
-        if (!result.UnlimitedStackSize && inv.GetItemCount(result) >= result.MaxStackSize)
+        if (!result.UnlimitedStackSize && inv.GetItem(result) >= result.MaxStackSize)
         {
             return false;
         }
@@ -36,7 +36,7 @@ public class Blueprint : ScriptableObject
         // Fufill every ingredient requirement
         foreach (var ingredient in ingredients)
         {
-            int count = inv.GetResourceCount(ingredient.Type);
+            int count = inv.GetResource(ingredient.Type);
             if (count < ingredient.Amount)
             {
                 return false;
