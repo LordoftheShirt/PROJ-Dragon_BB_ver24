@@ -6,6 +6,11 @@ public class TerrainGenerator : MonoBehaviour
     public bool GenerateNew;
     public int seed;
 
+    public void NewSeed()
+    {
+        seed = UnityEngine.Random.Range(0, 10000);
+    }
+
     Mesh mesh;
     Vector3[] vertices;
     int[] triangles;
@@ -79,6 +84,9 @@ public class TerrainGenerator : MonoBehaviour
         PlaceThings();
 
         PlaceResourceSpawners();
+
+        //fixa player
+        ReferenceManager.Instance.gameManager.ResetPlayer();
     }
 
 
@@ -272,8 +280,10 @@ public class TerrainGenerator : MonoBehaviour
                 {
                     Debug.Log("transform house");
                     house.transform.position = new Vector3(0, y+ house.transform.lossyScale.y/2, 0);
+
+                    
                 }
-                
+
 
                 //läger till offset för att hålla kartans mitt i origo
                 vertices[i] = new Vector3(x + offsetX, y, z + offsetZ);

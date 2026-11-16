@@ -316,9 +316,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1616118369}
     - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1788084276}
+    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 384130564}
+    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: playerMeter
       value: 
       objectReference: {fileID: 1788084275}
+    - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: terrainGenerator
+      value: 
+      objectReference: {fileID: 100107750}
     - target: {fileID: 7659324314623727060, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: m_Name
       value: Managers
@@ -384,6 +396,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+--- !u!114 &384130564 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5046293295825093072, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+  m_PrefabInstance: {fileID: 384130563}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3a2ba686fc06b4b9961b02420a6431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!1 &542508511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1456,12 +1479,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2434912319553636542, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
   m_PrefabInstance: {fileID: 1788084273}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1788084276}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c97e3cccac89bf642837c1cd14c9045f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMeter
+--- !u!1 &1788084276 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2595275706332628392, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+  m_PrefabInstance: {fileID: 1788084273}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1923164825 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8345070699079395522, guid: 09aade0ecefd01e4b8f7661acf64f5c2, type: 3}
