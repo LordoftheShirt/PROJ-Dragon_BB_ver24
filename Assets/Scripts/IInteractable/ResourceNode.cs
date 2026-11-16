@@ -35,7 +35,7 @@ public class ResourceNode : MonoBehaviour, IInteractable
     {
         Debug.Log("Interacted with resource!");
         //kan ändra ettan till en stat på spelaren
-        CollectResource(1);
+        Inventory.Instance.AddResource(resourceType, CollectResource(1));
         if (resourceAmount <= 0) { Destroy(gameObject); }       
     }
 
