@@ -121,9 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8deeb9a6b30e5f9409c052bf60411bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConsumablesManager
-  maxFlags: 5
-  currentFlags: 3
-  maxTents: 3
-  currentTents: 2
-  maxFirekits: 3
-  currentFirekits: 2
+  flagItem: {fileID: 11400000, guid: 06c8a16f3bd240e44844fdc1d428b560, type: 2}
+  tentItem: {fileID: 11400000, guid: 6b57f17ab53110e4ba77951943a7b226, type: 2}
+  firekitItem: {fileID: 11400000, guid: ad830811d290cec4e988a47b4db9759d, type: 2}

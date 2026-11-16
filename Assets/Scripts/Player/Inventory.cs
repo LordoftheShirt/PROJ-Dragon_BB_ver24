@@ -163,6 +163,7 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool HasItem(Item item)
     {
+        if (item == null) return false;
         return Items.ContainsKey(item);
     }
 
@@ -171,11 +172,13 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool HasAmountOfItem(Item item, int count)
     {
+        if (item == null) return false;
         return Items.ContainsKey(item) && Items[item] >= count;
     }
 
     public int GetItemCount(Item item)
     {
+        if (item == null) return 0;
         if (Items.TryGetValue(item, out int result))
         {
             return result;
