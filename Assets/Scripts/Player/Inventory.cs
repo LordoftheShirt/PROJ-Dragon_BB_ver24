@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,36 +15,41 @@ public class Inventory : SingletonPersistent<Inventory>
     [SerializeField] private List<SerializableItemAndAmount<Item>> startingItems = new();
     [SerializeField] private List<Blueprint> blueprintsUnlocked = new();
 
+    public delegate void ChangeDelegate<T>(T obj, int count, int change);
+
     #region Resources
-    public void AddResource(ResourceType resourceType, int count)
+    public static ChangeDelegate<ResourceType> OnResourceChanged { get; set; }
+    public void AddResource(ResourceType resourceType, int change)
     {
-        if (count <= 0)
+        if (change <= 0)
         {
-            Debug.LogWarning($"Attempted to add {count} of \"{resourceType.GetDisplayString()}\" to inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to add {change} of \"{resourceType.GetDisplayString()}\" to inventory. Count must be greater than 0.");
             return;
         }
 
         if (Resources.ContainsKey(resourceType))
         {
-            Resources[resourceType] += count;
+            Resources[resourceType] += change;
         }
         else
         {
-            Resources[resourceType] = count;
+            Resources[resourceType] = change;
         }
+
+        OnResourceChanged?.Invoke(resourceType, Resources[resourceType], change);
     }
 
-    public void RemoveResource(ResourceType resourceType, int count)
+    public void RemoveResource(ResourceType resourceType, int change)
     {
-        if (count <= 0)
+        if (change <= 0)
         {
-            Debug.LogWarning($"Attempted to remove {count} of \"{resourceType.GetDisplayString()}\" from inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to remove {change} of \"{resourceType.GetDisplayString()}\" from inventory. Count must be greater than 0.");
             return;
         }
 
         if (Resources.ContainsKey(resourceType))
         {
-            Resources[resourceType] -= count;
+            Resources[resourceType] -= change;
 
             // Cannot fall below 0
             if (Resources[resourceType] <= 0)
@@ -51,28 +57,39 @@ public class Inventory : SingletonPersistent<Inventory>
                 Resources[resourceType] = 0;
             }
         }
+        else
+        {
+            Resources[resourceType] = 0;
+        }
+
+        OnResourceChanged?.Invoke(resourceType, Resources[resourceType], change);
     }
 
-    public int GetResourceCount(ResourceType resourceType)
+    public int GetResource(ResourceType resourceType)
     {
         return Resources[resourceType];
     }
 
-    public void SetResourceCount(ResourceType resourceType, int count)
+    public void SetResource(ResourceType resourceType, int count)
     {
-        Resources[resourceType] = Mathf.Max(count, 0);
+        int oldCount = Resources[resourceType];
+        int newCount = Mathf.Max(count, 0);
+        Resources[resourceType] = newCount;
+
+        OnResourceChanged?.Invoke(resourceType, newCount, newCount - oldCount);
     }
     #endregion
 
     #region Item
+    public static ChangeDelegate<Item> OnItemChanged { get; set; }
     /// <summary>
     /// Add an item to the players inventory. Returns true if the item was successfully added to the inventory (will be false if the player has reached the max stack size)
     /// </summary>
-    public bool AddItem(Item item, int count = 1)
+    public bool AddItem(Item item, int change = 1)
     {
-        if (count <= 0)
+        if (change <= 0)
         {
-            Debug.LogWarning($"Attempted to add {count} of \"{item.Name}\" to inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to add {change} of \"{item.Name}\" to inventory. Count must be greater than 0.");
             return false;
         }
 
@@ -83,19 +100,24 @@ public class Inventory : SingletonPersistent<Inventory>
                 return false;
             }
 
-            Items[item] += count;
+            int count = Items[item] + change;
 
             // Clamp if necessary
-            if (!item.UnlimitedStackSize && Items[item] > item.MaxStackSize)
+            if (!item.UnlimitedStackSize && count > item.MaxStackSize)
             {
-                Items[item] = item.MaxStackSize;
+                count = item.MaxStackSize;
             }
+
+            Items[item] = count;
+
+            OnItemChanged?.Invoke(item, count, change);
 
             return true;
         }
         else
         {
-            Items[item] = count;
+            Items[item] = change;
+            OnItemChanged?.Invoke(item, change, change);
             return true;
         }
     }
@@ -103,21 +125,29 @@ public class Inventory : SingletonPersistent<Inventory>
     /// <summary>
     /// Removes an item from the players inventory. Returns true if the item was successfully removed from the inventory (will be false if the player doesn't have any of the item)
     /// </summary>
-    public bool RemoveItem(Item item, int count = 1)
+    public bool RemoveItem(Item item, int change = 1)
     {
-        if (count <= 0)
+        if (change <= 0)
         {
-            Debug.LogWarning($"Attempted to remove {count} of \"{item.Name}\" from inventory. Count must be greater than 0.");
+            Debug.LogWarning($"Attempted to remove {change} of \"{item.Name}\" from inventory. Count must be greater than 0.");
             return false;
         }
 
         if (Items.ContainsKey(item))
         {
-            Items[item] -= count;
-            if (Items[item] <= 0)
+            int count = Items[item] - change;
+
+            if (count <= 0)
             {
+                count = 0;
                 Items.Remove(item);
             }
+            else
+            {
+                Items[item] = count;
+            }
+
+            OnItemChanged?.Invoke(item, count, change);
 
             return true;
         }
@@ -130,9 +160,10 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool RemoveAllItem(Item item)
     {
-        if (Items.ContainsKey(item))
+        if (Items.TryGetValue(item, out int count))
         {
             Items.Remove(item);
+            OnItemChanged?.Invoke(item, 0, -count);
             return true;
         }
         return false;
@@ -143,19 +174,31 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public void ClearAllItems()
     {
+        foreach (var pair in Items)
+        {
+            OnItemChanged?.Invoke(pair.Key, 0, -pair.Value);
+        }
+
         Items.Clear();
     }
 
     public void SetItem(Item item, int count)
     {
+        Items.TryGetValue(item, out int oldCount);
+        int newCount;
+
         if (count <= 0)
         {
+            newCount = 0;
             Items.Remove(item);
         }
         else
         {
-            Items[item] = item.UnlimitedStackSize ? count : Mathf.Min(count, item.MaxStackSize);
+            newCount = item.UnlimitedStackSize ? count : Mathf.Min(count, item.MaxStackSize);
+            Items[item] = newCount;
         }
+
+        OnItemChanged?.Invoke(item, newCount, newCount - oldCount);
     }
 
     /// <summary>
@@ -163,6 +206,7 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool HasItem(Item item)
     {
+        if (item == null) return false;
         return Items.ContainsKey(item);
     }
 
@@ -171,11 +215,13 @@ public class Inventory : SingletonPersistent<Inventory>
     /// </summary>
     public bool HasAmountOfItem(Item item, int count)
     {
+        if (item == null) return false;
         return Items.ContainsKey(item) && Items[item] >= count;
     }
 
-    public int GetItemCount(Item item)
+    public int GetItem(Item item)
     {
+        if (item == null) return 0;
         if (Items.TryGetValue(item, out int result))
         {
             return result;
@@ -186,6 +232,7 @@ public class Inventory : SingletonPersistent<Inventory>
     #endregion
 
     #region Blueprints
+    public static Action<Blueprint> OnUnlockBlueprint { get; set; }
     public void UnlockBlueprint(Blueprint blueprint)
     {
         if (HasBlueprint(blueprint))
@@ -196,8 +243,11 @@ public class Inventory : SingletonPersistent<Inventory>
 
         blueprintsUnlocked.Add(blueprint);
         Debug.Log($"Blueprint \"{blueprint.name}\" unlocked!");
+
+        OnUnlockBlueprint?.Invoke(blueprint);
     }
 
+    public static Action<Blueprint> OnLockBlueprint { get; set; }
     public void LockBlueprint(Blueprint blueprint)
     {
         if (!HasBlueprint(blueprint))
@@ -205,8 +255,11 @@ public class Inventory : SingletonPersistent<Inventory>
             Debug.Log($"Blueprint \"{blueprint.name}\" is not unlocked.");
             return;
         }
+
         blueprintsUnlocked.Remove(blueprint);
         Debug.Log($"Blueprint \"{blueprint.name}\" locked!");
+
+        OnLockBlueprint?.Invoke(blueprint);
     }
 
     public bool HasBlueprint(Blueprint blueprint)
