@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4171174980703013476}
   - component: {fileID: 1893674284887056190}
   - component: {fileID: 5449498893061459164}
+  - component: {fileID: 925395872712470414}
   m_Layer: 0
   m_Name: Firewood
   m_TagString: Untagged
@@ -127,3 +128,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceNode
   resourceAmount: 100
   resourceType: 0
+--- !u!114 &925395872712470414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8689415650351826161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee25b0ebb642624fbc8dd3c1e8764d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquashAndStretch

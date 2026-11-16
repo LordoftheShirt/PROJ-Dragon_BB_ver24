@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 908400883003837817}
   - component: {fileID: 8469907169195559746}
   - component: {fileID: 1268874576096516111}
+  - component: {fileID: 5037214466651616950}
   m_Layer: 0
   m_Name: Bed
   m_TagString: Untagged
@@ -250,6 +251,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84ec5cc34d542b4298313cc816de5f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SleepNewWorld
+--- !u!114 &5037214466651616950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6298701547743513793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee25b0ebb642624fbc8dd3c1e8764d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquashAndStretch
 --- !u!1 &6485539330820765204
 GameObject:
   m_ObjectHideFlags: 0

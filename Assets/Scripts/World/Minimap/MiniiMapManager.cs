@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MiniMapManager : MonoBehaviour
@@ -18,6 +19,7 @@ public class MiniMapManager : MonoBehaviour
 
     public void AddMapObject(GameObject mapObject)
     {
+        Debug.Log("Add obj, lenght:" + mapObjects.Count);
         if (!mapObjects.Contains(mapObject)) { mapObjects.Add(mapObject); }        
     }
 
@@ -35,22 +37,33 @@ public class MiniMapManager : MonoBehaviour
         }
     }
 
-    public void ClearMapObjects()
+    private void ClearMapObjects()
     {
-        mapObjects.Clear();
+        Debug.Log("Cleared minimap");
+        //mapObjects.Clear();
         foreach (Transform child in playerMap) { Destroy(child.gameObject); }
     }
 
     public void CreateMap()
     {
+        ClearMapObjects();
         Instantiate(cabbinTokenPrefab, playerMap.position, playerMap.rotation, playerMap);
 
+
+        Debug.Log("mapObjs count: " + mapObjects.Count);
         foreach (GameObject mapObject in mapObjects)
         {
+            Debug.Log("Creates: " + mapObject);
             Vector3 mapObjectPosition = new Vector3(CalculateObjectCordinate(playerMap.position.x, cabbin.position.x, mapObject.transform.position.x), CalculateObjectCordinate(playerMap.position.y, cabbin.position.z, mapObject.transform.position.z), playerMap.localPosition.z);
             if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
+            {
                 Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);
+                Debug.Log("instantiatear");
+            }
+                
         }
+
+        mapObjects.Clear();
     }
 
     private float CalculateObjectCordinate(float mapLocalCordinate, float cabbinCordinate, float objectCordinate)

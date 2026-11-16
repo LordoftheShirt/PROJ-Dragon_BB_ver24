@@ -36,7 +36,8 @@ public class ResourceNode : MonoBehaviour, IInteractable
         Debug.Log("Interacted with resource!");
         //kan ändra ettan till en stat på spelaren
         Inventory.Instance.AddResource(resourceType, CollectResource(1));
-        if (resourceAmount <= 0) { Destroy(gameObject); }       
+        gameObject.GetComponent<SquashAndStretch>().Animate();
+        if (resourceAmount <= 0) { Destroy(gameObject,0.4f); }       
     }
 
     public virtual ResourceType GetResourceType()

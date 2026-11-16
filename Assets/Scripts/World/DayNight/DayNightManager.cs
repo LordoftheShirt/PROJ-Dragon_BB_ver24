@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 
 public class DayNightManager : MonoBehaviour
 {
@@ -25,45 +26,29 @@ public class DayNightManager : MonoBehaviour
     private float dayTimer;
 
 
-    bool createdMap = false;
-    float trimer = 1;
-
-
     void Start()
     {
-        //Remove when resources are created in runtime, weird stacking issue with map creation'
-        Newday();
+        //    //Remove when resources are created in runtime, weird stacking issue with map creation'
+        //    Newday();
     }
 
     private void FixedUpdate()
     {
         if (paused) return;
 
-        if(!createdMap)
-        {
-            if(trimer < 0)
-            {
-                ReferenceManager.Instance.mapManager.CreateMap();
-                createdMap = true;
-            }
-            trimer -= Time.fixedDeltaTime;                
-        }
-
-
-
-        dayTimer -= Time.fixedDeltaTime;
-        if (dayTimer <= newDayThreshold)        
-            Newday();        
+        if (dayTimer <= newDayThreshold && !isNight)
+            isNight = true;
+        else
+            dayTimer -= Time.fixedDeltaTime;
 
         CheckTempratureChange();
 
-        directionalLight.transform.rotation = Quaternion.Euler(CalculateLightRotation());
+        if(!isNight)
+            directionalLight.transform.rotation = Quaternion.Euler(CalculateLightRotation());
     }
 
     public void Newday()
     {
-        //ReferenceManager.Instance.mapManager.ClearMapObjects();//comment this out to test the day night cycle without clearing the map objects
-
         dayTimer = dayDuration;
         directionalLight.transform.Rotate(new Vector3(lightStartRotation, 0, 0));
 

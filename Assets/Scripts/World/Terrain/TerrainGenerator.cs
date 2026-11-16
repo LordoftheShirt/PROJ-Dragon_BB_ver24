@@ -85,8 +85,7 @@ public class TerrainGenerator : MonoBehaviour
 
         PlaceResourceSpawners();
 
-        //fixa player
-        ReferenceManager.Instance.gameManager.ResetPlayer();
+
     }
 
 
