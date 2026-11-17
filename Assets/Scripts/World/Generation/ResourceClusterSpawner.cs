@@ -1,4 +1,4 @@
-using Unity.Hierarchy;
+using System.Collections;
 using UnityEngine;
 
 public class ResourceClusterSpawner : MonoBehaviour

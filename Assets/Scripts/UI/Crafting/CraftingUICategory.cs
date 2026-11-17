@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingCategory : MonoBehaviour
+public class CraftingUICategory : MonoBehaviour
 {
     public BlueprintCategory Category
     {

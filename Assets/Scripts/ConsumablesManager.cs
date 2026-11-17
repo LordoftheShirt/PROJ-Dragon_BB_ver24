@@ -2,8 +2,10 @@ using System;
 using UnityEngine;
 
 // simply tracks the max and current counts of consumables. Does not communicate out to other scripts.
-public class ConsumablesManager : Singleton<ConsumablesManager>
+[LoadOnInit]
+public class ConsumablesManager : SingletonPersistent<ConsumablesManager>
 {
+    /*
     [Header("Flags")]
     [SerializeField] private int maxFlags = 5;
     [SerializeField] private int currentFlags = 3;
@@ -15,92 +17,84 @@ public class ConsumablesManager : Singleton<ConsumablesManager>
     [Header("Firekits")]
     [SerializeField] private int maxFirekits = 3;
     [SerializeField] private int currentFirekits = 2;
+    */
+
+    [Header("Items")]
+    [SerializeField] private Item flagItem;
+    [SerializeField] private Item tentItem;
+    [SerializeField] private Item firekitItem;
+
+    private Inventory _inv;
 
     public event Action<int> OnFlagsChanged;
     public event Action<int> OnTentsChanged;
     public event Action<int> OnFirekitsChanged;
 
-    public int GetMaxFlags()
+    public int GetMaxFlags() => GetMaxStack(flagItem);
+    public int GetMaxTents() => GetMaxStack(tentItem);
+    public int GetMaxFirekits() => GetMaxStack(firekitItem);
+    public int GetMaxStack(Item item) => (item == null || item.UnlimitedStackSize) ? int.MaxValue : item.MaxStackSize;
+
+    public int GetCurrentFlags() => GetItemCount(flagItem);
+    public int GetCurrentTents() => GetItemCount(tentItem);
+    public int GetCurrentFirekits() => GetItemCount(firekitItem);
+    public int GetItemCount(Item item) => _inv.GetItem(item);
+
+    private void Start()
     {
-        return maxFlags;
+        _inv = Inventory.Instance;
+
+        Inventory.OnItemChanged += OnItemChanged;
     }
 
-    public int GetMaxTents()
+    private void OnDestroy()
     {
-        return maxTents;
+        Inventory.OnItemChanged -= OnItemChanged;
     }
 
-    public int GetMaxFirekits()
+    private void OnItemChanged(Item item, int count, int change)
     {
-        return maxFirekits;
+        if (item == flagItem) OnFlagsChanged?.Invoke(count);
+        else if (item == tentItem) OnTentsChanged?.Invoke(count);
+        else if (item == firekitItem) OnFirekitsChanged?.Invoke(count);
     }
 
-    public int GetCurrentFlags()
+    public bool AddFlag()
     {
-        return currentFlags;
+        return AddItem(flagItem);
     }
-
-    public int GetCurrentTents()
+    public bool AddTent()
     {
-        return currentTents;
+        return AddItem(tentItem);
     }
-
-    public int GetCurrentFirekits()
+    public bool AddFirekit()
     {
-        return currentFirekits;
+        return AddItem(firekitItem);
     }
-
-    public void AddFlag()
+    private bool AddItem(Item item)
     {
-        if (currentFlags < maxFlags)
+        if (GetItemCount(item) < GetMaxStack(item))
         {
-            currentFlags++;
-            OnFlagsChanged?.Invoke(currentFlags);
+            return _inv.AddItem(item);
         }
+
+        return false;
     }
 
-    public void AddTent()
+    public bool UseFlag()
     {
-        if (currentTents < maxTents)
-        {
-            currentTents++;
-            OnTentsChanged?.Invoke(currentTents);
-        }
+        return UseItem(flagItem);
     }
-
-    public void AddFirekit()
+    public bool UseTent()
     {
-        if (currentFirekits < maxFirekits)
-        {
-            currentFirekits++;
-            OnFirekitsChanged?.Invoke(currentFirekits);
-        }
+        return UseItem(tentItem);
     }
-
-    public void UseFlag()
+    public bool UseFirekit()
     {
-        if (currentFlags > 0)
-        {
-            currentFlags--;
-            OnFlagsChanged?.Invoke(currentFlags);
-        }
+        return UseItem(firekitItem);
     }
-
-    public void UseTent()
+    private bool UseItem(Item item)
     {
-        if (currentTents > 0)
-        {
-            currentTents--;
-            OnTentsChanged?.Invoke(currentTents);
-        }
-    }
-
-    public void UseFirekit()
-    {
-        if (currentFirekits > 0)
-        {
-            currentFirekits--;
-            OnFirekitsChanged?.Invoke(currentFirekits);
-        }
+        return _inv.RemoveItem(item);
     }
 }

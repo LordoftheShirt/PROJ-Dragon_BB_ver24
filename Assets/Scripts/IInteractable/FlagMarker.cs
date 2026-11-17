@@ -6,8 +6,11 @@ public class FlagMarker : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        ConsumablesManager.Instance.AddFlag();
-        Destroy(gameObject);
+        if (ConsumablesManager.Instance.AddFlag())
+        {
+            // Successfully picked up flag
+            Destroy(gameObject);
+        }
     }
 
     public string GetDescription()

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1322753380729825397}
   - component: {fileID: 7251459169059617267}
   - component: {fileID: 5192237344934759343}
+  - component: {fileID: 642336236604582407}
   m_Layer: 0
   m_Name: PlayerFollowCamera
   m_TagString: Untagged
@@ -47,18 +48,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
-    Enabled: 0
-    m_Value: 0
+    Enabled: 1
+    m_Value: 10
   OutputChannel: 1
   StandbyUpdate: 2
-  m_StreamingVersion: 20170927
-  m_LegacyPriority: 10
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
   Target:
     TrackingTarget: {fileID: 0}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 40
+    FieldOfView: 70
     OrthographicSize: 10
     NearClipPlane: 0.2
     FarClipPlane: 500
@@ -120,3 +121,27 @@ MonoBehaviour:
   AmplitudeGain: 0.5
   FrequencyGain: 0.3
   m_NoiseOffsets: {x: -451.37964, y: 684.7062, z: 648.0488}
+--- !u!114 &642336236604582407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762286023885395077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2ddf8d12da7934ab9e7f17fb423699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraModifier
+  canDoBobbing: 1
+  bobbingIntensity: 0.08
+  bobbingFrequency: 10.5
+  bobbingModifierMultiplier: 1.3
+  bobbingRevertSpeed: 1
+  canDoSway: 1
+  swayIntensity: {x: 0.5, y: 1, z: 0.5}
+  swayFrequency: {x: 2.8, y: 1.4, z: 2.1}
+  swayModifierMultiplier: 1.3
+  swayFrequencyMoveMultiplier: 2.25
+  swayIntensityMoveMultiplier: {x: 0.875, y: 0.35, z: -0.35}
+  swayRevertSpeed: 4

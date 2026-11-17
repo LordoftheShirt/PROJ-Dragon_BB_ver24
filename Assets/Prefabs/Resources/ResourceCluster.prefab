@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf27ea01499bc24baff2f3c298353bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceCluster
-  clusterRadius: 10
-  maxResourceCount: 10
+  clusterRadius: 15
+  maxResourceCount: 5
   minResourceCount: 3
-  maxResourceAmount: 100
+  maxResourceAmount: 20

@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 3701358175195525032}
   - component: {fileID: 4312928742724149556}
   - component: {fileID: 1975072647981418583}
+  - component: {fileID: -5327618884440736130}
   m_Layer: 0
   m_Name: Crafting Table
   m_TagString: Untagged
@@ -252,6 +253,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0db3d4a3ac3d244854a7d17b0a8a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenCrafting
+--- !u!114 &-5327618884440736130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5738960682598352976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee25b0ebb642624fbc8dd3c1e8764d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquashAndStretch
 --- !u!1 &6480474458211813884
 GameObject:
   m_ObjectHideFlags: 0

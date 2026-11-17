@@ -18,8 +18,7 @@ public class PlayerMeter : MonoBehaviour
 
     void Start()
     {
-        currentWarmth = maxWarmth;
-        currentHealth = maxHealth;
+        //ResetMeter();
     }
 
     // Update is called once per frame
@@ -28,6 +27,12 @@ public class PlayerMeter : MonoBehaviour
         if (!PauseRealtimeDecay)
         {
             Decay();
+
+
+            if(currentHealth <= 0)
+            {
+                Die();
+            }
         }
     }
 
@@ -56,6 +61,19 @@ public class PlayerMeter : MonoBehaviour
         //resetts decayrate
         warmthDecayRate = newRate;
         Debug.Log("rate: " + warmthDecayRate);
+    }
+
+    public void Die()
+    {
+        ReferenceManager.Instance.gameManager.ResetWorld();
+        ReferenceManager.Instance.gameManager.ResetResources();
+    }
+
+    public void ResetMeter()
+    {
+        currentWarmth = maxWarmth;
+        currentHealth = maxHealth;
+        
     }
 
     public float GetMaxWarmth() { return maxWarmth; }

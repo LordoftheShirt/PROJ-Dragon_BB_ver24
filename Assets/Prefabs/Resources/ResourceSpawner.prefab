@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abae7f1023fa2784f90bc2669eea6c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceClusterSpawner
-  spawnRadius: 100
+  spawnRadius: 200
   centerOffset: 50
-  numberOfClusters: 5
+  numberOfClusters: 3
   resourceClusterPrefab: {fileID: 1282608504125897185, guid: 40b62df958b81d444a0468e31be2b6a8, type: 3}
   resourceNodePrefab:
   - {fileID: 5449498893061459164, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}

@@ -7,12 +7,20 @@ public enum ResourceType
     /// AKA. Metal
     /// </summary>
     Scrap,
-    NumberOfResourceTypes
+    Fabric,
+    Magnet,
+    Tech,
+    Crystal,
     // TODO: more resource types!!
 }
 
 public static class ResourceTypeExtensions
 {
+    public static int GetCountInInventory(this ResourceType type)
+    {
+        return Inventory.Instance.GetResource(type);
+    }
+
     public static string GetDisplayString(this ResourceType resourceType)
     {
         switch (resourceType)
