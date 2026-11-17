@@ -13,12 +13,13 @@ public class TerrainGenerator : MonoBehaviour
     private List<int> previousSeeds = new List<int>();
     public void NewSeed()
     {
-        previousSeeds.Add(seed);
+        
         seed = UnityEngine.Random.Range(minSeedValue, maxSeedValue);
 
         //safety precaution
         if(previousSeeds.Count >= maxSeedValue)
         {
+            Debug.Log("All available seeds have been used. Clearing seed list.");
             previousSeeds.Clear();
         }
 
@@ -28,8 +29,10 @@ public class TerrainGenerator : MonoBehaviour
         {
             Debug.Log("Seed: " + seed + " has already been used, picking a new one.");
             NewSeed();
+            return;
         }
-            
+        previousSeeds.Add(seed);
+
     }
 
     Mesh mesh;
