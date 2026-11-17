@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -6,9 +7,29 @@ public class TerrainGenerator : MonoBehaviour
     public bool GenerateNew;
     public int seed;
 
+    private int minSeedValue = 0;
+    private int maxSeedValue = 10000;
+
+    private List<int> previousSeeds = new List<int>();
     public void NewSeed()
     {
-        seed = UnityEngine.Random.Range(0, 10000);
+        previousSeeds.Add(seed);
+        seed = UnityEngine.Random.Range(minSeedValue, maxSeedValue);
+
+        //safety precaution
+        if(previousSeeds.Count >= maxSeedValue)
+        {
+            previousSeeds.Clear();
+        }
+
+
+        //if seed has already been used, pick a new one
+        if (previousSeeds.Contains(seed))
+        {
+            Debug.Log("Seed: " + seed + " has already been used, picking a new one.");
+            NewSeed();
+        }
+            
     }
 
     Mesh mesh;
@@ -277,10 +298,7 @@ public class TerrainGenerator : MonoBehaviour
 
                 if(x == centerPoint && z == centerPoint)
                 {
-                    Debug.Log("transform house");
                     house.transform.position = new Vector3(0, y+ house.transform.lossyScale.y/2, 0);
-
-                    
                 }
 
 
@@ -387,7 +405,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
 
-        Debug.Log("Vertices length: " + vertices.Length + " triangles length: " + triangles.Length);
+        //Debug.Log("Vertices length: " + vertices.Length + " triangles length: " + triangles.Length);
 
         //trying for steepness
         /*for (int i = 0; i < triangles.Length; i+=3)
