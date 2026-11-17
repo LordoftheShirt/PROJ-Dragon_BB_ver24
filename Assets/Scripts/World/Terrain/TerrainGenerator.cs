@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -80,7 +81,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        CreateNewMap();
+        //CreateNewMap();
     }
 
     public void CreateNewMap()
@@ -115,11 +116,11 @@ public class TerrainGenerator : MonoBehaviour
 
 
 
-    private int voronoiGridSize = 2;
+    private int voronoiGridSize = 8; //2 verkar vara ungefär en bra storlek
     private int verticesPerCell;
 
     private Vector2Int[,] pointPositions;
-    private int[] possibleBiomes = { 1, 2, 3 };
+    private int[] possibleBiomes = { 0, 1, 2 };
     private int[,] biomes;
 
     private int[] biomeMap;
@@ -130,7 +131,7 @@ public class TerrainGenerator : MonoBehaviour
 
         //1. Seed choses how many biomes to use
         //4 är placeholder för vad som bör vara Biomes.length eller liknande
-        int biomeCount = UnityEngine.Random.Range(0, 4);
+        int biomeCount = 3;// UnityEngine.Random.Range(0, 4);
 
         //nu skapa voronoi och på punkterna sätt ut ett nummer från 0 till biomeCount
         verticesPerCell = chunkSize / voronoiGridSize;
@@ -160,20 +161,32 @@ public class TerrainGenerator : MonoBehaviour
                     {
                         int X = gridX + a;
                         int Y = gridY + b;
-                        if (X < 0 || Y < 0 || X >= voronoiGridSize || Y >= voronoiGridSize) continue;
-
-                        float distance = Vector2Int.Distance(new Vector2Int(i, j), pointPositions[X, Y]);
-                        if (distance < nearestDistance)
+                        if (X < 0 || Y < 0 || X >= voronoiGridSize || Y >= voronoiGridSize)
                         {
-                            nearestDistance = distance;
-                            nearestPoint = new Vector2Int(X, Y);//pointPositions[X, Y];
+                            //continue;
                         }
+                        else
+                        {
+                            float distance = Vector2Int.Distance(new Vector2Int(i, j), pointPositions[X, Y]);
+                            if (distance < nearestDistance)
+                            {
+                                nearestDistance = distance;
+                                nearestPoint = new Vector2Int(X, Y);//pointPositions[X, Y];
+                            }
+                        }
+
+                            
                     }
                 }
 
                 //SÄTT TEXTUR STUFF!!!!!
                 //det är viktigt att pos hittar rätt vertice här!!!!!!!
                 int pos = i * xSize + j;
+
+
+                
+
+                //Debug.Log(" i : " + i + " j : " +  j + " pos : " + pos);
 
                 if (pos >= 0 && pos < biomeMap.Length)
                     biomeMap[pos] = biomes[nearestPoint.x, nearestPoint.y];
@@ -188,6 +201,9 @@ public class TerrainGenerator : MonoBehaviour
 
     private void GeneratePoints()
     {
+        Vector2 centre = new Vector3(voronoiGridSize/2, voronoiGridSize/2);
+
+
         pointPositions = new Vector2Int[voronoiGridSize, voronoiGridSize];
         biomes = new int[voronoiGridSize, voronoiGridSize];
         for (int i = 0; i < voronoiGridSize; i++)
@@ -197,8 +213,75 @@ public class TerrainGenerator : MonoBehaviour
                 //sätter ut punkterna
                 pointPositions[i, j] = new Vector2Int(i * verticesPerCell + UnityEngine.Random.Range(0, verticesPerCell), j * verticesPerCell + UnityEngine.Random.Range(0, verticesPerCell));
 
+
+                //get point distance from center (house)
+                float dist = Vector2Int.Distance(new Vector2Int(i * verticesPerCell - centerPoint, j * verticesPerCell - centerPoint), new Vector2Int(centerPoint,centerPoint)); //i * verticesPerCell
+
+
+                float distance = Vector2Int.Distance(new Vector2Int(i, j), pointPositions[voronoiGridSize/2, voronoiGridSize/2]);
+
+                int furthest = 0;
+
+                if(Mathf.Abs(i - (voronoiGridSize / 2)) > Mathf.Abs(j - (voronoiGridSize / 2)))
+                {
+                    furthest = Mathf.Abs(i - (voronoiGridSize / 2));
+                }
+                else
+                {
+                    furthest = Mathf.Abs(j - (voronoiGridSize / 2));
+                }
+
+
+
+
+                    //Vector2 centre = new Vector3(0, 0);
+
+                    dist = Mathf.Abs(dist);
+
+
+
+                float d = Vector2Int.Distance(new Vector2Int(i, j), new Vector2Int(voronoiGridSize/2,voronoiGridSize/2));
+
+                dist = d;
+
+                /*
+                if( i < 1)
+                    dist = Mathf.Abs(j - (voronoiGridSize / 2));
+                else
+                    dist = Mathf.Abs(j + (voronoiGridSize / 2));
+                */
+
+                //dist = j;// - (((voronoiGridSize * i +1) / 2));
+
+                Debug.Log("dist: " + dist);
+                int biome = -1;
+
+                //lägger till ett random nummer på dist för att få lite mer randomness
+                dist += UnityEngine.Random.Range(-1.5f, 1.5f);
+
+
+                if (dist < 2)
+                {
+                    //biome snowfield
+                    biome = 0;
+
+                }
+                else if (dist < 3.5f)
+                {
+                    //biome ice crystal fields
+                    biome = 1;
+                }
+                else
+                {
+                    //biome highlands
+                    biome = 2;
+                }
+
+                //biome = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
+
                 //och väljer vilken färg aka biome punkten ska ha
-                biomes[i, j] = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
+                //biomes[i, j] = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
+                biomes[i, j] = biome;
             }
         }
     }
@@ -212,8 +295,8 @@ public class TerrainGenerator : MonoBehaviour
         int length = 20;
         float scale = 25f; //höjden på noiset
         //offset för att hålla kartans centre i origo
-        float offsetX = -xSize / 2;
-        float offsetZ = -zSize / 2;
+        float offsetX =  -xSize / 2;
+        float offsetZ =  -zSize / 2;
 
 
 
@@ -277,17 +360,26 @@ public class TerrainGenerator : MonoBehaviour
                 if (y < minTerrainHeight)
                     minTerrainHeight = y;
 
-                /*
+
+                //  i = (pos - j) /xSize
+                // pos = i * xSize + j;   är   pos = x * xSize + y;
+
+                int pos2 = (z * xSize) + x;
+
                 //kolla biome och välj noise accordingly
-                if (biomeMap[i] == 1)
+                if (biomeMap[pos2] == 0)
+                {
+                    y = 0;
+                }
+                if (biomeMap[pos2] == 1)
                 {
                     y = simplex + maxTerrainHeight/2;
                 }
-                else if(biomeMap[i] == 2)
+                else if(biomeMap[pos2] == 2)
                 {
                     y = absValue + maxTerrainHeight / 2; 
                 }
-                */
+                
 
 
 
@@ -299,7 +391,7 @@ public class TerrainGenerator : MonoBehaviour
                 }*/
 
 
-                if(x == centerPoint && z == centerPoint)
+                if (x == centerPoint && z == centerPoint)
                 {
                     house.transform.position = new Vector3(0, y+ house.transform.lossyScale.y/2, 0);
                 }
@@ -355,12 +447,15 @@ public class TerrainGenerator : MonoBehaviour
             {
                 uvs[i] = new Vector2((float)x / xSize, (float)z / zSize);
 
-                float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);
-                colors[i] = gradient.Evaluate(height);
+                //float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);
+                //colors[i] = gradient.Evaluate(height);
+
+
+                int pos2 = (z * xSize) + x;
 
 
                 //för att testa biomes
-                //colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[i]));
+                colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
 
                 //Debug.Log(biomeMap[i]);
 
