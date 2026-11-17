@@ -14,8 +14,13 @@ public enum ResourceType
     // TODO: more resource types!!
 }
 
-public static class ResourceTypeExtensions
+public static class ResourceTypeUtil
 {
+    public static ResourceType[] GetAllResourceTypes()
+    {
+        return (ResourceType[])System.Enum.GetValues(typeof(ResourceType));
+    }
+
     public static int GetCountInInventory(this ResourceType type)
     {
         return Inventory.Instance.GetResource(type);

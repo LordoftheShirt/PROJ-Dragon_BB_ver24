@@ -1,7 +1,8 @@
 using StarterAssets;
+using System;
 using UnityEngine;
 
-public class ReferenceManager : MonoBehaviour
+public class ReferenceManager : Singleton<ReferenceManager>
 {
     public MiniMapManager mapManager;
     public DayNightManager dayNightManager;
@@ -17,6 +18,7 @@ public class ReferenceManager : MonoBehaviour
     public ResourceNode[] resourceNodePrefab;
     public ResourceType[] resourceType;
 
+    /* Singleton script does this automatically
     public static ReferenceManager Instance { get; private set; }
 
     private void Awake()
@@ -31,5 +33,6 @@ public class ReferenceManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    */
 }
 
