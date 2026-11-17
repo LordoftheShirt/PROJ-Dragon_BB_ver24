@@ -54,6 +54,7 @@ public class DayNightManager : MonoBehaviour
 
         ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
         coldMultiplyer = mediumTempraturePreset;
+        isNight = false;
     }
 
     private void CheckTempratureChange()
