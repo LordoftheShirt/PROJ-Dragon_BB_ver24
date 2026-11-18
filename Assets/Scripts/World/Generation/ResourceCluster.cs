@@ -34,7 +34,7 @@ public class ResourceCluster : MonoBehaviour
                     spawnPosition = new Vector3(spawnPosition.x, spawnPosition.y + dist, spawnPosition.z);
 
                 spawnXRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.forward);
-                spawnZRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.left);
+                spawnZRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.right);
 
             }
 

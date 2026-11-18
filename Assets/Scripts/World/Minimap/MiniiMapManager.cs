@@ -19,7 +19,6 @@ public class MiniMapManager : MonoBehaviour
 
     public void AddMapObject(GameObject mapObject)
     {
-        Debug.Log("Add obj, lenght:" + mapObjects.Count);
         if (!mapObjects.Contains(mapObject)) { mapObjects.Add(mapObject); }        
     }
 
@@ -39,7 +38,6 @@ public class MiniMapManager : MonoBehaviour
 
     private void ClearMapObjects()
     {
-        Debug.Log("Cleared minimap");
         //mapObjects.Clear();
         foreach (Transform child in playerMap) { Destroy(child.gameObject); }
     }
@@ -50,17 +48,12 @@ public class MiniMapManager : MonoBehaviour
         Instantiate(cabbinTokenPrefab, playerMap.position, playerMap.rotation, playerMap);
 
 
-        Debug.Log("mapObjs count: " + mapObjects.Count);
         foreach (GameObject mapObject in mapObjects)
         {
             Debug.Log("Creates: " + mapObject);
             Vector3 mapObjectPosition = new Vector3(CalculateObjectCordinate(playerMap.position.x, cabbin.position.x, mapObject.transform.position.x), CalculateObjectCordinate(playerMap.position.y, cabbin.position.z, mapObject.transform.position.z), playerMap.localPosition.z);
-            if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
-            {
-                Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);
-                Debug.Log("instantiatear");
-            }
-                
+            if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)            
+                Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);                
         }
 
         mapObjects.Clear();

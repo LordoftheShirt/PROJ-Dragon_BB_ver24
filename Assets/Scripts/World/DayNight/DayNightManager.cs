@@ -10,33 +10,29 @@ public class DayNightManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float dayDuration = 60f;
     [SerializeField] private float rotationDegrees = 200f;
+    [SerializeField] private AnimationCurve coldChange;
+
     [Tooltip("The initial rotation of the directional light at the start of a new day.")]
     [SerializeField] private float lightStartRotation = 200f;
     [Tooltip("The threshold at which a new day is triggered. Negative values is extra time before the day ends.")]
     [SerializeField] private float newDayThreshold = -1f;
     [SerializeField] private float dayDivide = 4;
-    [SerializeField] private float lowTempraturePreset = 5;
-    [SerializeField] private float mediumTempraturePreset = 10;
-    [SerializeField] private float highTempraturePreset = 40;
+    [Tooltip("Degrees outside in magnitude of 10. So a value of -1 is -10 degrees")]
+    [SerializeField] private float nightTempraturePreset = 4;
     [Header("References")]
     [SerializeField] private Light directionalLight;
 
+
+    private float currentTemprature;
     private float coldMultiplyer;
 
     private bool paused = false;
     private bool isNight = false;
     private float dayTimer;
 
-
-    void Start()
-    {
-        //    //Remove when resources are created in runtime, weird stacking issue with map creation'
-        //    Newday();
-    }
-
     private void FixedUpdate()
     {
-        if (paused) return;
+        if (paused || isNight) return;
 
         if (dayTimer <= newDayThreshold && !isNight)
             isNight = true;
@@ -54,37 +50,31 @@ public class DayNightManager : MonoBehaviour
         dayTimer = dayDuration;
         directionalLight.transform.Rotate(new Vector3(lightStartRotation, 0, 0));
 
-        ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
-        coldMultiplyer = mediumTempraturePreset;
+        CheckTempratureChange();
         isNight = false;
     }
 
     private void CheckTempratureChange()
     {
-        if(isNight)
+        if (isNight)
         {
-            ChangeTemprature(coldMultiplyer, highTempraturePreset);
-            coldMultiplyer = highTempraturePreset;
+            ChangeTemprature(coldMultiplyer, UpdateTemprature(nightTempraturePreset));
             return;
         }
-
-        if (dayTimer <= 3 * (dayDuration / dayDivide))
-        {
-            if (dayTimer <= dayDuration / dayDivide)
-            {
-                ChangeTemprature(coldMultiplyer, mediumTempraturePreset);
-                coldMultiplyer = mediumTempraturePreset;
-                return;
-            }
-            ChangeTemprature(coldMultiplyer, lowTempraturePreset);
-            coldMultiplyer = lowTempraturePreset;
-        }
+        ChangeTemprature(coldMultiplyer, UpdateTemprature(coldChange.Evaluate(dayTimer / dayDuration) * 10));
     }
 
     private void ChangeTemprature(float oldChange, float newChange)
     {
         if (oldChange != newChange)        
-            ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);        
+            ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);
+        coldMultiplyer = newChange;
+    }
+
+    private float UpdateTemprature(float newTemp)
+    {
+        currentTemprature = newTemp * 10;
+        return (newTemp * newTemp);
     }
 
     private Vector3 CalculateLightRotation()
@@ -113,4 +103,10 @@ public class DayNightManager : MonoBehaviour
         paused = false;
         directionalLight.transform.rotation = Quaternion.Euler(newSunRotation);
     }
+
+    public int GetCurrentTemrpature()
+    {
+        return (int)currentTemprature;
+    }
+
 }

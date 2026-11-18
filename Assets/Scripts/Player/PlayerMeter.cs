@@ -60,7 +60,6 @@ public class PlayerMeter : MonoBehaviour
     {
         //resetts decayrate
         warmthDecayRate = newRate;
-        Debug.Log("rate: " + warmthDecayRate);
     }
 
     public void Die()
