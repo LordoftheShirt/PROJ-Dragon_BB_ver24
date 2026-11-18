@@ -1,10 +1,12 @@
 using UnityEngine;
-using System.Collections;
-using UnityEditor.Experimental.GraphView;
 
 public class DayNightManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public float NormalizedDayTimer => Mathf.Clamp01(dayTimer / dayDuration);
+    public float DayTimer => dayTimer;
+    public float DayDuration => dayDuration;
+    public Light DirectionalLight => directionalLight;
+
     [Header("Settings")]
     [SerializeField] private float dayDuration = 60f;
     [SerializeField] private float rotationDegrees = 200f;
