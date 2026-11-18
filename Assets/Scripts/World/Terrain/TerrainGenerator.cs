@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -106,9 +108,9 @@ public class TerrainGenerator : MonoBehaviour
         CreateColors();
         UpdateMesh();
 
-        PlaceThings();
+        //PlaceThings();
 
-        PlaceResourceSpawners();
+        //PlaceResourceSpawners();
 
 
     }
@@ -124,10 +126,12 @@ public class TerrainGenerator : MonoBehaviour
     private int[,] biomes;
 
     private int[] biomeMap;
+    BiomePercent[] biomeMapPercentages;// = new BiomePercent[biomeMap.Length];
 
     private void CreateBiomes()
     {
         biomeMap = new int[vertices.Length];
+        biomeMapPercentages = new BiomePercent[vertices.Length];
 
         //1. Seed choses how many biomes to use
         //4 är placeholder för vad som bör vara Biomes.length eller liknande
@@ -197,6 +201,7 @@ public class TerrainGenerator : MonoBehaviour
 
         //nu bestäm vilken biom som ska korrespondera till vilken int
 
+
     }
 
     private void GeneratePoints()
@@ -253,7 +258,7 @@ public class TerrainGenerator : MonoBehaviour
 
                 //dist = j;// - (((voronoiGridSize * i +1) / 2));
 
-                Debug.Log("dist: " + dist);
+                //Debug.Log("dist: " + dist);
                 int biome = -1;
 
                 //lägger till ett random nummer på dist för att få lite mer randomness
@@ -287,13 +292,125 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
+    class BiomePercent
+    {
+        public float pBiome1 = 0;
+        public float pBiome2 = 0;
+        public float pBiome3 = 0;
+
+        BiomePercent()
+        {
+
+        }
+        public BiomePercent(float a, float b, float c)
+        {
+            pBiome1 = a; pBiome2 = b; pBiome3 = c;
+
+        }
+    }
+
+
+    int blendRadius = 5;
+    private void BlendBiomes()
+    {
+        int minBlendLength = 0 - blendRadius;
+        int maxBlendLength = blendRadius + 1;
+        float divideLength = blendRadius * 2 * 2;
+
+
+        //create temporary map with the size of the biomeMap
+        //int[] tBiomeMap = new int[biomeMap.Length];
+        BiomePercent[] tBiomeMap = new BiomePercent[biomeMap.Length];
+
+        //Go through the biome map
+        for (int x = 0; x < chunkSize; x++)
+        {
+            for (int z = 0; z < chunkSize; z++)
+            {
+                int pos = x * xSize + z;
+
+                //get this biome
+                //int biome = biomeMap[pos];
+
+
+                int biome1Count = 0;
+                int biome2Count = 0;
+                int biome3Count = 0;
+
+                //kollar Moore's neighbourhood runt cellen
+                //och samlar ihop vilka biomer vi har
+                for (int a = minBlendLength; a < maxBlendLength; a++)
+                {
+                    for (int b = minBlendLength; b < maxBlendLength; b++)
+                    {
+                        int tX = x + a;
+                        int tZ = z + b;
+                        int tPos = (tX * xSize) + tZ;
+
+                        if (tX < 0 || tZ < 0 || tPos >= biomeMap.Length || tPos < 0)
+                        {
+                            //Debug.Log("skipped saving this position " + tPos + " x: "  + x  + " z: " + z);
+                            continue;
+                        }
+
+
+
+                        int tBiome = biomeMap[tPos];
+
+                        if(tBiome  == 0)
+                        {
+                            biome1Count++;
+                        }
+                        else if(tBiome == 1)
+                        {
+                             biome2Count++;
+                        }
+                        else
+                        {
+                            biome3Count++;
+                        }
+
+                    }
+                }
+
+
+
+
+                //räknar ut procenten för varje biom
+
+                float pBiome1 = biome1Count / (float)divideLength;
+                float pBiome2 = biome2Count / (float)divideLength;
+                float pBiome3 = biome3Count / (float)divideLength;
+
+
+                //och lägg till detta i arrayen
+
+                BiomePercent biomePercent = new BiomePercent(pBiome1,pBiome2,pBiome3);
+
+                if (pos >= 0 && pos < biomeMap.Length)
+                    tBiomeMap[pos] = biomePercent;
+            }
+        }
+
+        //set biomeMap = tempMap
+        biomeMapPercentages = tBiomeMap;
+
+
+
+        //printa ut hela mappen...
+        /*foreach(BiomePercent biomePercent in biomeMapPercentages)
+        {
+            Debug.Log("biomePercent for a: " + biomePercent.pBiome1 + " b: " + biomePercent.pBiome2 + " c: " + biomePercent.pBiome3);
+        }*/
+
+    }
 
 
     private void CreateMeshShape()
     {
 
         int length = 20;
-        float scale = 25f; //höjden på noiset
+        float scale = 10f; //höjden på noiset
         //offset för att hålla kartans centre i origo
         float offsetX =  -xSize / 2;
         float offsetZ =  -zSize / 2;
@@ -313,6 +430,9 @@ public class TerrainGenerator : MonoBehaviour
         //skapa biomes 
         CreateBiomes();
 
+        //och blenda dessa
+        BlendBiomes();
+
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
@@ -323,15 +443,13 @@ public class TerrainGenerator : MonoBehaviour
 
                 float2 pos = new float2(x + newNoise, z + newNoise);  //                    double value = noise(x / 32.0, y / 32.0);
 
-                float value = noise.srnoise(pos / length * 10, seed);//Unity.Mathematics.noise.snoise(pos);
+                float value = noise.srnoise(pos / length * 1, seed);//Unity.Mathematics.noise.snoise(pos);
                 value = value * 0.5f;// + 0.5f;
                 float absValue = Mathf.Abs(value); //   
-                absValue *= 5;
+                //absValue *= 5;
 
-                if (absValue < 0.25f)
-                {
-                    //absValue += -2;
-                }
+                absValue += scale/2;
+
 
                 //float perlinSeed = noise.pnoise(new float2(x * .03f, z * .03f), seed) *25f;
                 float perlin = Mathf.PerlinNoise((x + newNoise) * .01f, (z + newNoise) * .01f) * scale;  //där * .03f zoomar in på the noise, och * 25f gör hjöjdskilnaderna tydligare!!
@@ -346,11 +464,12 @@ public class TerrainGenerator : MonoBehaviour
 
                 float simplex = noise.snoise(new float2(z * .03f, x * .03f));
                 float simplexV = Mathf.Abs(simplex);
-                if (simplexV > 0.35f)
+                /*if (simplexV > 0.35f)
                 {
                     simplex *= 5f;
-                }
+                }*/
 
+                simplex += scale/2;
 
                 float y = perlin;
 
@@ -366,8 +485,9 @@ public class TerrainGenerator : MonoBehaviour
 
                 int pos2 = (z * xSize) + x;
 
+                //OLD
                 //kolla biome och välj noise accordingly
-                if (biomeMap[pos2] == 0)
+                /*if (biomeMap[pos2] == 0)
                 {
                     y = 0;
                 }
@@ -378,9 +498,24 @@ public class TerrainGenerator : MonoBehaviour
                 else if(biomeMap[pos2] == 2)
                 {
                     y = absValue + maxTerrainHeight / 2; 
-                }
-                
+                }*/
 
+                //NEW (with percentages)
+                BiomePercent bp = biomeMapPercentages[pos2];
+
+                if (bp == null) //det här händer bara med en kant av hela mappen
+                {
+                    //y = -50;
+                    //Debug.Log("bp == null    pos: " + pos2);
+                }
+                else
+                {
+                                   
+                    //Debug.Log("skipped saving this position " + pos + " with biomePercent: 1" + bp.pBiome1 + " 2 " + bp.pBiome2 + " 3 " + bp.pBiome3 );
+                    y = (bp.pBiome1 * perlin) + (bp.pBiome2 * simplex ) + (bp.pBiome3 * absValue);
+
+                }
+                    
 
 
 
@@ -456,6 +591,23 @@ public class TerrainGenerator : MonoBehaviour
 
                 //för att testa biomes
                 colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
+
+                //NEW (with percentages)
+                /*BiomePercent bp = biomeMapPercentages[pos2];
+
+                if (bp == null) //det här händer bara med en kant av hela mappen
+                {
+                }
+                else
+                {
+                    float A = Mathf.InverseLerp(bp.pBiome1, bp.pBiome2, biomeMap[pos2])
+
+                    colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
+                    //Debug.Log("skipped saving this position " + pos + " with biomePercent: 1" + bp.pBiome1 + " 2 " + bp.pBiome2 + " 3 " + bp.pBiome3 );
+                    y = (bp.pBiome1 * 0) + (bp.pBiome2 * (simplex)) + (bp.pBiome3 * (absValue));
+                    
+                }*/
+
 
                 //Debug.Log(biomeMap[i]);
 
