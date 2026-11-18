@@ -45,10 +45,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceIcons
   resourceIcons:
-  - {fileID: 21300000, guid: b5835d70857da9b4bacb830236fee290, type: 3}
-  - {fileID: 21300000, guid: db6b4e87cfdd6b44eb7c4fceb8e26067, type: 3}
+  - {fileID: 21300000, guid: e1043e1bbbd9ba341bbafe53aff9b4cc, type: 3}
+  - {fileID: 21300000, guid: 98ecc2dfeb6fda34e8a639b0ac19589b, type: 3}
+  - {fileID: 21300000, guid: 123f5a6180a011b4da7fd196a37f2a43, type: 3}
+  - {fileID: 21300000, guid: 421236b65d97f3940b4c3aae75f3d83a, type: 3}
+  - {fileID: 21300000, guid: c070d86158a52b14fa23c55ceb63e0d3, type: 3}
+  - {fileID: 21300000, guid: 366fda8fee5dfbd45824beafeae5a191, type: 3}
   blueprintCategoryIcons:
-  - {fileID: 21300000, guid: 8959367d62272ac49af3b25fb8283106, type: 3}
-  - {fileID: 21300000, guid: 924d07a2191f79c41982bf319b0e8044, type: 3}
-  - {fileID: 21300000, guid: 1ee0da7eb78fbf345bb4fb37206f3953, type: 3}
-  - {fileID: 21300000, guid: 170d93d9ad4d3924abe799a7cc23eb3d, type: 3}
+  - {fileID: 21300000, guid: 5f3c144bdc2bbf24db4ef48620aab768, type: 3}
+  - {fileID: 21300000, guid: 66377c7a98c82eb41989bb2bc3e839f6, type: 3}
+  - {fileID: 21300000, guid: 3c8cbdd3edc285b4e8754b385e72c385, type: 3}
+  - {fileID: 21300000, guid: 1ac9269b2ca2b214a9a45b679ba442be, type: 3}
