@@ -49,6 +49,13 @@ public class DayNightVisuals : SingletonPersistent<DayNightVisuals>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    private void OnDestroy()
+    {
+        // Revert skybox to a default state
+        mat.SetColor(SKY_TINT_PROP, colors[0]);
+        mat.SetFloat(EXPOSURE_PROP, 1);
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
         SetDayNight();
