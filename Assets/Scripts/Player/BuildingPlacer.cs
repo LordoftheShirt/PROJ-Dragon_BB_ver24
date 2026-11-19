@@ -22,7 +22,8 @@ public class BuildingPlacer : MonoBehaviour
     [SerializeField] private GameObject tentPrefab;
 
 
-    [Header("Preview Build")]
+    [Header("Particles")]
+    [SerializeField] private GameObject placedExplosion;
 
     private float holdToPlaceSec = 1f;
     
@@ -177,6 +178,11 @@ public class BuildingPlacer : MonoBehaviour
                 return null;
             }
 
+            // SFX for tent and fireplace here.
+
+            if (placedExplosion != null)
+                Instantiate(placedExplosion, currentGhost.transform.position, currentGhost.transform.rotation);
+
             return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation);
         }
 
@@ -192,12 +198,17 @@ public class BuildingPlacer : MonoBehaviour
 
             Quaternion buildRotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
 
-            
+            if(build == flagPrefab)
+            {
+                // SFX for flag here.
+            }
+
             return Instantiate(build, hitinfo.point, buildRotation);
         }
-
         return null;
     }
+
+
 
 
     // Update the current ghost object based on the provided ghost prefab (ghost: a pre-build, when you want to preview the build location).

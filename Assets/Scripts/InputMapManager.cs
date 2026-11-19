@@ -36,8 +36,8 @@ public class InputMapManager : SingletonPersistent<InputMapManager>
     public void EnablePlayerMap()
     {
         playerMap.Enable();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
         if (starterAssetsInputs != null)
         {
@@ -53,8 +53,8 @@ public class InputMapManager : SingletonPersistent<InputMapManager>
     public void DisablePlayerMap()
     {
         playerMap.Disable();
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
 
         if (starterAssetsInputs != null)
         {
@@ -72,6 +72,15 @@ public class InputMapManager : SingletonPersistent<InputMapManager>
         }
     }
 
+    public bool IsPlayerMapActive()
+    {
+        if (playerMap == null)
+        {
+            Debug.Log("PlayerMap is null");
+            return false;
+        }
 
+        return playerMap.enabled;
+    }
 
 }
