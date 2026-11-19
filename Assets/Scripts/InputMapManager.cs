@@ -72,6 +72,15 @@ public class InputMapManager : SingletonPersistent<InputMapManager>
         }
     }
 
+    public bool IsPlayerMapActive()
+    {
+        if (playerMap == null)
+        {
+            Debug.Log("PlayerMap is null");
+            return false;
+        }
 
+        return playerMap.enabled;
+    }
 
 }

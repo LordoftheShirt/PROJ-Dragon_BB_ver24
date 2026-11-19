@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿/*
+using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+*/
 
+/* Why it broke: it expects the StarterAsset script to be in: StarterAssets/Runtime/InputSystem. It has been moved to Assets/Script for referencing ease.
 namespace StarterAssets
 {
     public partial class StarterAssetsDeployMenu : ScriptableObject
@@ -99,4 +102,4 @@ namespace StarterAssets
             return null;
         }
     }
-}
+} */

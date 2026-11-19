@@ -22,7 +22,13 @@ namespace StarterAssets
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM
-		public void OnMove(InputValue value)
+
+        public void Start()
+        {
+            SetCursorState(cursorLocked);
+        }
+
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -70,8 +76,12 @@ namespace StarterAssets
 		
 		private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
-		}
+			if (InputMapManager.Instance.IsPlayerMapActive())
+			{
+                //Debug.Log("Playermap is active!");
+                SetCursorState(cursorLocked);
+            }
+        }
 
 		private void SetCursorState(bool newState)
 		{

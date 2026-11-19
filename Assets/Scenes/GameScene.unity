@@ -1308,6 +1308,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2595275706332628388, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2595275706332628399, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: RotationSpeed
       value: 0.15
@@ -1476,7 +1480,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2595275706332628388, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
