@@ -76,7 +76,7 @@ namespace StarterAssets
 		
 		private void OnApplicationFocus(bool hasFocus)
 		{
-			if (InputMapManager.Instance.IsPlayerMapActive())
+			if (InputMapManager.Instance.IsPlayerMapActive() && hasFocus)
 			{
                 //Debug.Log("Playermap is active!");
                 SetCursorState(cursorLocked);
@@ -85,7 +85,7 @@ namespace StarterAssets
 
 		private void SetCursorState(bool newState)
 		{
-			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+			UnityEngine.Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
 	
