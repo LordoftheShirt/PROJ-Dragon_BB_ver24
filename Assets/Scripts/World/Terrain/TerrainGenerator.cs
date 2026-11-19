@@ -589,24 +589,14 @@ public class TerrainGenerator : MonoBehaviour
                 int pos2 = (z * xSize) + x;
 
 
-                //för att testa biomes
-                colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
+                //biome färger som använder gradient slidern
+                //colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
 
-                //NEW (with percentages)
-                /*BiomePercent bp = biomeMapPercentages[pos2];
+                //biome färger som använder biome percentages för att skapa rgb färg
+                BiomePercent bp = biomeMapPercentages[pos2];
+                if (bp != null)
+                    colors[i] = new Color(bp.pBiome1, bp.pBiome2, bp.pBiome3, 0.5f);
 
-                if (bp == null) //det här händer bara med en kant av hela mappen
-                {
-                }
-                else
-                {
-                    float A = Mathf.InverseLerp(bp.pBiome1, bp.pBiome2, biomeMap[pos2])
-
-                    colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
-                    //Debug.Log("skipped saving this position " + pos + " with biomePercent: 1" + bp.pBiome1 + " 2 " + bp.pBiome2 + " 3 " + bp.pBiome3 );
-                    y = (bp.pBiome1 * 0) + (bp.pBiome2 * (simplex)) + (bp.pBiome3 * (absValue));
-                    
-                }*/
 
 
                 //Debug.Log(biomeMap[i]);
