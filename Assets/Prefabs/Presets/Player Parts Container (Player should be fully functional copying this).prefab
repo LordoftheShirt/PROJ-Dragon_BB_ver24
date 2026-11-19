@@ -251,7 +251,7 @@ MonoBehaviour:
   flagCounter: {fileID: 7836937184535535006}
   fireKitCounter: {fileID: 4046788181040408144}
   tentCounter: {fileID: 7949934345417416787}
-  buildingPlacer: {fileID: 4074963635181093454}
+  buildingPlacer: {fileID: 0}
   buildTimeSlider: {fileID: 2892730789165898181}
 --- !u!1 &336458356296906697
 GameObject:
@@ -6646,20 +6646,14 @@ PrefabInstance:
     - {fileID: 1661461708523499441, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8762286023885395077, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4074963635181093454}
-    - targetCorrespondingSourceObject: {fileID: 8762286023885395077, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3956237535670157133}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
 --- !u!114 &2526424174783658359 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 642336236604582407, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
   m_PrefabInstance: {fileID: 3163110242286113648}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5943701163052500981}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df2ddf8d12da7934ab9e7f17fb423699, type: 3}
@@ -6670,45 +6664,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
   m_PrefabInstance: {fileID: 3163110242286113648}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5943701163052500981 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8762286023885395077, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
-  m_PrefabInstance: {fileID: 3163110242286113648}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4074963635181093454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5943701163052500981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7c647e6a4b3c7841b9e8b2528e3e1db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlagPlacer
-  buildRange: 8
-  maxSurfaceAngle: 45
-  flagPrefab: {fileID: 1143922573743967422, guid: a2c4809533aee094a93ac1e2763f39ed, type: 3}
-  fireKitGhostPrefab: {fileID: 2120276930775436328, guid: 105e0c7074071db40b5a54c9b19441df, type: 3}
-  fireKitPrefab: {fileID: 2120276930775436328, guid: c27fda38277a0ea478e6d52eb82ea29c, type: 3}
-  tentGhostPrefab: {fileID: 8845116247779368566, guid: bcb204d9bd8310f47be558f330ea6167, type: 3}
-  tentPrefab: {fileID: 8845116247779368566, guid: b5a1f753ab063dc448ee4b0edc835170, type: 3}
---- !u!114 &3956237535670157133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5943701163052500981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4d0ca49caa422745939df33fd442b41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactor
-  interactRange: 5
-  interactionUI: {fileID: 2265432700447827176}
-  interactionText: {fileID: 6545823609004892820}
 --- !u!1001 &5077972149529719787
 PrefabInstance:
   m_ObjectHideFlags: 0

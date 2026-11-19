@@ -155,6 +155,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8997996947095583982}
   - component: {fileID: 8616685848737228382}
+  - component: {fileID: 7413844506479627764}
+  - component: {fileID: 5572772612424339557}
   - component: {fileID: 8616685848737228371}
   - component: {fileID: 1978471637655604388}
   - component: {fileID: 5420857361349278248}
@@ -208,6 +210,40 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!114 &7413844506479627764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c647e6a4b3c7841b9e8b2528e3e1db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlagPlacer
+  buildRange: 8
+  maxSurfaceAngle: 45
+  flagPrefab: {fileID: 1143922573743967422, guid: a2c4809533aee094a93ac1e2763f39ed, type: 3}
+  fireKitGhostPrefab: {fileID: 2120276930775436328, guid: 105e0c7074071db40b5a54c9b19441df, type: 3}
+  fireKitPrefab: {fileID: 2120276930775436328, guid: c27fda38277a0ea478e6d52eb82ea29c, type: 3}
+  tentGhostPrefab: {fileID: 8845116247779368566, guid: bcb204d9bd8310f47be558f330ea6167, type: 3}
+  tentPrefab: {fileID: 8845116247779368566, guid: b5a1f753ab063dc448ee4b0edc835170, type: 3}
+--- !u!114 &5572772612424339557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d0ca49caa422745939df33fd442b41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactor
+  interactRange: 5
+  interactionUI: {fileID: 0}
+  interactionText: {fileID: 0}
 --- !u!114 &8616685848737228371
 MonoBehaviour:
   m_ObjectHideFlags: 0
