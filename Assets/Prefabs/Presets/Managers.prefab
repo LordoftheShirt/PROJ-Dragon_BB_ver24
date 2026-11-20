@@ -49,7 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReferenceManager
   mapManager: {fileID: 3058454260273352574}
   dayNightManager: {fileID: 8243468339349818222}
-  playerResourceManager: {fileID: 0}
+  terrainGenerator: {fileID: 0}
+  player: {fileID: 0}
+  gameManager: {fileID: 5046293295825093072}
   playerMeter: {fileID: 0}
   cabbin: {fileID: 0}
   resourceClusterPrefab: {fileID: 1282608504125897185, guid: 40b62df958b81d444a0468e31be2b6a8, type: 3}
@@ -69,14 +71,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b22a079362c983a469270bc7ddf03a87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayNightManager
-  dayDuration: 15
-  rotationDegrees: 200
-  lightStartRotation: 200
-  newDayThreshold: -0.5
+  dayDuration: 360
+  rotationDegrees: 180
+  coldChange:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0013160706
+      value: -0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2
+      value: -0.2
+      inSlope: 0.109815754
+      outSlope: 0.109815754
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3154357
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8
+      value: -0.2
+      inSlope: -0.07447229
+      outSlope: -0.07447229
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.31565252
+    - serializedVersion: 3
+      time: 1
+      value: -0.3
+      inSlope: 0.18627882
+      outSlope: 0.18627882
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.4403666
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  lightStartRotation: 180
+  newDayThreshold: -1
   dayDivide: 4
-  lowTempraturePreset: 2
-  mediumTempraturePreset: 5
-  highTempraturePreset: 20
+  nightTempraturePreset: -4
   directionalLight: {fileID: 0}
 --- !u!114 &3058454260273352574
 MonoBehaviour:
@@ -94,7 +136,7 @@ MonoBehaviour:
   playerMap: {fileID: 0}
   cabbinTokenPrefab: {fileID: 7052464961573610756, guid: a0a763a335f38af49a813ebc22a0f1c1, type: 3}
   mapObjectTokenPrefab: {fileID: 7052464961573610756, guid: b7e476913d5302f45b7f3ec7f4cd0ca6, type: 3}
-  scale: 2
+  scale: 3
   size: 100
 --- !u!114 &5046293295825093072
 MonoBehaviour:

@@ -16,7 +16,6 @@ public class DayNightManager : MonoBehaviour
     [SerializeField] private float lightStartRotation = 200f;
     [Tooltip("The threshold at which a new day is triggered. Negative values is extra time before the day ends.")]
     [SerializeField] private float newDayThreshold = -1f;
-    [SerializeField] private float dayDivide = 4;
     [Tooltip("Degrees outside in magnitude of 10. So a value of -1 is -10 degrees")]
     [SerializeField] private float nightTempraturePreset = 4;
     [Header("References")]
