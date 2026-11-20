@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     {
         // Reset PCGeneration from here.
         ReferenceManager.Instance.terrainGenerator.NewSeed();
-        ReferenceManager.Instance.terrainGenerator.CreateNewMap();
+        ReferenceManager.Instance.terrainGenerator.CreateNewTerrain();
         ReferenceManager.Instance.dayNightManager.Newday();
 
         StartCoroutine(CreateMapLate());
