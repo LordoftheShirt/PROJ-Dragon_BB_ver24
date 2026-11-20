@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 // A raycast you place on the camera; it looks for IInteractable objects.
-public class BuildingPlacer : MonoBehaviour
+public class BuildingPlacer : Singleton<BuildingPlacer>
 {
     [SerializeField] private float buildRange = 8f;
     [SerializeField] private float maxSurfaceAngle = 45f; // Maximum angle from the up vector that is considered a valid surface for placement.
@@ -28,10 +28,12 @@ public class BuildingPlacer : MonoBehaviour
     private float holdToPlaceSec = 1f;
     
     private InputAction confirmBuildAction;
+    /* Input handling has been moved to Hotbar script
     private InputAction placeFireKitAction;
     private InputAction placeTentAction;
-    private InputAction cancelBuildAction;
     private InputAction placeFlagAction;
+    */
+    private InputAction cancelBuildAction;
 
     private bool isHoldingBuild = false;
     private float holdTimer = 0f;
@@ -41,17 +43,19 @@ public class BuildingPlacer : MonoBehaviour
     // For Placeholder UI.
     public event Action<bool> OnGhostPresent;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         confirmBuildAction = InputSystem.actions["Confirm"];
 
+        /* Input handling has been moved to Hotbar script
         placeFireKitAction = InputSystem.actions["Place Fire"];
-
         placeTentAction = InputSystem.actions["Place Tent"];
+        placeFlagAction = InputSystem.actions["Place Flag"];
+        */
 
         cancelBuildAction = InputSystem.actions["Cancel Build"];
-
-        placeFlagAction = InputSystem.actions["Place Flag"];
     }
 
     void Start()
@@ -123,21 +127,28 @@ public class BuildingPlacer : MonoBehaviour
     }
 
     // Place the flag instantly.
-    private void OnPlaceFlagKey(InputAction.CallbackContext context)
+    public void PlaceFlag()
     {
-        UpdateCurrentGhost(null);
+        RemoveGhost();
 
         if (PlaceBuild(flagPrefab, ConsumablesManager.Instance.GetCurrentFlags()) != null)
             ConsumablesManager.Instance.UseFlag();
     }
 
-    // Spawns a preview "ghost" Firekit
-    private void OnPlaceFireKitKey(InputAction.CallbackContext context)
+    public void SetGhostToFireKit()
     {
         UpdateCurrentGhost(fireKitGhostPrefab, ConsumablesManager.Instance.GetCurrentFirekits());
     }
 
+    public void SetGhostToTent()
+    {
+        UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+    }
 
+    public void RemoveGhost()
+    {
+        UpdateCurrentGhost(null);
+    }
 
     // when a previeww build is selected,the player must hold down the confirm build button for a set amount of time to place it. If the player releases the button before the time is up, the build is not placed.
     private void OnConfirmBuild(InputAction.CallbackContext context)
@@ -159,8 +170,6 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
     }
-
-
 
     private void OnCancelBuild(InputAction.CallbackContext context)
     {
@@ -207,9 +216,6 @@ public class BuildingPlacer : MonoBehaviour
         }
         return null;
     }
-
-
-
 
     // Update the current ghost object based on the provided ghost prefab (ghost: a pre-build, when you want to preview the build location).
     // Do no let the ghost object appear if the player has no more of that item to place.
@@ -258,12 +264,13 @@ public class BuildingPlacer : MonoBehaviour
 
     private void OnEnable()
     {
+        /* Input handling has been moved to Hotbar script
         placeFlagAction.performed += OnPlaceFlagKey;
-
 
         placeFireKitAction.performed += OnPlaceFireKitKey;
 
         placeTentAction.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        */
 
         confirmBuildAction.started += OnConfirmBuild;
         confirmBuildAction.canceled += OnConfirmBuild;
@@ -273,12 +280,13 @@ public class BuildingPlacer : MonoBehaviour
 
     private void OnDisable()
     {
+        /* Input handling has been moved to Hotbar script
         placeFlagAction.performed -= OnPlaceFlagKey;
 
         placeFireKitAction.performed -= OnPlaceFireKitKey;
 
         placeTentAction.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
-
+        */
         confirmBuildAction.started += OnConfirmBuild;
         confirmBuildAction.canceled += OnConfirmBuild;
 

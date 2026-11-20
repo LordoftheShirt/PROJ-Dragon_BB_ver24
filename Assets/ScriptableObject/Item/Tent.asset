@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3262106d0c224344e9c3e83572c36a47, type: 3}
   m_Name: Tent
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  icon: {fileID: 21300000, guid: da085d00b3ad6444f806a0fd7c541ff0, type: 3}
+  icon: {fileID: 21300000, guid: e6828939159a05140ae88c7209f08c5d, type: 3}
+  color: {r: 0.64705884, g: 0.8745099, b: 1, a: 1}
+  backgroundColor: {r: 0.19215688, g: 0.3254902, b: 0.454902, a: 1}
   itemName: Tent
   description: A placeable tent you can use once to sleep through the night. Requires
     an external heat source nearby, like a campfire, to use.
   maxStackSize: 2
+  durability: 0
+  canBeBroughtOnExpeditions: 1
+  equipmentSlot: 0
+  useType: TentUse, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

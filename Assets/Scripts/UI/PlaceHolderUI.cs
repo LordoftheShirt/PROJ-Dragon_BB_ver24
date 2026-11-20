@@ -38,7 +38,7 @@ public class PlaceHolderUI : MonoBehaviour
 
         if (stats != null)
         {
-            warmthSlider.maxValue = stats.GetMaxWarmth();
+            //warmthSlider.maxValue = stats.GetMaxWarmth();
             healthSlider.maxValue = stats.GetMaxHealth();
         }
 
@@ -78,7 +78,7 @@ public class PlaceHolderUI : MonoBehaviour
 
     void UpdateSliders()
     {
-        warmthSlider.value = stats.GetCurrentWarmth();
+        //warmthSlider.value = stats.GetCurrentWarmth();
         healthSlider.value = stats.GetCurrentHealth();
     }
 

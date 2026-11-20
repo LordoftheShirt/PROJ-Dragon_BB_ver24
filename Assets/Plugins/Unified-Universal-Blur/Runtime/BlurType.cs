@@ -3,7 +3,7 @@ namespace Unified.UniversalBlur.Runtime
     public enum BlurType
     {
         Fast, // Kawase
-        Balanced, // Gaussian
-        Quality // Bilateral
+        //Balanced, // Gaussian
+        //Quality // Bilateral
     }
 }
