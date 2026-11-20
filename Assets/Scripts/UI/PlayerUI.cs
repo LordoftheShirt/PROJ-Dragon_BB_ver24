@@ -16,6 +16,11 @@ public class PlayerUI : Singleton<PlayerUI>
     [SerializeField] private Slider hpBar;
     [SerializeField] private TMP_Text hpText;
     private string _hpFormat;
+
+    [Space]
+    [SerializeField] private Slider warmthBar;
+    [SerializeField] private TMP_Text warmthText;
+    private string _warmthFormat;
     private PlayerMeter _meter;
 
     [Space]
@@ -39,11 +44,14 @@ public class PlayerUI : Singleton<PlayerUI>
 
         _worldTempFormat = worldTempText.text;
         _hpFormat = hpText.text;
+        _warmthFormat = warmthText.text;
         _stormTimeFormat = stormTimeText.text;
 
         hpBar.maxValue = _meter.GetMaxHealth();
+        warmthBar.maxValue = _meter.GetMaxWarmth();
 
         UpdateHP();
+        UpdateWarmth();
     }
 
     private void LateUpdate()
@@ -51,6 +59,7 @@ public class PlayerUI : Singleton<PlayerUI>
         UpdateCompass();
         UpdateWorldTemp();
         UpdateHP();
+        UpdateWarmth();
         UpdateStormTime();
     }
 
@@ -73,6 +82,13 @@ public class PlayerUI : Singleton<PlayerUI>
         float hp = _meter.GetCurrentHealth();
         hpBar.value = hp;
         hpText.text = string.Format(_hpFormat, hp);
+    }
+
+    private void UpdateWarmth()
+    {
+        float warmth = _meter.GetCurrentWarmth();
+        warmthBar.value = warmth;
+        warmthText.text = string.Format(_warmthFormat, warmth);
     }
 
     private void UpdateStormTime()
