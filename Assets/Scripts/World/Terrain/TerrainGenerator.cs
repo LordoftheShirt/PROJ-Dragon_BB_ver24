@@ -1,28 +1,148 @@
+using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public bool GenerateNew;
-    public int seed;
+    #region bools used as buttons
+    [Header("Buttons")]
+    public bool generateNewTerrain;
+    public bool placeDecorations;
+    public bool placeResources;
+    #endregion
 
+    [Header("Terrain Settings")]
+    #region seed settings
+    public int seed;
     private int minSeedValue = 0;
     private int maxSeedValue = 10000;
-
     private List<int> previousSeeds = new List<int>();
+    #endregion
+
+    #region mesh-specific variables
+    private Mesh mesh;
+    private Vector3[] vertices;
+    private int[] triangles;
+
+    public int terrainSize = 500;
+    private int zSize;
+    private int xSize;
+
+    Vector2[] uvs;
+    Color[] colors;
+    #endregion
+
+    //public Gradient gradient;
+    private float minTerrainHeight;
+    private float maxTerrainHeight;
+
+    private int centerPoint; //centre of the terrain
+
+    [Header("Object to place references")]
+    //decorative objects to place
+    [SerializeField]
+    private GameObject objToPlace;
+    [SerializeField]
+    private GameObject objToPlace2;
+    [SerializeField]
+    private GameObject objToPlace3;
+    private GameObject objContainer; //holds all decorative gameobjects in the inspector
+
+
+    [SerializeField]
+    private GameObject[] resources; //mitt gamla sätt att sätta ut resources ##############################
+
+    [SerializeField]
+    private GameObject resourceSpawner;
+    private GameObject spawnerContainer; //holds all spawner gameobjects in the inspector (for resources)
+
+    [SerializeField]
+    private GameObject house;
+    private int houseSize = 6; //should be an even number, used for flattening the terrain in the centre
+
+
+    #region biome specific settings
+    [Header("Biome Settings")]
+    [Tooltip("This determines how much the biomes will blend. For no blending use 0.")]
+    [Range(0, 10)]
+    public int biomeBlendRadius = 5;
+
+    public int biomeInnerRadius = 200;
+    public int biomeMiddleRadius = 350;
+    //public int biomeFarRadius = 0;
+
+    [Tooltip("This determines how much the terrain will be divided for biomes. A higher number gives more detail, with many smaller biome pieces added together. 8 is a solid number for this.")]
+    public int voronoiGridSize = 8; 
+    private int verticesPerCell;
+
+    [Tooltip("This adds randomness to the biome placement in regards to the distance from origo (0,0). For no added randomness use 0.")]
+    public float biomePlacementRandomness = 1.5f; //added randomness to biome placement
+
+    public float scale = 25f; //höjden på noiset för biomerna
+
+    private Vector2Int[,] pointPositions;
+    //private int[] possibleBiomes = { 0, 1, 2 };
+    private int[,] biomes;
+    private int[] biomeMap;
+    private BiomePercent[] biomeMapPercentages;
+
+    class BiomePercent
+    {
+        public float pBiome1 = 0;
+        public float pBiome2 = 0;
+        public float pBiome3 = 0;
+
+        BiomePercent() { }
+        public BiomePercent(float a, float b, float c)
+        {
+            pBiome1 = a; pBiome2 = b; pBiome3 = c;
+        }
+    }
+    #endregion
+
+
+    void Start()
+    {
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+        //CreateNewMap();
+    }
+
+    void Update()
+    {
+        if (generateNewTerrain)
+        {
+            CreateNewTerrain();
+            generateNewTerrain = false;
+        }
+
+        if (placeDecorations)
+        {
+            PlaceThings();
+            placeDecorations = false;
+        }
+
+        if (placeResources)
+        {
+            PlaceResources(resources);
+            placeResources = false;
+        }
+    }
+
     public void NewSeed()
     {
-        
         seed = UnityEngine.Random.Range(minSeedValue, maxSeedValue);
 
         //safety precaution
-        if(previousSeeds.Count >= maxSeedValue)
+        if (previousSeeds.Count >= maxSeedValue)
         {
             Debug.Log("All available seeds have been used. Clearing seed list.");
             previousSeeds.Clear();
         }
-
 
         //if seed has already been used, pick a new one
         if (previousSeeds.Contains(seed))
@@ -32,75 +152,22 @@ public class TerrainGenerator : MonoBehaviour
             return;
         }
         previousSeeds.Add(seed);
-
     }
 
-    Mesh mesh;
-    Vector3[] vertices;
-    int[] triangles;
-
-    public int chunkSize;
-
-    private int zSize;
-    private int xSize;
-
-    Vector2[] uvs;
-    Color[] colors;
-    public Gradient gradient;
-
-    float maxTerrainHeight;
-    float minTerrainHeight;
-
-    [SerializeField]
-    GameObject objToPlace;
-    [SerializeField]
-    GameObject objToPlace2;
-    [SerializeField]
-    GameObject objToPlace3;
-    private GameObject objContainer;
-
-    public bool PlaceStuff;
-    public bool placeResources;
-    [SerializeField]
-    GameObject[] resources;
-
-
-    int centerPoint;
-    int houseSize = 6; //måste vara ett jämnt nummer?
-
-    [SerializeField]
-    GameObject house;
-    [SerializeField]
-    GameObject resourceSpawner;
-    private GameObject spawnerContainer;
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void CreateNewTerrain()
     {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-        CreateNewMap();
-    }
+        //DestroyPreviousGameobjects();
 
-    public void CreateNewMap()
-    {
-        DestroyThings();
-
-        if (chunkSize <= 0)
+        if (terrainSize <= 0)
         {
             Debug.LogWarning("ChunkSize is too small on " + this.gameObject.name + " it needs to be larger than 0.");
             return;
         }
-        zSize = xSize = chunkSize;
-        centerPoint = chunkSize / 2;
+        zSize = xSize = terrainSize;
+        centerPoint = terrainSize / 2;
 
 
         CreateMeshShape();
-
-
-
-
         CreateTriangles();
         CreateColors();
         UpdateMesh();
@@ -109,31 +176,19 @@ public class TerrainGenerator : MonoBehaviour
 
         PlaceResourceSpawners();
 
-
     }
-
-
-
-
-    private int voronoiGridSize = 2;
-    private int verticesPerCell;
-
-    private Vector2Int[,] pointPositions;
-    private int[] possibleBiomes = { 1, 2, 3 };
-    private int[,] biomes;
-
-    private int[] biomeMap;
 
     private void CreateBiomes()
     {
         biomeMap = new int[vertices.Length];
+        biomeMapPercentages = new BiomePercent[vertices.Length];
 
         //1. Seed choses how many biomes to use
         //4 är placeholder för vad som bör vara Biomes.length eller liknande
-        int biomeCount = UnityEngine.Random.Range(0, 4);
+        //int biomeCount = 3;// UnityEngine.Random.Range(0, 4);
 
         //nu skapa voronoi och på punkterna sätt ut ett nummer från 0 till biomeCount
-        verticesPerCell = chunkSize / voronoiGridSize;
+        verticesPerCell = terrainSize / voronoiGridSize;
 
         if (verticesPerCell <= 0)
         {
@@ -143,9 +198,9 @@ public class TerrainGenerator : MonoBehaviour
 
         GeneratePoints();
 
-        for (int i = 0; i < chunkSize; i++)
+        for (int i = 0; i < terrainSize; i++)
         {
-            for (int j = 0; j < chunkSize; j++)
+            for (int j = 0; j < terrainSize; j++)
             {
 
                 int gridX = i / verticesPerCell;
@@ -160,19 +215,18 @@ public class TerrainGenerator : MonoBehaviour
                     {
                         int X = gridX + a;
                         int Y = gridY + b;
-                        if (X < 0 || Y < 0 || X >= voronoiGridSize || Y >= voronoiGridSize) continue;
-
+                        if (X < 0 || Y < 0 || X >= voronoiGridSize || Y >= voronoiGridSize)
+                            continue;
+                        
                         float distance = Vector2Int.Distance(new Vector2Int(i, j), pointPositions[X, Y]);
                         if (distance < nearestDistance)
                         {
                             nearestDistance = distance;
                             nearestPoint = new Vector2Int(X, Y);//pointPositions[X, Y];
-                        }
+                        }    
                     }
                 }
 
-                //SÄTT TEXTUR STUFF!!!!!
-                //det är viktigt att pos hittar rätt vertice här!!!!!!!
                 int pos = i * xSize + j;
 
                 if (pos >= 0 && pos < biomeMap.Length)
@@ -182,40 +236,158 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
 
-        //nu bestäm vilken biom som ska korrespondera till vilken int
-
     }
 
     private void GeneratePoints()
     {
+        Vector2 centre = new Vector2((voronoiGridSize / 2), (voronoiGridSize / 2));
+        if (voronoiGridSize % 2 == 0) //solves distance favouring one side when the grid is evenly divided
+            centre -= new Vector2(0.5f, 0.5f);
+
+
         pointPositions = new Vector2Int[voronoiGridSize, voronoiGridSize];
         biomes = new int[voronoiGridSize, voronoiGridSize];
         for (int i = 0; i < voronoiGridSize; i++)
         {
             for (int j = 0; j < voronoiGridSize; j++)
             {
-                //sätter ut punkterna
+                //placing points randomly within the biome cells
                 pointPositions[i, j] = new Vector2Int(i * verticesPerCell + UnityEngine.Random.Range(0, verticesPerCell), j * verticesPerCell + UnityEngine.Random.Range(0, verticesPerCell));
 
+                float dist = Vector2.Distance(new Vector2(i, j), centre);
+
+                //adding a random number to the distance to get some more randomness in the selected biomes
+                dist += UnityEngine.Random.Range(-biomePlacementRandomness, biomePlacementRandomness);
+                dist *= 100; //translated for an easier distance value to work with
+
+                int biome = -1;
+                if (dist < biomeInnerRadius)
+                {
+                    //biome snowfield
+                    biome = 0;
+
+                }
+                else if (dist < biomeMiddleRadius)
+                {
+                    //biome ice crystal fields
+                    biome = 1;
+                }
+                else
+                {
+                    //biome highlands
+                    biome = 2;
+                }
+
+                //biome = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
+
                 //och väljer vilken färg aka biome punkten ska ha
-                biomes[i, j] = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
+                //biomes[i, j] = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
+                biomes[i, j] = biome;
             }
         }
     }
 
+    private void BlendBiomes()
+    {
+        int minBlendLength = 0 - biomeBlendRadius;
+        int maxBlendLength = biomeBlendRadius + 1;
 
+
+        //create temporary map with the size of the biomeMap
+        //int[] tBiomeMap = new int[biomeMap.Length];
+        BiomePercent[] tBiomeMap = new BiomePercent[biomeMap.Length];
+
+        //Go through the biome map
+        for (int x = 0; x < terrainSize; x++)
+        {
+            for (int z = 0; z < terrainSize; z++)
+            {
+                int pos = x * xSize + z;
+
+                //get this biome
+                //int biome = biomeMap[pos];
+
+
+                int biome1Count = 0;
+                int biome2Count = 0;
+                int biome3Count = 0;
+                float divideLength = 0;
+
+                //kollar Moore's neighbourhood runt cellen
+                //och samlar ihop vilka biomer vi har
+                for (int a = minBlendLength; a < maxBlendLength; a++)
+                {
+                    for (int b = minBlendLength; b < maxBlendLength; b++)
+                    {
+                        int tX = x + a;
+                        int tZ = z + b;
+                        int tPos = (tX * xSize) + tZ;
+
+                        if (tX < 0 || tZ < 0 || tPos >= biomeMap.Length || tPos < 0)
+                        {
+                            //Debug.Log("skipped saving this position " + tPos + " x: "  + x  + " z: " + z);
+                            continue;
+                        }
+
+
+
+                        int tBiome = biomeMap[tPos];
+
+                        if(tBiome  == 0)
+                        {
+                            biome1Count++;
+                        }
+                        else if(tBiome == 1)
+                        {
+                             biome2Count++;
+                        }
+                        else
+                        {
+                            biome3Count++;
+                        }
+                        divideLength++;
+                    }
+                }
+
+
+
+
+                //räknar ut procenten för varje biom
+                if(divideLength == 0)
+                    divideLength = 1;
+                float pBiome1 = biome1Count / (float)divideLength;
+                float pBiome2 = biome2Count / (float)divideLength;
+                float pBiome3 = biome3Count / (float)divideLength;
+
+
+                //och lägg till detta i arrayen
+
+                BiomePercent biomePercent = new BiomePercent(pBiome1,pBiome2,pBiome3);
+
+                if (pos >= 0 && pos < biomeMap.Length)
+                    tBiomeMap[pos] = biomePercent;
+            }
+        }
+
+        //set biomeMap = tempMap
+        biomeMapPercentages = tBiomeMap;
+
+
+
+        //printa ut hela mappen...
+        /*foreach(BiomePercent biomePercent in biomeMapPercentages)
+        {
+            Debug.Log("biomePercent for a: " + biomePercent.pBiome1 + " b: " + biomePercent.pBiome2 + " c: " + biomePercent.pBiome3);
+        }*/
+
+    }
 
 
     private void CreateMeshShape()
     {
-
-        int length = 20;
-        float scale = 25f; //höjden på noiset
         //offset för att hålla kartans centre i origo
-        float offsetX = -xSize / 2;
-        float offsetZ = -zSize / 2;
-
-
+        float offsetX =  -xSize / 2;
+        float offsetZ =  -zSize / 2;
 
         //1. create seed
         UnityEngine.Random.InitState(seed);
@@ -230,76 +402,18 @@ public class TerrainGenerator : MonoBehaviour
         //skapa biomes 
         CreateBiomes();
 
+        //och blenda dessa
+        BlendBiomes();
+
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
             {
                 //set the height for each vert
+                float y = getBiomeHeight(newNoise, x, z);
 
-
-                float2 pos = new float2(x + newNoise, z + newNoise);  //                    double value = noise(x / 32.0, y / 32.0);
-
-                float value = noise.srnoise(pos / length * 10, seed);//Unity.Mathematics.noise.snoise(pos);
-                value = value * 0.5f;// + 0.5f;
-                float absValue = Mathf.Abs(value); //   
-                absValue *= 5;
-
-                if (absValue < 0.25f)
-                {
-                    //absValue += -2;
-                }
-
-                //float perlinSeed = noise.pnoise(new float2(x * .03f, z * .03f), seed) *25f;
-                float perlin = Mathf.PerlinNoise((x + newNoise) * .01f, (z + newNoise) * .01f) * scale;  //där * .03f zoomar in på the noise, och * 25f gör hjöjdskilnaderna tydligare!!
-
-                //för mer komplex noise lägger på stuff
-                // perlin += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
-               // perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
-
-
-
-                //float simplex = noise.snoise(new float2(z * .03f, x * .03f)) * 5f;
-
-                float simplex = noise.snoise(new float2(z * .03f, x * .03f));
-                float simplexV = Mathf.Abs(simplex);
-                if (simplexV > 0.35f)
-                {
-                    simplex *= 5f;
-                }
-
-
-                float y = perlin;
-
-
-                if (y > maxTerrainHeight)
-                    maxTerrainHeight = y;
-                if (y < minTerrainHeight)
-                    minTerrainHeight = y;
-
-                /*
-                //kolla biome och välj noise accordingly
-                if (biomeMap[i] == 1)
-                {
-                    y = simplex + maxTerrainHeight/2;
-                }
-                else if(biomeMap[i] == 2)
-                {
-                    y = absValue + maxTerrainHeight / 2; 
-                }
-                */
-
-
-
-
-                //kolla om det är i center zonen
-                /*if (centerPoint >= x - houseSize && centerPoint <= x + houseSize && centerPoint >= z - houseSize && centerPoint <= z + houseSize)
-                {
-                    y = Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
-                }*/
-
-
-                if(x == centerPoint && z == centerPoint)
+                if (x == centerPoint && z == centerPoint)
                 {
                     house.transform.position = new Vector3(0, y+ house.transform.lossyScale.y/2, 0);
                 }
@@ -315,6 +429,73 @@ public class TerrainGenerator : MonoBehaviour
         //float height = house.transform.lossyScale.y + Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
         //house.transform.position = new Vector3 (0, height, 0);
 
+    }
+
+
+    private float getBiomeHeight(int newNoise, int x, int z)
+    {
+        float y = 0;
+
+        //SOME NOISE????
+        float2 pos = new float2(x + newNoise, z + newNoise);  //                    double value = noise(x / 32.0, y / 32.0);
+        float value = noise.srnoise(pos / 5 * 1, seed);//Unity.Mathematics.noise.snoise(pos);
+        value = value * 0.5f;// + 0.5f;
+        float absValue = Mathf.Abs(value);
+        absValue *= 5;
+        absValue += scale / 2;
+        absValue += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
+        if (absValue > 15f)
+        {
+            absValue = noise.snoise(new float2(z * .03f, x * .03f));
+            absValue += scale / 2;
+        }
+
+
+        //PERLIN
+        float perlin = Mathf.PerlinNoise((x + newNoise) * .01f, (z + newNoise) * .01f) * scale;  //där * .03f zoomar in på the noise, och * 25f gör hjöjdskilnaderna tydligare!!
+        //för mer komplex noise lägger på stuff
+        // perlin += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
+        // perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
+
+
+        //SIMPLEX
+        float simplex = noise.snoise(new float2(z * .03f, x * .03f));
+        //float simplexV = Mathf.Abs(simplex);
+        /*if (simplexV > 0.35f)
+        {
+            simplex *= 5f;
+        }*/
+        simplex += scale;// / 2;
+
+
+        if (y > maxTerrainHeight)
+            maxTerrainHeight = y;
+        if (y < minTerrainHeight)
+            minTerrainHeight = y;
+
+
+        //  i = (pos - j) /xSize
+        // pos = i * xSize + j;   är   pos = x * xSize + y;
+        int pos2 = (z * xSize) + x;
+        BiomePercent bp = biomeMapPercentages[pos2];
+        if (bp == null) //det här händer bara med en kant av hela mappen
+        {
+            y = +40;
+            //Debug.Log("bp == null    pos: " + pos2);
+        }
+        else
+        {
+            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * simplex) + (bp.pBiome3 * absValue);
+
+        }
+
+        //kolla om det är i center zonen
+        /*if (centerPoint >= x - houseSize && centerPoint <= x + houseSize && centerPoint >= z - houseSize && centerPoint <= z + houseSize)
+        {
+            y = Mathf.PerlinNoise((centerPoint + newNoise) * .03f, (centerPoint + newNoise) * .03f) * scale;
+        }*/
+
+        return y;
     }
 
     private void CreateTriangles()
@@ -355,105 +536,22 @@ public class TerrainGenerator : MonoBehaviour
             {
                 uvs[i] = new Vector2((float)x / xSize, (float)z / zSize);
 
-                float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);
-                colors[i] = gradient.Evaluate(height);
+                //färger baserat på höjden av mappen
+                //float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);
+                //colors[i] = gradient.Evaluate(height);
 
+                //biome färger med användning av gamla gradient slidern
+                //colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
 
-                //för att testa biomes
-                //colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[i]));
+                //biome färger som använder biome percentages för att skapa rgb färg
+                int pos2 = (z * xSize) + x;
+                BiomePercent bp = biomeMapPercentages[pos2];
+                if (bp != null)
+                    colors[i] = new Color(bp.pBiome1, bp.pBiome2, bp.pBiome3, 0.5f);
 
-                //Debug.Log(biomeMap[i]);
-
-                /*
-                if (i+zSize < vertices.Length && Mathf.Abs(vertices[i].y - vertices[i+1].y) > .3f )
-                {
-                    colors[i] = Color.black;
-                }
-                else
-                    colors[i] = gradient.Evaluate(height);
-                */
-
-
-                //test för slope
-                //vert    vs    vert + xSize + 1;
-                /*
-                float ang = 0;
-                if (i%3== 0 && i+2 < vertices.Length)
-                {
-                    Vector3 side1 = vertices[i + 1] - vertices[i];
-                    Vector3 side2 = vertices[i + 2] - vertices[i];
-                    Vector3 triangle = Vector3.Cross(side1, side2);//.normalized;
-
-
-                    Plane plane = new Plane(vertices[i], vertices[i + 1], vertices[i + 2]);
-
-                    Vector3 norm = plane.normal;
-
-
-                    ang = Vector3.Angle(norm, Vector3.up);//Vector3.Angle(triangle, Vector3.down);
-                    Debug.Log("Angle between ( " + triangle + " and " + Vector3.up + ") is angle: " + ang);
-                }
-
-
-               
-
-                if (Mathf.Abs(ang) > 30f)
-                    colors[i] = Color.black;
-                else
-                    colors[i] = gradient.Evaluate(height);
-
-                */
                 i++;
             }
         }
-
-
-        //Debug.Log("Vertices length: " + vertices.Length + " triangles length: " + triangles.Length);
-
-        //trying for steepness
-        /*for (int i = 0; i < triangles.Length; i+=3)
-        {
-            if (i+2 > triangles.Length)
-                return;
-            Vector3 tri = new Vector3(triangles[i + 0], triangles[i + 1], triangles[i + 2]);
-            float ang = Vector3.Angle(Vector3.up, tri);
-            Debug.Log("Angle between i: " + i + " and up is angle: " +  ang);
-
-            if(ang > 40f && i+2 < colors.Length)
-            {
-                colors[i] = Color.green;
-                colors[i+1] = Color.green;
-                colors[i+2] = Color.green;
-            }
-        }*/
-
-        /*
-        int vert = 0;
-        int tris = 0;
-
-        //loop through rows
-        for (int z = 0; z < zSize; z++) 
-        {
-            for (int x = 0; x < xSize; x++)
-            {
-                Vector3 tri = new Vector3(triangles[tris + 0], triangles[tris + 1], triangles[tris + 2]);
-                float ang = Vector3.Angle(Vector3.up, tri.normalized);
-                Debug.Log("Angle between i: " + z + " and up is angle: " + ang);
-
-                if (ang > 45f)
-                {
-                    colors[vert + 0] = Color.green;
-                    colors[vert + xSize + 1] = Color.green;
-                    colors[vert + 1] = Color.green;
-                }
-
-                vert++;
-                tris += 6;
-            }
-            vert++;
-        }
-        */
-
     }
 
     private void UpdateMesh()
@@ -472,15 +570,16 @@ public class TerrainGenerator : MonoBehaviour
         //gameObject.transform.localScale = new Vector3(xSize * zSize, xSize * zSize, xSize * zSize);
     }
 
-    private void DestroyThings()
+    /*private void DestroyPreviousGameobjects()
     {
         //probably borde börja med att ta bort saker först?
         Destroy(objContainer);
-    }
+    }*/
 
     private void PlaceThings()
     {
-        DestroyThings();
+        //DestroyPreviousGameobjects();
+        Destroy(objContainer);
 
 
         objContainer = new GameObject("Object Container"); //för att hålla det clean i inspectorn
@@ -490,7 +589,7 @@ public class TerrainGenerator : MonoBehaviour
             return;
         }
 
-        //note: vid en storm map aka många objekt bör de probably delas in i mindre chunks, där bara vissa är aktiva åt gången?
+        //note: vid en stor map aka många objekt bör de probably delas in i mindre chunks, där bara vissa är aktiva åt gången?
 
         Vector3 origoOffset = new Vector3(-(xSize / 2), 0, -(xSize / 2));
 
@@ -513,16 +612,16 @@ public class TerrainGenerator : MonoBehaviour
 
                 //sätter ut träd beroende på höjdskillnad
                 //idee för biom där dips är gröna
-                
+                /*
                 if (vertices[i].y < minTerrainHeight + (maxTerrainHeight/3))
                 {
                     //25% ish Chans
                     if (UnityEngine.Random.Range(1, 101) < 2)
                         Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
 
-                }
+                }*/
 
-                /*
+                
                 float perlin = Mathf.PerlinNoise(x * .3f, z * .3f);
 
 
@@ -559,7 +658,7 @@ public class TerrainGenerator : MonoBehaviour
                             Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
                     }
                 }
-                */
+                
 
                 i++;
             }
@@ -583,6 +682,9 @@ public class TerrainGenerator : MonoBehaviour
 
         foreach(Vector2Int pos in pointPositions)
         {
+            if(pos.x %2 == 0 || pos.y %2 == 0)         //DET ÄR FÖR MÅNGA RN SÅ TEMP LÖSNING ÄR ATT HALVERA HUR MÅNGA SOM SÄTTS UT
+                continue;
+
             Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
             int i = (xSize * pos.y) + pos.x;
             Instantiate(resourceSpawner, vertices[i] + offset, transform.rotation, spawnerContainer.transform);
@@ -621,27 +723,6 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (GenerateNew)
-        {
-            CreateNewMap();
-            GenerateNew = false;
-        }
-
-        if (PlaceStuff)
-        {
-            PlaceThings();
-            PlaceStuff = false;
-        }
-
-        if (placeResources)
-        {
-            PlaceResources(resources);
-            placeResources = false;
-        }
-    }
+    
 }
 

@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿
+/* 
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
 
-/* Note: animations are called via the controller for both the character and capsule using animator null checks
- */
 
+
+
+/* Why it broke: it expects the StarterAsset script to be in: StarterAssets/Runtime/InputSystem. It has been moved to Assets/Script for referencing ease.
 namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
@@ -388,5 +391,4 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
-    }
-}
+    } */

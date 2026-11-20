@@ -1,6 +1,7 @@
 using StarterAssets;
 using UnityEngine;
 
+/* Why it broke: it expects the StarterAsset script to be in: StarterAssets/Runtime/InputSystem. It has been moved to Assets/Script for referencing ease.
 namespace StarterAssets
 {
     public class VirtualInput : MonoBehaviour
@@ -29,4 +30,4 @@ namespace StarterAssets
             StarterAssetsInputs.SprintInput(virtualSprintState);
         }
     }
-}
+} */

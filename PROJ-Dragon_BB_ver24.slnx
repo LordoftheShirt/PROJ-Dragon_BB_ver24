@@ -1,12 +1,16 @@
 ﻿<Solution>
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unified.Universal.Blur.csproj" />
+  <Project Path="Coffee.UIEffect.csproj" />
+  <Project Path="Unified.Universal.Blur.Editor.csproj" />
   <Project Path="FMODUnityResonanceEditor.csproj" />
   <Project Path="FMODUnityEditor.csproj" />
   <Project Path="FMODUnity.csproj" />
+  <Project Path="Coffee.UIEffect.Editor.csproj" />
   <Project Path="FMODUnityHaptics.csproj" />
   <Project Path="Unity.StarterAssets.Editor.csproj" />
-  <Project Path="Unity.StarterAssets.csproj" />
   <Project Path="DOTween.Modules.csproj" />
+  <Project Path="Unity.StarterAssets.csproj" />
   <Project Path="FMODUnityResonance.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="URPWizard.csproj" />

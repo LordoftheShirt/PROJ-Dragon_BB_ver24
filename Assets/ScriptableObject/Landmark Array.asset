@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a675a34d669caef4c853861f94bc20b6, type: 3}
+  m_Name: Landmark Array
+  m_EditorClassIdentifier: Assembly-CSharp::LandmarkArray
+  landmarks:
+  - model: {fileID: 6730408330541937050, guid: b4ad7b529935e484a867e2853e60364d, type: 3}
+    mapIcon: {fileID: -8568042794190644651, guid: bbb7ec6b11b7ef741a99ba020bd7de94, type: 3}
+  - model: {fileID: 3489996332478064156, guid: 75175a34296de8240b994afbe32987c4, type: 3}
+    mapIcon: {fileID: -4032481707582436298, guid: a731904b66e2bf7469a15775405e944b, type: 3}
+  - model: {fileID: 3946440905628430624, guid: d7531a4ebbf9e2f459f9cd6895086258, type: 3}
+    mapIcon: {fileID: -7339149984724004702, guid: cc460859d395dcc44b99ce3cf72a74d1, type: 3}
+  - model: {fileID: 3590186093698069983, guid: c4597a5eb8a133d4f97c1bb113229120, type: 3}
+    mapIcon: {fileID: -3889763897345174515, guid: d17479c1d8404814d8374efff27b184c, type: 3}
+  - model: {fileID: 665775425664625576, guid: 8e5f6f4c26282d541a85ffb4f1e70770, type: 3}
+    mapIcon: {fileID: -3893141973531030841, guid: ffa454232c3e03e4d8428e6cce362169, type: 3}
+  - model: {fileID: 3300117151016631628, guid: 086cc6188abd76842bd6138258c23395, type: 3}
+    mapIcon: {fileID: -3648454827251026613, guid: 1e80ab20e11266e48b4e2018ddd0fddc, type: 3}
+  - model: {fileID: 8147428171177194631, guid: b7e2ccd94169b17409b285b2326afa23, type: 3}
+    mapIcon: {fileID: 4055287881669030508, guid: b31bd85d79e44ef45a9638b942e417f6, type: 3}
+  - model: {fileID: 4250761237616577418, guid: f5b09215025138346ae41770de2b5918, type: 3}
+    mapIcon: {fileID: 9052168551616157550, guid: 1bab52e2a4dabc9448b20ded6c5ffe3b, type: 3}
+  - model: {fileID: 3175409710382026837, guid: 1a0e74f42f9330a4f913048463dd4a3d, type: 3}
+    mapIcon: {fileID: -9078514504233251462, guid: eb57fa223a0271b44a3f690b87c49bf1, type: 3}
