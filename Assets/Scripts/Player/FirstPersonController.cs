@@ -58,6 +58,7 @@ namespace StarterAssets
         public string LookActionName = "Player/Look";
         public string JumpActionName = "Player/Jump";
         public string SprintActionName = "Player/Sprint";
+        public string OpenMapActionName = "Player/OpenMap";
 
         [Header("Visuals/VFX")]
         [SerializeField] private PlayerCameraModifier camModifier;
@@ -87,6 +88,7 @@ namespace StarterAssets
         private InputAction _lookAction;
         private InputAction _jumpAction;
         private InputAction _sprintAction;
+        private InputAction _openMapAction;
 #endif
 
         private CharacterController _controller;
@@ -114,6 +116,8 @@ namespace StarterAssets
                 _lookAction = InputSystem.actions.FindAction(LookActionName);
                 _jumpAction = InputSystem.actions.FindAction(JumpActionName);
                 _sprintAction = InputSystem.actions.FindAction(SprintActionName);
+                _openMapAction= InputSystem.actions.FindAction(OpenMapActionName);
+                _openMapAction.performed += ReferenceManager.Instance.mapManager.ActiveteOrDeactivateMap;
             }
             else
             {
