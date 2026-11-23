@@ -4,7 +4,8 @@ using UnityEngine;
 public class ResourceCluster : MonoBehaviour
 {
     [SerializeField] private float clusterRadius = 5f;
-    [SerializeField] private int maxResourceAmount = 30;
+
+    private int maxResourceAmount;
 
     public void SpawnResources(ResourceNode resourcePrefab, ResourceType resourceType)
     {

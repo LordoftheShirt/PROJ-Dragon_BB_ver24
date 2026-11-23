@@ -55,10 +55,13 @@ MonoBehaviour:
   playerMeter: {fileID: 0}
   cabbin: {fileID: 0}
   resourceClusterPrefab: {fileID: 1282608504125897185, guid: 40b62df958b81d444a0468e31be2b6a8, type: 3}
-  resourceNodePrefab:
-  - {fileID: 5449498893061459164, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
-  - {fileID: 6208488965665334647, guid: 928bff5abf0eabe42bb28182a6b57ba0, type: 3}
-  resourceType: 0000000001000000
+  resourceNodePrefabs:
+  - {fileID: 6208488965665334647, guid: 50b51d3962eb41a49a44069ba1048d72, type: 3}
+  - {fileID: 6208488965665334647, guid: 1d81c88337b70a24f82cd823c71307a5, type: 3}
+  - {fileID: 6208488965665334647, guid: ad1f82760e2f46648ad5bd7f1a54b9c6, type: 3}
+  - {fileID: 6208488965665334647, guid: b38ca8858a052214488b519f32dfde81, type: 3}
+  - {fileID: 6208488965665334647, guid: ce682c1fb91a9b843a82e59e0fa1bdba, type: 3}
+  - {fileID: 6208488965665334647, guid: 32fb48331057d91438052292bf048366, type: 3}
 --- !u!114 &8243468339349818222
 MonoBehaviour:
   m_ObjectHideFlags: 0

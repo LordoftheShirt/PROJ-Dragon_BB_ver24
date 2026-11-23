@@ -13,16 +13,6 @@ public class ResourceClusterSpawner : MonoBehaviour
         }
     }
 
-    //Old way to spawn resourses 
-    //public void SpawnResourceClusters(Vector3 centerPosition)
-    //{
-    //    for (int i = 0; i < numberOfClusters; i++)
-    //    {
-    //        currentResourceType = Random.Range(0, resourceType.Length);
-    //        SpawnAResourceCluster(centerPosition, resourceType[currentResourceType]);
-    //    }
-    //}
-
     private void SpawnAResourceCluster(Vector3 centerPosition, ResourceType resourceType)
     { 
         //Selects position
@@ -34,10 +24,4 @@ public class ResourceClusterSpawner : MonoBehaviour
 
         resourceCluster.SpawnResources(ReferenceManager.Instance.resourceNodePrefabs[(int)resourceType], resourceType);
     }
-
-    public void DestroyCildren()
-    {
-        foreach (Transform child in transform) { Destroy(child.gameObject); }
-    }
-
 }
