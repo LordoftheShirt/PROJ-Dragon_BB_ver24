@@ -16,7 +16,6 @@ public class ReferenceManager : Singleton<ReferenceManager>
 
     public ResourceCluster resourceClusterPrefab;
     public ResourceNode[] resourceNodePrefabs;
-    public ResourceType[] resourceType;
 
     /* Singleton script does this automatically
     public static ReferenceManager Instance { get; private set; }
