@@ -30,7 +30,7 @@ public class MiniMapManager : MonoBehaviour
 
         foreach (GameObject mapObject in mapObjects)
         {
-            Debug.Log("Creates: " + mapObject);
+            //Debug.Log("Creates: " + mapObject);
             Vector3 mapObjectPosition = new Vector3(CalculateObjectCordinate(playerMap.position.x, cabbin.position.x, mapObject.transform.position.x), playerMap.position.y + 0.1f, CalculateObjectCordinate(playerMap.position.z, cabbin.position.z, mapObject.transform.position.z));
             if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)            
                 Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);                

@@ -298,11 +298,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: size
-      value: 100
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: scale
-      value: 3
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: cabbin
@@ -1139,10 +1139,6 @@ PrefabInstance:
     - target: {fileID: 3600735466530754045, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5959844143698432098, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -59.999878
       objectReference: {fileID: 0}
     - target: {fileID: 6156626788824462016, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchorMax.y
