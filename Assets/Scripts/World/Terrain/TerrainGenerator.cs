@@ -59,6 +59,8 @@ public class TerrainGenerator : MonoBehaviour
 
     [SerializeField]
     private GameObject resourceSpawner;
+    [SerializeField]
+    private ResourceClusterSpawner rcspawner;
     private GameObject spawnerContainer; //holds all spawner gameobjects in the inspector (for resources)
 
     [SerializeField]
@@ -812,9 +814,11 @@ public class TerrainGenerator : MonoBehaviour
             int amountOfResourceClustersToSpawn = UnityEngine.Random.Range(1, 3);
             ResourceType[] resourcesToSpawn = new ResourceType[amountOfResourceClustersToSpawn];
 
+
+            int i = (xSize * pos.y) + pos.x;
             for (int j = 0; j< amountOfResourceClustersToSpawn; j++)
             {
-                int i = (xSize * pos.y) + pos.x;
+                
 
                 int resource;
 
@@ -840,7 +844,13 @@ public class TerrainGenerator : MonoBehaviour
             }
 
 
+            if(rcspawner == null)
+            {
+                Debug.LogError("rcspawner on " + this.name + " is unnassigned, assign the resourceclusterspawner!");
+            }
 
+            rcspawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i]);
+            //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i]); //vertices[i]
 
             //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnAResourceCluster(vertices[i] + offset,ResourceType.Wood); //(ResourceType)resource
 
