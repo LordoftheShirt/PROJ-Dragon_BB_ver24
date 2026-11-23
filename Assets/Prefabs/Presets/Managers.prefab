@@ -117,7 +117,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   lightStartRotation: 180
   newDayThreshold: -1
-  dayDivide: 4
   nightTempraturePreset: -4
   directionalLight: {fileID: 0}
 --- !u!114 &3058454260273352574
@@ -134,10 +133,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniMapManager
   cabbin: {fileID: 0}
   playerMap: {fileID: 0}
-  cabbinTokenPrefab: {fileID: 7052464961573610756, guid: a0a763a335f38af49a813ebc22a0f1c1, type: 3}
-  mapObjectTokenPrefab: {fileID: 7052464961573610756, guid: b7e476913d5302f45b7f3ec7f4cd0ca6, type: 3}
-  scale: 3
-  size: 100
+  cabbinTokenPrefab: {fileID: 8927763020995527257, guid: 80a3259bf3d8a5249a5a5c33f17d54f9, type: 3}
+  mapObjectTokenPrefab: {fileID: 8927763020995527257, guid: b81f3964c42b8154b9522a7f94630f21, type: 3}
+  scale: 110
+  size: 1
+  xRotation: 180
 --- !u!114 &5046293295825093072
 MonoBehaviour:
   m_ObjectHideFlags: 0
