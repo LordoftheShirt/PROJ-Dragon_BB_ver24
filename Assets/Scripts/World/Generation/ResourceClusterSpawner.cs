@@ -3,54 +3,36 @@ using UnityEngine;
 
 public class ResourceClusterSpawner : MonoBehaviour
 {
-    [SerializeField] private float spawnRadius = 5f;
-    [SerializeField] private float centerOffset = 0f;
-    [SerializeField] private int numberOfClusters = 5;
-    [SerializeField] private ResourceCluster resourceClusterPrefab;
-    [SerializeField] private ResourceNode[] resourceNodePrefab;
-    [SerializeField] private ResourceType[] resourceType;
+    [SerializeField] private float spawnRadius = 30f;
 
-    private int currentResourceType;
-
-    private void Start()
+    public void SpawnResourceClusterWithSpecificResource(ResourceType[] resourcesToSpawn, Vector3 centerPosition)
     {
-        ReferenceManager refe = ReferenceManager.Instance;
-        DefineClusterSpawner(30, 5, refe.resourceClusterPrefab, refe.resourceNodePrefab, refe.resourceType);
-        SpawnResourceClusters(transform.position);
-    }
-
-    public void SpawnResourceClusters(Vector3 centerPosition)
-    {
-        for (int i = 0; i < numberOfClusters; i++)
+        foreach(ResourceType type in resourcesToSpawn)
         {
-            currentResourceType = Random.Range(0, resourceType.Length);
-            SpawnAResourceCluster(centerPosition, resourceType[currentResourceType]);
+            SpawnAResourceCluster(centerPosition, type);
         }
     }
+
+    //Old way to spawn resourses 
+    //public void SpawnResourceClusters(Vector3 centerPosition)
+    //{
+    //    for (int i = 0; i < numberOfClusters; i++)
+    //    {
+    //        currentResourceType = Random.Range(0, resourceType.Length);
+    //        SpawnAResourceCluster(centerPosition, resourceType[currentResourceType]);
+    //    }
+    //}
 
     private void SpawnAResourceCluster(Vector3 centerPosition, ResourceType resourceType)
     { 
         //Selects position
-        Vector2 randomPosition = Random.insideUnitCircle * (spawnRadius + centerOffset);
+        Vector2 randomPosition = Random.insideUnitCircle * spawnRadius;
 
-        //Make a method to remove resources that are too close
-
-        //Sets the spawn position with offset
+        //Sets the spawn position
         Vector3 spawnPosition = centerPosition + new Vector3(randomPosition.x, 0f, randomPosition.y);
-        ResourceCluster resourceCluster = Instantiate(resourceClusterPrefab, spawnPosition, Quaternion.identity);
+        ResourceCluster resourceCluster = Instantiate(ReferenceManager.Instance.resourceClusterPrefab, spawnPosition, Quaternion.identity, transform);
 
-        resourceCluster.transform.SetParent(transform);
-
-        resourceCluster.SpawnResources(resourceNodePrefab[currentResourceType], resourceType);
-    }
-
-    public void DefineClusterSpawner(float newSpawnRadius, int newNumberOfclusters, ResourceCluster newResourceClusterPrefab, ResourceNode[] newResourceNodePrefabsInOrder, ResourceType[] newResourceTypes)
-    {
-        spawnRadius = newSpawnRadius;
-        numberOfClusters = newNumberOfclusters;
-        resourceClusterPrefab = newResourceClusterPrefab;
-        resourceNodePrefab = newResourceNodePrefabsInOrder;
-        resourceType = newResourceTypes;
+        resourceCluster.SpawnResources(ReferenceManager.Instance.resourceNodePrefabs[(int)resourceType], resourceType);
     }
 
     public void DestroyCildren()

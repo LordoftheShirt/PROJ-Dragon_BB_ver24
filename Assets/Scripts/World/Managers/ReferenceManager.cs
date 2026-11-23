@@ -15,7 +15,7 @@ public class ReferenceManager : Singleton<ReferenceManager>
     public GameObject cabbin;
 
     public ResourceCluster resourceClusterPrefab;
-    public ResourceNode[] resourceNodePrefab;
+    public ResourceNode[] resourceNodePrefabs;
     public ResourceType[] resourceType;
 
     /* Singleton script does this automatically

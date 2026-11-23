@@ -1,12 +1,12 @@
 using UnityEngine;
 
 public enum ResourceType
-{
-    Wood = 1,
+{   
     /// <summary>
     /// AKA. Metal
     /// </summary>
-    Scrap = 0,
+    Scrap = 0, 
+    Wood = 1,
     Fabric = 2,
     Magnet = 3,
     Tech = 4,
@@ -35,6 +35,18 @@ public static class ResourceTypeUtil
 
             case ResourceType.Scrap:
                 return "Metal Scrap";
+
+            case ResourceType.Fabric:
+                return "Fabric";
+
+            case ResourceType.Magnet:
+                return "Magnet";
+
+            case ResourceType.Tech:
+                return "Tech";
+
+            case ResourceType.Crystal:
+                return "Crystal";
 
             default:
                 return "Unknown";
