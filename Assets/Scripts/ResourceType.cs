@@ -2,15 +2,15 @@ using UnityEngine;
 
 public enum ResourceType
 {
-    Wood = 0,
+    Wood = 1,
     /// <summary>
     /// AKA. Metal
     /// </summary>
-    Scrap,
-    Fabric,
-    Magnet,
-    Tech,
-    Crystal,
+    Scrap = 0,
+    Fabric = 2,
+    Magnet = 3,
+    Tech = 4,
+    Crystal = 5,
     // TODO: more resource types!!
 }
 
