@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 // A raycast you place on the camera; it looks for IInteractable objects.
-public class BuildingPlacer : MonoBehaviour
+public class BuildingPlacer : Singleton<BuildingPlacer>
 {
     [SerializeField] private float buildRange = 8f;
     [SerializeField] private float maxSurfaceAngle = 45f; // Maximum angle from the up vector that is considered a valid surface for placement.
@@ -22,16 +22,27 @@ public class BuildingPlacer : MonoBehaviour
     [SerializeField] private GameObject tentPrefab;
 
 
-    [Header("Particles")]
+    [Header("Particles (Optional)")]
     [SerializeField] private GameObject placedExplosion;
+
+    [Header("Material (Optional)")]
+    [SerializeField] private Material matUnplaceable;
+
+    [Header("LayerMask")]
+    [SerializeField] private LayerMask whatIsGround;
+
+    private Material matPlaceable;
+    private Renderer rendCurrentMat;
 
     private float holdToPlaceSec = 1f;
     
     private InputAction confirmBuildAction;
+    /* Input handling has been moved to Hotbar script
     private InputAction placeFireKitAction;
     private InputAction placeTentAction;
-    private InputAction cancelBuildAction;
     private InputAction placeFlagAction;
+    */
+    private InputAction cancelBuildAction;
 
     private bool isHoldingBuild = false;
     private float holdTimer = 0f;
@@ -41,17 +52,19 @@ public class BuildingPlacer : MonoBehaviour
     // For Placeholder UI.
     public event Action<bool> OnGhostPresent;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         confirmBuildAction = InputSystem.actions["Confirm"];
 
+        /* Input handling has been moved to Hotbar script
         placeFireKitAction = InputSystem.actions["Place Fire"];
-
         placeTentAction = InputSystem.actions["Place Tent"];
+        placeFlagAction = InputSystem.actions["Place Flag"];
+        */
 
         cancelBuildAction = InputSystem.actions["Cancel Build"];
-
-        placeFlagAction = InputSystem.actions["Place Flag"];
     }
 
     void Start()
@@ -63,29 +76,12 @@ public class BuildingPlacer : MonoBehaviour
     {
         Debug.DrawRay(builderSource.position, builderSource.forward * buildRange, Color.red);
 
-        // Keeps track of the current ghost's location. Locks the location if the player begins confirming the build.
-        if (currentGhost != null && !isHoldingBuild)
+        PreviewGhostLocation();
+
+        // prevents ghosts from being placed if it's the wrong material.
+        if (rendCurrentMat != null && matUnplaceable != null && rendCurrentMat.sharedMaterial == matUnplaceable)
         {
-
-            Ray placementRange = new Ray(builderSource.position, builderSource.forward);
-
-
-            // CURRENT BUG 1: must prevent the ghost mesh from clipping into walls.
-            // CURRENT BUG 2: must prevent object stacking (need a way to tell "whatIsGround"); this is a problem for the placeBuild() function as well.
-            if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
-            {
-                float surfaceAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
-
-                if (surfaceAngle < maxSurfaceAngle)
-                {
-                    currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
-                    currentGhost.transform.position = hitinfo.point;
-                }
-                else
-                {
-                    // CURRENT BUG 3: ghost spawns can be placed on surfaces that are too steep (during the moment wherein the ghost spawns). Must build an indicator here that shows the player they can't place the ghost on this surface: change the material to red.
-                }
-            }
+            holdTimer = 0f;
         }
 
 
@@ -122,22 +118,70 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+
     // Place the flag instantly.
-    private void OnPlaceFlagKey(InputAction.CallbackContext context)
+    public void PlaceFlag()
     {
-        UpdateCurrentGhost(null);
+        RemoveGhost();
 
         if (PlaceBuild(flagPrefab, ConsumablesManager.Instance.GetCurrentFlags()) != null)
             ConsumablesManager.Instance.UseFlag();
     }
 
-    // Spawns a preview "ghost" Firekit
-    private void OnPlaceFireKitKey(InputAction.CallbackContext context)
+    public void SetGhostToFireKit()
     {
         UpdateCurrentGhost(fireKitGhostPrefab, ConsumablesManager.Instance.GetCurrentFirekits());
     }
 
+    public void SetGhostToTent()
+    {
+        UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+    }
 
+    public void RemoveGhost()
+    {
+        UpdateCurrentGhost(null);
+    }
+
+    // Keeps track of the current ghost's location. Locks the location if the player begins confirming the build.
+    private void PreviewGhostLocation()
+    {
+        if (currentGhost != null && !isHoldingBuild)
+        {
+
+            Ray placementRange = new Ray(builderSource.position, builderSource.forward);
+
+
+            // CURRENT BUG 1: must prevent the ghost mesh from clipping into walls.
+            // CURRENT BUG 2: must prevent object stacking (need a way to tell "whatIsGround"); this is a problem for the placeBuild() function as well.
+            if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
+            {
+                float surfaceAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
+
+                currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
+                currentGhost.transform.position = hitinfo.point;
+
+                // changes the ghost's material; its material determines whether it should be allowed to be placed or not.
+
+                if (matPlaceable != null && matUnplaceable != null)
+                {
+                    bool isValidAngle = surfaceAngle <= maxSurfaceAngle;
+                    bool isGroundLayer = (whatIsGround.value & (1 << hitinfo.collider.gameObject.layer)) != 0;
+
+                    if (isValidAngle && isGroundLayer)
+                    {
+                        if (rendCurrentMat.sharedMaterial != matPlaceable)
+                            rendCurrentMat.sharedMaterial = matPlaceable;
+                    }
+                    else
+                    {
+                        if (rendCurrentMat.sharedMaterial != matUnplaceable)
+                            rendCurrentMat.sharedMaterial = matUnplaceable;
+                    }
+                }
+            }
+        }
+    }
 
     // when a previeww build is selected,the player must hold down the confirm build button for a set amount of time to place it. If the player releases the button before the time is up, the build is not placed.
     private void OnConfirmBuild(InputAction.CallbackContext context)
@@ -159,8 +203,6 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
     }
-
-
 
     private void OnCancelBuild(InputAction.CallbackContext context)
     {
@@ -208,9 +250,6 @@ public class BuildingPlacer : MonoBehaviour
         return null;
     }
 
-
-
-
     // Update the current ghost object based on the provided ghost prefab (ghost: a pre-build, when you want to preview the build location).
     // Do no let the ghost object appear if the player has no more of that item to place.
     public void UpdateCurrentGhost(GameObject ghost, int currentQuantity = 1)
@@ -253,17 +292,25 @@ public class BuildingPlacer : MonoBehaviour
             currentGhost = null;
             OnGhostPresent?.Invoke(false);
         }
+
+        if (currentGhost != null)
+        {
+            rendCurrentMat = currentGhost.GetComponentInChildren<Renderer>();
+            matPlaceable = rendCurrentMat.sharedMaterial;
+        }
+
     }
 
 
     private void OnEnable()
     {
+        /* Input handling has been moved to Hotbar script
         placeFlagAction.performed += OnPlaceFlagKey;
-
 
         placeFireKitAction.performed += OnPlaceFireKitKey;
 
         placeTentAction.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        */
 
         confirmBuildAction.started += OnConfirmBuild;
         confirmBuildAction.canceled += OnConfirmBuild;
@@ -273,12 +320,13 @@ public class BuildingPlacer : MonoBehaviour
 
     private void OnDisable()
     {
+        /* Input handling has been moved to Hotbar script
         placeFlagAction.performed -= OnPlaceFlagKey;
 
         placeFireKitAction.performed -= OnPlaceFireKitKey;
 
         placeTentAction.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
-
+        */
         confirmBuildAction.started += OnConfirmBuild;
         confirmBuildAction.canceled += OnConfirmBuild;
 

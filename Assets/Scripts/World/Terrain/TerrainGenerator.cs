@@ -55,6 +55,7 @@ public class TerrainGenerator : MonoBehaviour
 
     [SerializeField]
     private GameObject[] resources; //mitt gamla sätt att sätta ut resources ##############################
+    private GameObject resourceContainer; //holds all spawner gameobjects in the inspector (for resources)
 
     [SerializeField]
     private GameObject resourceSpawner;
@@ -102,6 +103,63 @@ public class TerrainGenerator : MonoBehaviour
             pBiome1 = a; pBiome2 = b; pBiome3 = c;
         }
     }
+
+
+    Snowfields biomeSnowfields;
+    CrystalIcefields biomeCrystalIcefields;
+    RockyHighlands biomeRockyHighlands;
+
+    abstract class Biome
+    {
+        public abstract int ChanceForScrapMetal { get; }
+        public abstract int ChanceForPlanks { get; }
+        public abstract int ChanceForFabric { get; }
+        public abstract int ChanceForMagnets { get; }
+        public abstract int ChanceForElectronics { get; }
+        public abstract int ChanceForThermalCrystals { get; }
+
+        public int GetTotal()
+        {
+            return ChanceForScrapMetal + ChanceForPlanks 
+                + ChanceForFabric + ChanceForMagnets 
+                + ChanceForElectronics + ChanceForThermalCrystals;
+        }
+
+    }
+
+    class Snowfields : Biome
+    {
+        override public int ChanceForScrapMetal { get { return 50; } }
+        override public int ChanceForPlanks { get { return 50; } }
+        override public int ChanceForFabric { get { return 50; } }
+        override public int ChanceForMagnets { get { return 10; } }
+        override public int ChanceForElectronics { get { return 0; } }
+        override public int ChanceForThermalCrystals { get { return 0; } }
+
+    }
+
+    class CrystalIcefields : Biome
+    {
+        override public int ChanceForScrapMetal { get { return 0; } }
+        override public int ChanceForPlanks { get { return 0; } }
+        override public int ChanceForFabric { get { return 0; } }
+        override public int ChanceForMagnets { get { return 50; } }
+        override public int ChanceForElectronics { get { return 50; } }
+        override public int ChanceForThermalCrystals { get { return 25; } }
+
+    }
+
+    class RockyHighlands : Biome
+    {
+        override public int ChanceForScrapMetal { get { return 0; } }
+        override public int ChanceForPlanks { get { return 10; } }
+        override public int ChanceForFabric { get { return 10; } }
+        override public int ChanceForMagnets { get { return 0; } }
+        override public int ChanceForElectronics { get { return 50; } }
+        override public int ChanceForThermalCrystals { get { return 50; } }
+
+    }
+
     #endregion
 
 
@@ -110,6 +168,10 @@ public class TerrainGenerator : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         //CreateNewMap();
+
+        biomeSnowfields = new Snowfields();
+        biomeCrystalIcefields = new CrystalIcefields();
+        biomeRockyHighlands = new RockyHighlands();
     }
 
     void Update()
@@ -128,7 +190,7 @@ public class TerrainGenerator : MonoBehaviour
 
         if (placeResources)
         {
-            PlaceResources(resources);
+            PlaceResources();
             placeResources = false;
         }
     }
@@ -172,9 +234,10 @@ public class TerrainGenerator : MonoBehaviour
         CreateColors();
         UpdateMesh();
 
-        PlaceThings();
+        //PlaceThings();
 
-        PlaceResourceSpawners();
+        //PlaceResourceSpawners();
+        PlaceResources();
 
     }
 
@@ -693,11 +756,110 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
-    private void PlaceResources(GameObject[] resources)
+
+    int GetWeightedResource(Biome b)
     {
+        int maxChance = b.GetTotal();
+        int rand = UnityEngine.Random.Range(0, maxChance);
+
+
+
+
+        if (rand < b.ChanceForScrapMetal)
+        {
+            return 0;
+        }
+        else if(rand < b.ChanceForScrapMetal + b.ChanceForPlanks)
+        {
+            return 1;
+        }
+        else if (rand < b.ChanceForScrapMetal + b.ChanceForPlanks +b.ChanceForFabric)
+        {
+            return 2;
+        }
+        else if (rand < b.ChanceForScrapMetal + b.ChanceForPlanks + b.ChanceForFabric +b.ChanceForMagnets)
+        {
+            return 3;
+        }
+        else if (rand < b.ChanceForScrapMetal + b.ChanceForPlanks + b.ChanceForFabric + b.ChanceForMagnets + b.ChanceForElectronics)
+        {
+            return 4;
+        }
+        else if (rand < b.ChanceForScrapMetal + b.ChanceForPlanks + b.ChanceForFabric + b.ChanceForMagnets + b.ChanceForElectronics + b.ChanceForThermalCrystals)
+        {
+            return 5;
+        }
+        return -1;
+    }
+
+    private void PlaceResources()
+    {
+
+        if(resources == null || resources.Length == 0) { return; }
+
+
+        Destroy(resourceContainer);
+        resourceContainer = new GameObject("resourceContainer");
+
+
+
+        
+
+        //NEW:
+
+        //GÅ IGENOM BIOMER
+        foreach (Vector2Int pos in pointPositions)
+        {
+            int i = (xSize * pos.y) + pos.x;
+
+            int resource;
+
+            if(biomeMap[i]== 1)
+            {
+                resource = GetWeightedResource(biomeSnowfields);
+            }
+            else if (biomeMap[i] == 2)
+            {
+                resource = GetWeightedResource(biomeCrystalIcefields);
+            }
+            else
+            {
+                resource = GetWeightedResource(biomeRockyHighlands);
+            }
+
+            Debug.Log("sätter ut en resource, vald resource;" + resource);
+            if (resource == -1) //SENTINEL
+            { continue; }
+
+            Vector3 offset = new Vector3(0, 3, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
+            Vector3 offset2 = new Vector3(UnityEngine.Random.Range(0,5), 0, UnityEngine.Random.Range(0, 5));
+
+            Instantiate(resources[resource], vertices[i] + offset, transform.rotation, resourceContainer.transform);
+            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
+            offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
+            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
+            offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
+            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
+            offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
+            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
+            //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnAResourceCluster(vertices[i] + offset,ResourceType.Wood); //(ResourceType)resource
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        //OLD:
         //det finns en liiten risk att resources hamnar på samma plats om dess x och z blir densamma som för en tidigare resource
         //och det här hanterar inte clipping eller något, så resources kan hamna halvt innuti ett berg ex
-
+        /*
 
         foreach (GameObject obj in resources)
         {
@@ -720,7 +882,7 @@ public class TerrainGenerator : MonoBehaviour
             }
             Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
             Instantiate(obj, vertices[i] + offset, transform.rotation);
-        }
+        }*/
     }
 
     

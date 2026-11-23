@@ -251,6 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84ec5cc34d542b4298313cc816de5f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SleepNewWorld
+  sleepAnimationGroup: {fileID: 0}
+  sleepAnimationSpeed: 1
 --- !u!114 &5037214466651616950
 MonoBehaviour:
   m_ObjectHideFlags: 0
