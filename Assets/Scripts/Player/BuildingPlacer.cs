@@ -22,8 +22,17 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     [SerializeField] private GameObject tentPrefab;
 
 
-    [Header("Particles")]
+    [Header("Particles (Optional)")]
     [SerializeField] private GameObject placedExplosion;
+
+    [Header("Material (Optional)")]
+    [SerializeField] private Material matUnplaceable;
+
+    [Header("LayerMask")]
+    [SerializeField] private LayerMask whatIsGround;
+
+    private Material matPlaceable;
+    private Renderer rendCurrentMat;
 
     private float holdToPlaceSec = 1f;
     
@@ -67,29 +76,12 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     {
         Debug.DrawRay(builderSource.position, builderSource.forward * buildRange, Color.red);
 
-        // Keeps track of the current ghost's location. Locks the location if the player begins confirming the build.
-        if (currentGhost != null && !isHoldingBuild)
+        PreviewGhostLocation();
+
+        // prevents ghosts from being placed if it's the wrong material.
+        if (rendCurrentMat != null && matUnplaceable != null && rendCurrentMat.sharedMaterial == matUnplaceable)
         {
-
-            Ray placementRange = new Ray(builderSource.position, builderSource.forward);
-
-
-            // CURRENT BUG 1: must prevent the ghost mesh from clipping into walls.
-            // CURRENT BUG 2: must prevent object stacking (need a way to tell "whatIsGround"); this is a problem for the placeBuild() function as well.
-            if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
-            {
-                float surfaceAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
-
-                if (surfaceAngle < maxSurfaceAngle)
-                {
-                    currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
-                    currentGhost.transform.position = hitinfo.point;
-                }
-                else
-                {
-                    // CURRENT BUG 3: ghost spawns can be placed on surfaces that are too steep (during the moment wherein the ghost spawns). Must build an indicator here that shows the player they can't place the ghost on this surface: change the material to red.
-                }
-            }
+            holdTimer = 0f;
         }
 
 
@@ -126,6 +118,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
         }
     }
 
+
     // Place the flag instantly.
     public void PlaceFlag()
     {
@@ -148,6 +141,46 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     public void RemoveGhost()
     {
         UpdateCurrentGhost(null);
+    }
+
+    // Keeps track of the current ghost's location. Locks the location if the player begins confirming the build.
+    private void PreviewGhostLocation()
+    {
+        if (currentGhost != null && !isHoldingBuild)
+        {
+
+            Ray placementRange = new Ray(builderSource.position, builderSource.forward);
+
+
+            // CURRENT BUG 1: must prevent the ghost mesh from clipping into walls.
+            // CURRENT BUG 2: must prevent object stacking (need a way to tell "whatIsGround"); this is a problem for the placeBuild() function as well.
+            if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
+            {
+                float surfaceAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
+
+                currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
+                currentGhost.transform.position = hitinfo.point;
+
+                // changes the ghost's material; its material determines whether it should be allowed to be placed or not.
+
+                if (matPlaceable != null && matUnplaceable != null)
+                {
+                    bool isValidAngle = surfaceAngle <= maxSurfaceAngle;
+                    bool isGroundLayer = (whatIsGround.value & (1 << hitinfo.collider.gameObject.layer)) != 0;
+
+                    if (isValidAngle && isGroundLayer)
+                    {
+                        if (rendCurrentMat.sharedMaterial != matPlaceable)
+                            rendCurrentMat.sharedMaterial = matPlaceable;
+                    }
+                    else
+                    {
+                        if (rendCurrentMat.sharedMaterial != matUnplaceable)
+                            rendCurrentMat.sharedMaterial = matUnplaceable;
+                    }
+                }
+            }
+        }
     }
 
     // when a previeww build is selected,the player must hold down the confirm build button for a set amount of time to place it. If the player releases the button before the time is up, the build is not placed.
@@ -259,6 +292,13 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
             currentGhost = null;
             OnGhostPresent?.Invoke(false);
         }
+
+        if (currentGhost != null)
+        {
+            rendCurrentMat = currentGhost.GetComponentInChildren<Renderer>();
+            matPlaceable = rendCurrentMat.sharedMaterial;
+        }
+
     }
 
 

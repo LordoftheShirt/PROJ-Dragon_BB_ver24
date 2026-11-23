@@ -1248,9 +1248,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3851597947083255304, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: matUnplaceable
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e59660e964b8b24999e958c1ac8b2c5, type: 2}
+    - target: {fileID: 3851597947083255304, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: placedExplosion
       value: 
       objectReference: {fileID: 4006051852673508161, guid: f42ac1c73bb8d5047920ff52ab922c91, type: 3}
+    - target: {fileID: 3851597947083255304, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: whatIsGround.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 4793686096356523343, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
