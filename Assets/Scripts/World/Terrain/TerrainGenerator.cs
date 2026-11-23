@@ -762,9 +762,6 @@ public class TerrainGenerator : MonoBehaviour
         int maxChance = b.GetTotal();
         int rand = UnityEngine.Random.Range(0, maxChance);
 
-
-
-
         if (rand < b.ChanceForScrapMetal)
         {
             return 0;
@@ -810,29 +807,50 @@ public class TerrainGenerator : MonoBehaviour
         //GÅ IGENOM BIOMER
         foreach (Vector2Int pos in pointPositions)
         {
-            int i = (xSize * pos.y) + pos.x;
+            //skapa array med de saker som spawnern ska spawna, och skicka med
 
-            int resource;
+            int amountOfResourceClustersToSpawn = UnityEngine.Random.Range(1, 3);
+            ResourceType[] resourcesToSpawn = new ResourceType[amountOfResourceClustersToSpawn];
 
-            if(biomeMap[i]== 1)
+            for (int j = 0; j< amountOfResourceClustersToSpawn; j++)
             {
-                resource = GetWeightedResource(biomeSnowfields);
-            }
-            else if (biomeMap[i] == 2)
-            {
-                resource = GetWeightedResource(biomeCrystalIcefields);
-            }
-            else
-            {
-                resource = GetWeightedResource(biomeRockyHighlands);
+                int i = (xSize * pos.y) + pos.x;
+
+                int resource;
+
+                //kan simplifiera detta om jag gör enums av biomerna så jag inte behöver ha if, utan bara kan skicka med biomeMap[i] i GetWeightedResource()
+                if (biomeMap[i] == 1)
+                {
+                    resource = GetWeightedResource(biomeSnowfields);
+                }
+                else if (biomeMap[i] == 2)
+                {
+                    resource = GetWeightedResource(biomeCrystalIcefields);
+                }
+                else
+                {
+                    resource = GetWeightedResource(biomeRockyHighlands);
+                }
+
+                //Debug.Log("sätter ut en resource, vald resource;" + resource);
+                if (resource == -1) //SENTINEL
+                { continue; }
+
+                resourcesToSpawn[j] = (ResourceType)resource;
             }
 
-            Debug.Log("sätter ut en resource, vald resource;" + resource);
-            if (resource == -1) //SENTINEL
-            { continue; }
 
+
+
+            //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnAResourceCluster(vertices[i] + offset,ResourceType.Wood); //(ResourceType)resource
+
+
+
+
+
+            /*
             Vector3 offset = new Vector3(0, 3, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
-            Vector3 offset2 = new Vector3(UnityEngine.Random.Range(0,5), 0, UnityEngine.Random.Range(0, 5));
+            Vector3 offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
 
             Instantiate(resources[resource], vertices[i] + offset, transform.rotation, resourceContainer.transform);
             Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
@@ -841,8 +859,7 @@ public class TerrainGenerator : MonoBehaviour
             offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
             Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
             offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
-            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
-            //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnAResourceCluster(vertices[i] + offset,ResourceType.Wood); //(ResourceType)resource
+            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);*/
 
         }
 
