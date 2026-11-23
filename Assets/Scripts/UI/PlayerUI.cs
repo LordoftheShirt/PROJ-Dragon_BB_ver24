@@ -27,6 +27,10 @@ public class PlayerUI : Singleton<PlayerUI>
     [SerializeField] private TMP_Text stormTimeText;
     private string _stormTimeFormat;
 
+    [Space]
+    [SerializeField] private ResourceUISlot resourceUISlotTemplate;
+    private ResourceUISlot[] _resourceUISlots;
+
     [Header("Compass")]
     [SerializeField] private RectTransform compassNeedle;
     private Transform _playerTransform;
@@ -46,6 +50,19 @@ public class PlayerUI : Singleton<PlayerUI>
         _hpFormat = hpText.text;
         _warmthFormat = warmthText.text;
         _stormTimeFormat = stormTimeText.text;
+
+        ResourceType[] allResourceTypes = ResourceTypeUtil.GetAllResourceTypes();
+        int length = allResourceTypes.Length;
+        _resourceUISlots = new ResourceUISlot[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            var newSlot = Instantiate(resourceUISlotTemplate, resourceUISlotTemplate.transform.parent);
+            newSlot.Type = allResourceTypes[i];
+
+            _resourceUISlots[i] = newSlot;
+        }
+        resourceUISlotTemplate.gameObject.SetActive(false);
 
         hpBar.maxValue = _meter.GetMaxHealth();
         warmthBar.maxValue = _meter.GetMaxWarmth();
@@ -73,8 +90,7 @@ public class PlayerUI : Singleton<PlayerUI>
 
     private void UpdateWorldTemp()
     {
-        // TODO
-        worldTempText.text = "TODO!";
+        worldTempText.text = string.Format(_worldTempFormat, _dayNightManager.GetCurrentTemrpature());
     }
 
     private void UpdateHP()
