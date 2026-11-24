@@ -849,7 +849,7 @@ public class TerrainGenerator : MonoBehaviour
                 Debug.LogError("rcspawner on " + this.name + " is unnassigned, assign the resourceclusterspawner!");
             }
 
-            rcspawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i]);
+            rcspawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i], resourceContainer.transform);
             //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i]); //vertices[i]
 
             //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnAResourceCluster(vertices[i] + offset,ResourceType.Wood); //(ResourceType)resource
