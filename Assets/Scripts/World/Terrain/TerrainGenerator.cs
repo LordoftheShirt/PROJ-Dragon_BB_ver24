@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -57,8 +58,6 @@ public class TerrainGenerator : MonoBehaviour
     private GameObject[] resources; //mitt gamla sätt att sätta ut resources ##############################
     private GameObject resourceContainer; //holds all spawner gameobjects in the inspector (for resources)
 
-    [SerializeField]
-    private GameObject resourceSpawner;
     [SerializeField]
     private ResourceClusterSpawner rcspawner;
     private GameObject spawnerContainer; //holds all spawner gameobjects in the inspector (for resources)
@@ -147,7 +146,7 @@ public class TerrainGenerator : MonoBehaviour
         override public int ChanceForFabric { get { return 0; } }
         override public int ChanceForMagnets { get { return 50; } }
         override public int ChanceForElectronics { get { return 50; } }
-        override public int ChanceForThermalCrystals { get { return 25; } }
+        override public int ChanceForThermalCrystals { get { return 20; } }
 
     }
 
@@ -220,8 +219,6 @@ public class TerrainGenerator : MonoBehaviour
 
     public void CreateNewTerrain()
     {
-        //DestroyPreviousGameobjects();
-
         if (terrainSize <= 0)
         {
             Debug.LogWarning("ChunkSize is too small on " + this.gameObject.name + " it needs to be larger than 0.");
@@ -238,7 +235,6 @@ public class TerrainGenerator : MonoBehaviour
 
         //PlaceThings();
 
-        //PlaceResourceSpawners();
         PlaceResources();
 
     }
@@ -263,9 +259,9 @@ public class TerrainGenerator : MonoBehaviour
 
         GeneratePoints();
 
-        for (int i = 0; i < terrainSize; i++)
+        for (int i = 0; i <= terrainSize; i++)
         {
-            for (int j = 0; j < terrainSize; j++)
+            for (int j = 0; j <= terrainSize; j++)
             {
 
                 int gridX = i / verticesPerCell;
@@ -363,9 +359,9 @@ public class TerrainGenerator : MonoBehaviour
         BiomePercent[] tBiomeMap = new BiomePercent[biomeMap.Length];
 
         //Go through the biome map
-        for (int x = 0; x < terrainSize; x++)
+        for (int x = 0; x <= terrainSize; x++)
         {
-            for (int z = 0; z < terrainSize; z++)
+            for (int z = 0; z <= terrainSize; z++)
             {
                 int pos = x * xSize + z;
 
@@ -388,7 +384,7 @@ public class TerrainGenerator : MonoBehaviour
                         int tZ = z + b;
                         int tPos = (tX * xSize) + tZ;
 
-                        if (tX < 0 || tZ < 0 || tPos >= biomeMap.Length || tPos < 0)
+                        if (tX < 0 || tZ < 0 || tPos >= biomeMap.Length )
                         {
                             //Debug.Log("skipped saving this position " + tPos + " x: "  + x  + " z: " + z);
                             continue;
@@ -436,15 +432,6 @@ public class TerrainGenerator : MonoBehaviour
 
         //set biomeMap = tempMap
         biomeMapPercentages = tBiomeMap;
-
-
-
-        //printa ut hela mappen...
-        /*foreach(BiomePercent biomePercent in biomeMapPercentages)
-        {
-            Debug.Log("biomePercent for a: " + biomePercent.pBiome1 + " b: " + biomePercent.pBiome2 + " c: " + biomePercent.pBiome3);
-        }*/
-
     }
 
 
@@ -543,16 +530,10 @@ public class TerrainGenerator : MonoBehaviour
         // pos = i * xSize + j;   är   pos = x * xSize + y;
         int pos2 = (z * xSize) + x;
         BiomePercent bp = biomeMapPercentages[pos2];
-        if (bp == null) //det här händer bara med en kant av hela mappen
-        {
-            y = +40;
-            //Debug.Log("bp == null    pos: " + pos2);
-        }
-        else
-        {
+        if (bp != null) 
             y = (bp.pBiome1 * perlin) + (bp.pBiome2 * simplex) + (bp.pBiome3 * absValue);
 
-        }
+
 
         //kolla om det är i center zonen
         /*if (centerPoint >= x - houseSize && centerPoint <= x + houseSize && centerPoint >= z - houseSize && centerPoint <= z + houseSize)
@@ -609,8 +590,8 @@ public class TerrainGenerator : MonoBehaviour
                 //colors[i] = gradient.Evaluate(Mathf.InverseLerp(0, possibleBiomes.Length, biomeMap[pos2]));
 
                 //biome färger som använder biome percentages för att skapa rgb färg
-                int pos2 = (z * xSize) + x;
-                BiomePercent bp = biomeMapPercentages[pos2];
+                int pos = (z * xSize) + x;
+                BiomePercent bp = biomeMapPercentages[pos];
                 if (bp != null)
                     colors[i] = new Color(bp.pBiome1, bp.pBiome2, bp.pBiome3, 0.5f);
 
@@ -635,15 +616,8 @@ public class TerrainGenerator : MonoBehaviour
         //gameObject.transform.localScale = new Vector3(xSize * zSize, xSize * zSize, xSize * zSize);
     }
 
-    /*private void DestroyPreviousGameobjects()
-    {
-        //probably borde börja med att ta bort saker först?
-        Destroy(objContainer);
-    }*/
-
     private void PlaceThings()
     {
-        //DestroyPreviousGameobjects();
         Destroy(objContainer);
 
 
@@ -733,32 +707,6 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
-    private void PlaceResourceSpawners()
-    {
-        Destroy(spawnerContainer);
-        if (resourceSpawner == null)
-        {
-            Debug.LogWarning("resourceSpawner gameobject saknas på terrängen!!");
-            return;
-        }
-
-        spawnerContainer = new GameObject("spawnerContainer");
-
-
-        foreach(Vector2Int pos in pointPositions)
-        {
-            if(pos.x %2 == 0 || pos.y %2 == 0)         //DET ÄR FÖR MÅNGA RN SÅ TEMP LÖSNING ÄR ATT HALVERA HUR MÅNGA SOM SÄTTS UT
-                continue;
-
-            Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
-            int i = (xSize * pos.y) + pos.x;
-            Instantiate(resourceSpawner, vertices[i] + offset, transform.rotation, spawnerContainer.transform);
-        }
-
-    }
-
-
-
     int GetWeightedResource(Biome b)
     {
         int maxChance = b.GetTotal();
@@ -793,47 +741,43 @@ public class TerrainGenerator : MonoBehaviour
 
     private void PlaceResources()
     {
-
         if(resources == null || resources.Length == 0) { return; }
-
 
         Destroy(resourceContainer);
         resourceContainer = new GameObject("resourceContainer");
-
-
-
-        
-
-        //NEW:
 
         //GÅ IGENOM BIOMER
         foreach (Vector2Int pos in pointPositions)
         {
             //skapa array med de saker som spawnern ska spawna, och skicka med
 
-            int amountOfResourceClustersToSpawn = UnityEngine.Random.Range(1, 3);
+            int amountOfResourceClustersToSpawn = 1;// UnityEngine.Random.Range(1, 3);
             ResourceType[] resourcesToSpawn = new ResourceType[amountOfResourceClustersToSpawn];
 
 
             int i = (xSize * pos.y) + pos.x;
+            Vector3 vecPos = new Vector3(pos.x - xSize / 2, 0, pos.y - zSize / 2);
             for (int j = 0; j< amountOfResourceClustersToSpawn; j++)
             {
                 
 
-                int resource;
+                int resource = -1;
 
                 //kan simplifiera detta om jag gör enums av biomerna så jag inte behöver ha if, utan bara kan skicka med biomeMap[i] i GetWeightedResource()
-                if (biomeMap[i] == 1)
+                if (biomeMap[i] == 0)
                 {
                     resource = GetWeightedResource(biomeSnowfields);
+                    //Instantiate(resources[0], vecPos, transform.rotation);
                 }
-                else if (biomeMap[i] == 2)
+                else if (biomeMap[i] == 1)
                 {
                     resource = GetWeightedResource(biomeCrystalIcefields);
+                    //Instantiate(resources[1], vecPos, transform.rotation);
                 }
-                else
+                else if(biomeMap[i] == 2)
                 {
                     resource = GetWeightedResource(biomeRockyHighlands);
+                    //Instantiate(resources[2], vecPos, transform.rotation);
                 }
 
                 //Debug.Log("sätter ut en resource, vald resource;" + resource);
@@ -849,12 +793,9 @@ public class TerrainGenerator : MonoBehaviour
                 Debug.LogError("rcspawner on " + this.name + " is unnassigned, assign the resourceclusterspawner!");
             }
 
-            rcspawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i], resourceContainer.transform);
-            //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vertices[i]); //vertices[i]
+            rcspawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vecPos, resourceContainer.transform);
 
-            //resourceSpawner.GetComponent<ResourceClusterSpawner>().SpawnAResourceCluster(vertices[i] + offset,ResourceType.Wood); //(ResourceType)resource
-
-
+            
 
 
 
@@ -872,44 +813,6 @@ public class TerrainGenerator : MonoBehaviour
             Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);*/
 
         }
-
-
-
-
-
-
-
-
-
-
-
-        //OLD:
-        //det finns en liiten risk att resources hamnar på samma plats om dess x och z blir densamma som för en tidigare resource
-        //och det här hanterar inte clipping eller något, så resources kan hamna halvt innuti ett berg ex
-        /*
-
-        foreach (GameObject obj in resources)
-        {
-            //skapa random position
-            int x = UnityEngine.Random.Range(0, xSize);
-            int z = UnityEngine.Random.Range(0, xSize);
-
-            //vertices har antal platser som är zSize * xSize stor (detta är i)
-            //för att hitta positionen vid x,z 's vertice
-            //xSize * z + x
-            int i = (xSize * z) + x;
-
-            //bara för säkerhet
-            if (i < 0 || i >= vertices.Length)
-                return;
-            if (obj == null)
-            {
-                Debug.LogWarning("A resource is NULL in the resources array on " + this.gameObject.name);
-                continue;
-            }
-            Vector3 offset = new Vector3(0, 0, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
-            Instantiate(obj, vertices[i] + offset, transform.rotation);
-        }*/
     }
 
     

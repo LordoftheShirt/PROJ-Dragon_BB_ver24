@@ -161,16 +161,16 @@ MonoBehaviour:
   objToPlace2: {fileID: 919132149155446097, guid: 2cf61b3a092437f4080bf59db195d619, type: 3}
   objToPlace3: {fileID: 919132149155446097, guid: 46d7b6de10f156e4088012935285f8bb, type: 3}
   resources:
-  - {fileID: 8689415650351826161, guid: 928bff5abf0eabe42bb28182a6b57ba0, type: 3}
-  - {fileID: 8689415650351826161, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
-  - {fileID: 509521200768844708, guid: b5d413e60684afc40be3c26447b401f0, type: 3}
+  - {fileID: 8689415650351826161, guid: 1d81c88337b70a24f82cd823c71307a5, type: 3}
+  - {fileID: 8689415650351826161, guid: ad1f82760e2f46648ad5bd7f1a54b9c6, type: 3}
+  - {fileID: 8689415650351826161, guid: ce682c1fb91a9b843a82e59e0fa1bdba, type: 3}
   - {fileID: 5933196674494083239, guid: 816c3b3be5aa7d84d81f9c12c2964dfc, type: 3}
   - {fileID: 8907059878829624906, guid: f18b8d95c793ba241a0e20a3299926ff, type: 3}
   - {fileID: 1055412442946892537, guid: 3ea1a47eaae8a8b46b64a997b44a4153, type: 3}
   resourceSpawner: {fileID: 442708828969365185, guid: b8db2069ac5edef4da373c9ec12d49d9, type: 3}
   rcspawner: {fileID: 100107755}
   house: {fileID: 976564111}
-  biomeBlendRadius: 5
+  biomeBlendRadius: 2
   biomeInnerRadius: 200
   biomeMiddleRadius: 350
   voronoiGridSize: 8
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abae7f1023fa2784f90bc2669eea6c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceClusterSpawner
-  spawnRadius: 30
+  spawnRadius: 10
 --- !u!4 &287362596 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8063073397250431797, guid: f0271df749728104eac22c3d897fd8ce, type: 3}
