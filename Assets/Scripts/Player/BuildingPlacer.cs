@@ -49,6 +49,8 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     private GameObject currentGhost;
     private Transform builderSource;
 
+    private GameObject buildingHolder;
+
     // For Placeholder UI.
     public event Action<bool> OnGhostPresent;
 
@@ -65,11 +67,15 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
         */
 
         cancelBuildAction = InputSystem.actions["Cancel Build"];
+
+
     }
 
     void Start()
     {
         builderSource = Camera.main.transform;
+
+        ResetBuildings();
     }
 
     void Update()
@@ -223,9 +229,9 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
             // SFX for tent and fireplace here.
 
             if (placedExplosion != null)
-                Instantiate(placedExplosion, currentGhost.transform.position, currentGhost.transform.rotation);
+                Instantiate(placedExplosion, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);
 
-            return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation);
+            return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);
         }
 
 
@@ -245,7 +251,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
                 // SFX for flag here.
             }
 
-            return Instantiate(build, hitinfo.point, buildRotation);
+            return Instantiate(build, hitinfo.point, buildRotation, buildingHolder.transform);
         }
         return null;
     }
@@ -341,5 +347,20 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     public float GetHoldToPlaceSeconds()
     {
         return holdToPlaceSec;
+    }
+
+    public void ResetBuildings()
+    {
+        if (buildingHolder == null)
+        {
+            buildingHolder = new GameObject("Building Holder");
+        }
+        else
+        {
+            Destroy(buildingHolder);
+            buildingHolder = new GameObject("Building Holder");
+        }
+
+        // måste reset input/UI build selection hos ghost Preview här. Annars blir den lite skum efter man har sovit.
     }
 }

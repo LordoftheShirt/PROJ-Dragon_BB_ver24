@@ -17,6 +17,8 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
         inAnimation = true;
         sleeping = true;
         sleepAnimationGroup.alpha = 0.5f;
+
+        BuildingPlacer.Instance?.ResetBuildings();
     }
 
     private void FixedUpdate()
