@@ -12,7 +12,7 @@ public class ResourceCluster : MonoBehaviour
         Vector3 spawnPosition;
         float spawnXRotation;
         float spawnZRotation;
-        maxResourceAmount = 0;
+        maxResourceAmount = -1;
 
         do
         {
@@ -39,11 +39,10 @@ public class ResourceCluster : MonoBehaviour
             ResourceNode resource = Instantiate(resourcePrefab, spawnPosition, Quaternion.identity, transform);
             resource.transform.rotation = Quaternion.Euler(spawnXRotation, 0, spawnZRotation);
 
-            if (maxResourceAmount == 0)
+            if (maxResourceAmount == -1)
                 maxResourceAmount = resource.GetMaxResourceAmountPerCluster();
-            int amount = Random.Range(resource.GetResourceMin(), resource.GetResourceMax());
-            maxResourceAmount -= amount;
-            SetResourceStats(resource, resourceType, amount);
+
+            SetResourceStats(resource, resourceType, Random.Range(resource.GetResourceMin(), resource.GetResourceMax() + 1));
         }
         while (maxResourceAmount >= 0);
 
@@ -53,6 +52,7 @@ public class ResourceCluster : MonoBehaviour
     private void SetResourceStats(ResourceNode resource, ResourceType resourceType, int addedResourceAmount)
     {
         resource.SetResourceType(resourceType, addedResourceAmount);
+
         maxResourceAmount -= addedResourceAmount;
     }
 }

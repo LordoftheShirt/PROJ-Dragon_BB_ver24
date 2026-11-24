@@ -10,15 +10,17 @@ public class MiniMapManager : MonoBehaviour
     [SerializeField] private Transform playerMap;
     [Header("Prefabs")]
     [SerializeField] private GameObject cabbinTokenPrefab;
-    [SerializeField] private GameObject mapObjectTokenPrefab;
+    [SerializeField] private GameObject[] mapObjectTokenPrefabs;
     [Header("Settings")]
     [Tooltip("The scale factor for the minimap. If its a larger value, the minimap will be more zoomed out. Ex: 5 means a map in 1:5 scale")]
-    [SerializeField] private float scale = 5;
-    [SerializeField] private float size = 5;
+    [SerializeField] private float scale = 110;
     [SerializeField] private float xRotation = 180;
 
+
+    private float size = 0.9f;
+
+    private bool isOpen;
     private List<GameObject> mapObjects = new List<GameObject>();
-    private bool activated;
 
     public void CreateMap()
     {
@@ -30,10 +32,14 @@ public class MiniMapManager : MonoBehaviour
 
         foreach (GameObject mapObject in mapObjects)
         {
-            //Debug.Log("Creates: " + mapObject);
             Vector3 mapObjectPosition = new Vector3(CalculateObjectCordinate(playerMap.position.x, cabbin.position.x, mapObject.transform.position.x), playerMap.position.y + 0.1f, CalculateObjectCordinate(playerMap.position.z, cabbin.position.z, mapObject.transform.position.z));
-            if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)            
-                Instantiate(mapObjectTokenPrefab, mapObjectPosition, playerMap.rotation, playerMap);                
+            //Later implement instantiation for POIs.
+            ResourceNode node = mapObject.GetComponent<ResourceNode>();
+            //Debug.Log((int)node.GetResourceType());
+            if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
+                Instantiate(mapObjectTokenPrefabs[(int)node.GetResourceType()], mapObjectPosition, playerMap.rotation, playerMap);
+
+            Debug.Log("prefab: " + mapObjectTokenPrefabs[(int)node.GetResourceType()] + " type: " + node.GetResourceType());
         }
 
         mapObjects.Clear();
@@ -42,15 +48,15 @@ public class MiniMapManager : MonoBehaviour
     public void ActiveteOrDeactivateMap(InputAction.CallbackContext context)
     {
         Debug.Log("presed map");
-        if (activated)
+        if (isOpen)
         {
-            activated = false;
-            ViewMap(activated);          
+            isOpen = false;
+            ViewMap(isOpen);          
         }
         else
         {
-            activated = true;
-            ViewMap(activated);
+            isOpen = true;
+            ViewMap(isOpen);
         }
     }
 

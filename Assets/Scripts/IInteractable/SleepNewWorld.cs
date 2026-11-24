@@ -16,7 +16,7 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
         sleepAnimationTime = 0;
         inAnimation = true;
         sleeping = true;
-        sleepAnimationGroup.alpha = 0f;
+        sleepAnimationGroup.alpha = 0.5f;
     }
 
     private void FixedUpdate()
@@ -25,7 +25,6 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
             return;
 
         sleepAnimationTime += Time.fixedDeltaTime;
-        Debug.Log("anim: " + sleepAnimationGroup.alpha);
 
         if(sleeping)
         {

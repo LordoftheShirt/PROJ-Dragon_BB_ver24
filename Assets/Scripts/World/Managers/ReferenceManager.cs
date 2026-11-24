@@ -17,21 +17,6 @@ public class ReferenceManager : Singleton<ReferenceManager>
     public ResourceCluster resourceClusterPrefab;
     public ResourceNode[] resourceNodePrefabs;
 
-    /* Singleton script does this automatically
-    public static ReferenceManager Instance { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-    */
 }
 
