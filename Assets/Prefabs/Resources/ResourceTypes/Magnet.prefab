@@ -143,19 +143,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.156
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -163,15 +163,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.097
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071069
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_LocalRotation.y
@@ -197,6 +197,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 811429db88686e541843d5cf6ce2d8d5, type: 2}
+    - target: {fileID: -5754084199372789682, guid: abc40b893891afa48b12cb14a002245b, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -4928939413278532795, guid: a75057eb18b1c72478cd771d4daec46d, type: 3}
     - target: {fileID: 919132149155446097, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_Name
       value: StoneResource
