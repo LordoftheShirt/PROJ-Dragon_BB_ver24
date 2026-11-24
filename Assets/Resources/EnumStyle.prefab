@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6115170727675993105}
   - component: {fileID: 5067900352351737288}
   m_Layer: 0
-  m_Name: EnumIcons
+  m_Name: EnumStyle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6418066898517719239}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b46572bf8e505e5499a5c10cf123684b, type: 3}
+  m_Script: {fileID: 11500000, guid: 48ba8f2fccfa0c143b176698e99d8120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceIcons
   resourceIcons:
@@ -51,8 +51,22 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 421236b65d97f3940b4c3aae75f3d83a, type: 3}
   - {fileID: 21300000, guid: c070d86158a52b14fa23c55ceb63e0d3, type: 3}
   - {fileID: 21300000, guid: 366fda8fee5dfbd45824beafeae5a191, type: 3}
+  resourceColors:
+  - {r: 0.84705883, g: 0.6784314, b: 0.49803922, a: 1}
+  - {r: 0.65882355, g: 0.7764706, b: 0.84313726, a: 1}
+  - {r: 0.54509807, g: 0.83137256, b: 0.7372549, a: 1}
+  - {r: 0.8980392, g: 0.63529414, b: 0.6509804, a: 1}
+  - {r: 0.7176471, g: 0.68235296, b: 0.91764706, a: 1}
+  - {r: 0.5411765, g: 0.8980392, b: 0.9490196, a: 1}
+  resourceBackgroundColors:
+  - {r: 0.28627452, g: 0.22352941, b: 0.1764706, a: 1}
+  - {r: 0.14901961, g: 0.24705882, b: 0.31764707, a: 1}
+  - {r: 0.13725491, g: 0.28235295, b: 0.29803923, a: 1}
+  - {r: 0.29411766, g: 0.20784314, b: 0.25490198, a: 1}
+  - {r: 0.2, g: 0.21568628, b: 0.33333334, a: 1}
+  - {r: 0.13725491, g: 0.27450982, b: 0.32941177, a: 1}
   blueprintCategoryIcons:
   - {fileID: 21300000, guid: 5f3c144bdc2bbf24db4ef48620aab768, type: 3}
-  - {fileID: 21300000, guid: 66377c7a98c82eb41989bb2bc3e839f6, type: 3}
+  - {fileID: 21300000, guid: 24889111f491afa4ab10c42a380bee0d, type: 3}
   - {fileID: 21300000, guid: 3c8cbdd3edc285b4e8754b385e72c385, type: 3}
   - {fileID: 21300000, guid: 1ac9269b2ca2b214a9a45b679ba442be, type: 3}

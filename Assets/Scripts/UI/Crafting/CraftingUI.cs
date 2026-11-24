@@ -43,6 +43,20 @@ public class CraftingUI : Singleton<CraftingUI>
     private BlueprintCategory _currentCategory;
     private int _categoryAmount;
 
+    public CraftingUIBlueprint SelectedCraftingUIBlueprint
+    {
+        get => _selectedCraftingUIBlueprint;
+        set
+        {
+            if (_selectedCraftingUIBlueprint != null) _selectedCraftingUIBlueprint.SetState(false);
+
+            _selectedCraftingUIBlueprint = value;
+
+            if (_selectedCraftingUIBlueprint != null) _selectedCraftingUIBlueprint.SetState(true);
+        }
+    }
+    private CraftingUIBlueprint _selectedCraftingUIBlueprint;
+
     public Blueprint SelectedBlueprint
     {
         get => _selectedBlueprint;

@@ -38,6 +38,6 @@ public static class BlueprintCategoryExtensions
 
     public static Sprite GetIcon(this BlueprintCategory category)
     {
-        return EnumIcons.GetBlueprintCategoryIcon(category);
+        return EnumStyle.GetBlueprintCategoryIcon(category);
     }
 }

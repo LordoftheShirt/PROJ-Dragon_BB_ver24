@@ -43,10 +43,10 @@ public static class ResourceTypeUtil
                 return "Magnet";
 
             case ResourceType.Tech:
-                return "Tech";
+                return "Electronic";
 
             case ResourceType.Crystal:
-                return "Crystal";
+                return "Thermal Crystal";
 
             default:
                 return "Unknown";
@@ -60,6 +60,14 @@ public static class ResourceTypeUtil
 
     public static Sprite GetIcon(this ResourceType resourceType)
     {
-        return EnumIcons.GetResourceIcon(resourceType);
+        return EnumStyle.GetResourceIcon(resourceType);
+    }
+    public static Color GetColor(this ResourceType resourceType)
+    {
+        return EnumStyle.GetResourceColor(resourceType);
+    }
+    public static Color GetBackgroundColor(this ResourceType resourceType)
+    {
+        return EnumStyle.GetResourceBackgroundColor(resourceType);
     }
 }

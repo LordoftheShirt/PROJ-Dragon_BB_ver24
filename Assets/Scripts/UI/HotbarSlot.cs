@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class HotbarSlot : MonoBehaviour
 {
-    private static readonly int SDF_COLOR_PROP = Shader.PropertyToID("_Color");
-    private static readonly int SDF_OUTLINE_COLOR_PROP = Shader.PropertyToID("_OutlineColor");
-    private static readonly int SDF_OUTLINE_THICKNESS_PROP = Shader.PropertyToID("_OutlineThickness");
-
     public bool SlotEnabled { get; private set; } = false;
 
     [SerializeField] private Graphic sdfGraphic;
@@ -64,13 +60,13 @@ public class HotbarSlot : MonoBehaviour
     #region Selection Outline Thickness
     private Vector2 GetSelectionOutineThickness()
     {
-        Vector4 outlineThickness = _selectionOutlineMaterial.GetVector(SDF_OUTLINE_THICKNESS_PROP);
+        Vector4 outlineThickness = _selectionOutlineMaterial.GetVector(SdfShaderProperties.OUTLINE_THICKNESS);
         return new(outlineThickness.x, outlineThickness.y);
     }
 
     private void SetSelectionOutlineThickness(Vector2 vector)
     {
-        _selectionOutlineMaterial.SetVector(SDF_OUTLINE_THICKNESS_PROP, new(vector.x, vector.y, 0,0));
+        _selectionOutlineMaterial.SetVector(SdfShaderProperties.OUTLINE_THICKNESS, new(vector.x, vector.y, 0,0));
     }
 
     private Tween TweenSelectionOutlineThickness(Vector2 to, float duration)
@@ -122,8 +118,8 @@ public class HotbarSlot : MonoBehaviour
             graphic.color = backgroundColor;
         }
 
-        _material.SetColor(SDF_COLOR_PROP, backgroundColor);
-        _material.SetColor(SDF_OUTLINE_COLOR_PROP, color);
+        _material.SetColor(SdfShaderProperties.COLOR, backgroundColor);
+        _material.SetColor(SdfShaderProperties.OUTLINE_COLOR, color);
     }
 
     public void SetKeyText(string text)

@@ -8,76 +8,24 @@ using UnityEngine;
 [LoadOnInit]
 public class Inventory : SingletonPersistent<Inventory>
 {
-    public static readonly Dictionary<ResourceType, int> Resources = new();
+    public static Dictionary<ResourceType, int> Resources => _resources.Dictionary;
+    private static readonly ResourceDictionary _resources = new();
     public static readonly Dictionary<Item, int> Items = new();
     public static List<Blueprint> BlueprintsUnlocked => Instance.blueprintsUnlocked;
     [SerializeField] private List<SerializableItemAndAmount<ResourceType>> startingResources = new();
     [SerializeField] private List<SerializableItemAndAmount<Item>> startingItems = new();
     [SerializeField] private List<Blueprint> blueprintsUnlocked = new();
 
-    public delegate void ChangeDelegate<T>(T obj, int count, int change);
-
     #region Resources
-    public static ChangeDelegate<ResourceType> OnResourceChanged { get; set; }
-    public void AddResource(ResourceType resourceType, int change)
+    public static ChangeDelegate<ResourceType> OnResourceChanged
     {
-        if (change <= 0)
-        {
-            Debug.LogWarning($"Attempted to add {change} of \"{resourceType.GetDisplayString()}\" to inventory. Count must be greater than 0.");
-            return;
-        }
-
-        if (Resources.ContainsKey(resourceType))
-        {
-            Resources[resourceType] += change;
-        }
-        else
-        {
-            Resources[resourceType] = change;
-        }
-
-        OnResourceChanged?.Invoke(resourceType, Resources[resourceType], change);
+        get => _resources.OnChanged;
+        set => _resources.OnChanged = value;
     }
-
-    public void RemoveResource(ResourceType resourceType, int change)
-    {
-        if (change <= 0)
-        {
-            Debug.LogWarning($"Attempted to remove {change} of \"{resourceType.GetDisplayString()}\" from inventory. Count must be greater than 0.");
-            return;
-        }
-
-        if (Resources.ContainsKey(resourceType))
-        {
-            Resources[resourceType] -= change;
-
-            // Cannot fall below 0
-            if (Resources[resourceType] <= 0)
-            {
-                Resources[resourceType] = 0;
-            }
-        }
-        else
-        {
-            Resources[resourceType] = 0;
-        }
-
-        OnResourceChanged?.Invoke(resourceType, Resources[resourceType], change);
-    }
-
-    public int GetResource(ResourceType resourceType)
-    {
-        return Resources[resourceType];
-    }
-
-    public void SetResource(ResourceType resourceType, int count)
-    {
-        int oldCount = Resources[resourceType];
-        int newCount = Mathf.Max(count, 0);
-        Resources[resourceType] = newCount;
-
-        OnResourceChanged?.Invoke(resourceType, newCount, newCount - oldCount);
-    }
+    public void AddResource(ResourceType resourceType, int change) => _resources.AddResource(resourceType, change);
+    public void RemoveResource(ResourceType resourceType, int change) => _resources.RemoveResource(resourceType, change);
+    public int GetResource(ResourceType resourceType) => _resources.GetResource(resourceType);
+    public void SetResource(ResourceType resourceType, int count) => _resources.SetResource(resourceType, count);
     #endregion
 
     #region Item

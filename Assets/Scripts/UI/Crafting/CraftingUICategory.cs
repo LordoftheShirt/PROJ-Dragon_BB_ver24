@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,7 @@ public class CraftingUICategory : MonoBehaviour
     private void Awake()
     {
         _craftingUI = GetComponentInParent<CraftingUI>(true);
+        SetState(false);
     }
 
     public void OnClick()
@@ -35,8 +37,25 @@ public class CraftingUICategory : MonoBehaviour
         _craftingUI.ChangeCategory(Category);
     }
 
-    public void SetState(bool selected)
+    public void SetState(bool selected, bool instant = false)
     {
-        bg.color = selected ? selectedColor : unselectedColor;
+        Color col = selected ? selectedColor : unselectedColor;
+        Color invCol = !selected ? selectedColor : unselectedColor;
+
+        bg.DOKill();
+        icon.DOKill();
+        text.DOKill();
+
+        if (instant)
+        {
+            bg.color = col;
+            icon.color = invCol;
+            text.color = invCol;
+            return;
+        }
+
+        bg.DOColor(col, 0.1f);
+        icon.DOColor(invCol, 0.1f);
+        text.DOColor(invCol, 0.1f);
     }
 }
