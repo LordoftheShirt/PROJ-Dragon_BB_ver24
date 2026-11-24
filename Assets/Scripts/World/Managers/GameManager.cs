@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
         ReferenceManager.Instance.player.GetComponent<CharacterController>().enabled = false;
         ReferenceManager.Instance.player.gameObject.transform.position = new Vector3(cab.transform.position.x, cab.transform.position.y + cab.transform.lossyScale.y, cab.transform.position.z);
         ReferenceManager.Instance.player.GetComponent<CharacterController>().enabled = true;
+
+        BuildingPlacer.Instance?.ResetBuildings();
     }
 
     public void ResetResources()
