@@ -156,7 +156,7 @@ MonoBehaviour:
   placeDecorations: 0
   placeResources: 0
   seed: 21
-  terrainSize: 500
+  terrainSize: 1000
   objToPlace: {fileID: 919132149155446097, guid: edb0db62d1a6a264699cb3fb530b1c0d, type: 3}
   objToPlace2: {fileID: 919132149155446097, guid: 2cf61b3a092437f4080bf59db195d619, type: 3}
   objToPlace3: {fileID: 919132149155446097, guid: 46d7b6de10f156e4088012935285f8bb, type: 3}
@@ -167,14 +167,13 @@ MonoBehaviour:
   - {fileID: 5933196674494083239, guid: 816c3b3be5aa7d84d81f9c12c2964dfc, type: 3}
   - {fileID: 8907059878829624906, guid: f18b8d95c793ba241a0e20a3299926ff, type: 3}
   - {fileID: 1055412442946892537, guid: 3ea1a47eaae8a8b46b64a997b44a4153, type: 3}
-  resourceSpawner: {fileID: 442708828969365185, guid: b8db2069ac5edef4da373c9ec12d49d9, type: 3}
   rcspawner: {fileID: 100107755}
   house: {fileID: 976564111}
-  biomeBlendRadius: 2
+  biomeBlendRadius: 4
   biomeInnerRadius: 200
   biomeMiddleRadius: 350
   voronoiGridSize: 8
-  biomePlacementRandomness: 1.5
+  biomePlacementRandomness: 0.5
   scale: 25
 --- !u!64 &100107751
 MeshCollider:
@@ -1076,6 +1075,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 881193398301843028, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -60.00006
+      objectReference: {fileID: 0}
     - target: {fileID: 1593804173212233310, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -1106,6 +1109,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2252958366728364909, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434912319553636542, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: PauseRealtimeDecay
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2770240588887316460, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}

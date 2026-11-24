@@ -484,6 +484,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
+
     private float getBiomeHeight(int newNoise, int x, int z)
     {
         float y = 0;
@@ -498,8 +499,8 @@ public class TerrainGenerator : MonoBehaviour
         absValue += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
         if (absValue > 15f)
         {
-            absValue = noise.snoise(new float2(z * .03f, x * .03f));
-            absValue += scale / 2;
+            //absValue = noise.snoise(new float2(z * .03f, x * .03f));
+            //absValue += scale / 2;
         }
 
 
@@ -509,15 +510,17 @@ public class TerrainGenerator : MonoBehaviour
         // perlin += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
         // perlin += Mathf.PerlinNoise((x + newNoise) * .5f, (z + newNoise) * .5f) * (scale / 64);
 
+        float perlin2 = Mathf.PerlinNoise((x + newNoise) * .005f, (z + newNoise) * .005f) * scale/2;
+
+        float perlin3 = Mathf.PerlinNoise((x + newNoise) * .005f, (z + newNoise) * .005f) * (scale/2);
+
 
         //SIMPLEX
         float simplex = noise.snoise(new float2(z * .03f, x * .03f));
-        //float simplexV = Mathf.Abs(simplex);
-        /*if (simplexV > 0.35f)
-        {
-            simplex *= 5f;
-        }*/
-        simplex += scale;// / 2;
+        simplex += scale;
+
+
+
 
 
         if (y > maxTerrainHeight)
@@ -525,13 +528,12 @@ public class TerrainGenerator : MonoBehaviour
         if (y < minTerrainHeight)
             minTerrainHeight = y;
 
-
         //  i = (pos - j) /xSize
         // pos = i * xSize + j;   är   pos = x * xSize + y;
         int pos2 = (z * xSize) + x;
         BiomePercent bp = biomeMapPercentages[pos2];
         if (bp != null) 
-            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * simplex) + (bp.pBiome3 * absValue);
+            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * ((perlin * perlin2) / 4)) + (bp.pBiome3 * ((perlin * perlin3)/2));
 
 
 
@@ -751,7 +753,7 @@ public class TerrainGenerator : MonoBehaviour
         {
             //skapa array med de saker som spawnern ska spawna, och skicka med
 
-            int amountOfResourceClustersToSpawn = 1;// UnityEngine.Random.Range(1, 3);
+            int amountOfResourceClustersToSpawn = UnityEngine.Random.Range(1, 3);
             ResourceType[] resourcesToSpawn = new ResourceType[amountOfResourceClustersToSpawn];
 
 
