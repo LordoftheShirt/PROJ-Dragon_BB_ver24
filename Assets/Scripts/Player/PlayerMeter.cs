@@ -10,6 +10,7 @@ public class PlayerMeter : MonoBehaviour
 
     [Header("Health loss per second - MAX HP: 100")]
     [SerializeField] private float HealthDecayRate = 2f;
+    [SerializeField] private float HealthRegenRate = 1;
 
     //[Header("Warmth loss per second - MAX W: 100")]
     //[SerializeField] private float DefultWarmthDecayRate = 1f;
@@ -53,8 +54,13 @@ public class PlayerMeter : MonoBehaviour
         {
             currentWarmth = 0;
             currentHealth -= HealthDecayRate * Time.deltaTime;
+        } else if (currentHealth < maxHealth)
+        {
+            currentHealth += HealthRegenRate * Time.deltaTime;
         }
     }
+
+
 
     public void ChangeWarmthDecayrate(float newRate)
     {
@@ -65,7 +71,7 @@ public class PlayerMeter : MonoBehaviour
     public void Die()
     {
         ReferenceManager.Instance.gameManager.ResetWorld();
-        ReferenceManager.Instance.gameManager.ResetResources();
+        ReferenceManager.Instance.gameManager.ResetTemporaryResources();
     }
 
     public void ResetMeter()

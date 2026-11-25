@@ -31,3 +31,5 @@ MonoBehaviour:
     mapIcon: {fileID: 9052168551616157550, guid: 1bab52e2a4dabc9448b20ded6c5ffe3b, type: 3}
   - model: {fileID: 3175409710382026837, guid: 1a0e74f42f9330a4f913048463dd4a3d, type: 3}
     mapIcon: {fileID: -9078514504233251462, guid: eb57fa223a0271b44a3f690b87c49bf1, type: 3}
+  - model: {fileID: 8964293846415889975, guid: 7e80207834fd6f84aad1549417372926, type: 3}
+    mapIcon: {fileID: -7490549210145418512, guid: 13ed49ad48921354a8087aedc01b5394, type: 3}

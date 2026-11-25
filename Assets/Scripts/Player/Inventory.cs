@@ -8,24 +8,78 @@ using UnityEngine;
 [LoadOnInit]
 public class Inventory : SingletonPersistent<Inventory>
 {
-    public static Dictionary<ResourceType, int> Resources => _resources.Dictionary;
-    private static readonly ResourceDictionary _resources = new();
+    public static Dictionary<ResourceType, int> TemporaryResources => _temporaryResources.Dictionary;
+    public static Dictionary<ResourceType, int> PermanentResources => _permanentResources.Dictionary;
+    private static readonly ResourceDictionary _temporaryResources = new();
+    private static readonly ResourceDictionary _permanentResources = new();
     public static readonly Dictionary<Item, int> Items = new();
     public static List<Blueprint> BlueprintsUnlocked => Instance.blueprintsUnlocked;
-    [SerializeField] private List<SerializableItemAndAmount<ResourceType>> startingResources = new();
     [SerializeField] private List<SerializableItemAndAmount<Item>> startingItems = new();
     [SerializeField] private List<Blueprint> blueprintsUnlocked = new();
 
     #region Resources
-    public static ChangeDelegate<ResourceType> OnResourceChanged
+    public static ChangeDelegate<ResourceType> OnResourceChanged { get; set; }
+    public void AddResource(ResourceType resourceType, int change)
     {
-        get => _resources.OnChanged;
-        set => _resources.OnChanged = value;
+        _temporaryResources.AddResource(resourceType, change);
+
+        OnResourceChanged?.Invoke(resourceType, GetResource(resourceType), change);
     }
-    public void AddResource(ResourceType resourceType, int change) => _resources.AddResource(resourceType, change);
-    public void RemoveResource(ResourceType resourceType, int change) => _resources.RemoveResource(resourceType, change);
-    public int GetResource(ResourceType resourceType) => _resources.GetResource(resourceType);
-    public void SetResource(ResourceType resourceType, int count) => _resources.SetResource(resourceType, count);
+    public void RemoveResource(ResourceType resourceType, int change)
+    {
+        int temporaryResourcesChange = _temporaryResources.RemoveResource(resourceType, change);
+
+        int permanentChange = change - temporaryResourcesChange;
+
+        if (permanentChange > 0) _permanentResources.RemoveResource(resourceType, permanentChange);
+
+        OnResourceChanged?.Invoke(resourceType, GetResource(resourceType), change);
+    }
+    public int GetResource(ResourceType resourceType) => _temporaryResources.GetResource(resourceType) + _permanentResources.GetResource(resourceType);
+    private void SetResource(ResourceDictionary dictionary, ResourceDictionary otherDictionary, ResourceType resourceType, int count)
+    {
+        int oldCount = dictionary.GetResource(resourceType);
+        int newCount = Mathf.Max(count, 0);
+
+        dictionary.SetResource(resourceType, newCount);
+
+        OnResourceChanged?.Invoke(resourceType, otherDictionary.GetResource(resourceType) + newCount, newCount - oldCount);
+    }
+    public void SetTemporaryResource(ResourceType resourceType, int count) => SetResource(_temporaryResources, _permanentResources, resourceType, count);
+    public void SetPermanentResource(ResourceType resourceType, int count) => SetResource(_permanentResources, _temporaryResources, resourceType, count);
+
+    public void RemoveAllTemporaryResources()
+    {
+        foreach (var type in ResourceTypeUtil.GetAllResourceTypes())
+        {
+            SetTemporaryResource(type, 0);
+        }
+    }
+
+    public void RemoveAllPermanentResources()
+    {
+        foreach (var type in ResourceTypeUtil.GetAllResourceTypes())
+        {
+            SetPermanentResource(type, 0);
+        }
+    }
+
+    public void ConvertTemporaryResourcesToPermanent()
+    {
+        List<ResourceType> types = new();
+        foreach (var pair in TemporaryResources)
+        {
+            PermanentResources[pair.Key] += pair.Value;
+            types.Add(pair.Key);
+        }
+
+        foreach (var type in types)
+        {
+            TemporaryResources[type] = 0;
+        }
+
+        // No amount was actually changed so don't bother with the invoking OnResourceChanged
+    }
     #endregion
 
     #region Item
@@ -130,7 +184,7 @@ public class Inventory : SingletonPersistent<Inventory>
         Items.Clear();
     }
 
-    public void SetItem(Item item, int count)
+    public void SetItemAmount(Item item, int count)
     {
         Items.TryGetValue(item, out int oldCount);
         int newCount;
@@ -167,7 +221,7 @@ public class Inventory : SingletonPersistent<Inventory>
         return Items.ContainsKey(item) && Items[item] >= count;
     }
 
-    public int GetItem(Item item)
+    public int GetItemAmount(Item item)
     {
         if (item == null) return 0;
         if (Items.TryGetValue(item, out int result))
@@ -220,19 +274,6 @@ public class Inventory : SingletonPersistent<Inventory>
     {
         base.Awake();
 
-        foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
-        {
-            Resources[type] = 0;
-        }
-
-        foreach (SerializableItemAndAmount<ResourceType> pair in startingResources)
-        {
-            ResourceType resource = pair.Item;
-            int count = pair.Count;
-
-            Resources[resource] = count;
-        }
-
         foreach (SerializableItemAndAmount<Item> pair in startingItems)
         {
             Item item = pair.Item;
@@ -242,7 +283,7 @@ public class Inventory : SingletonPersistent<Inventory>
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class SerializableItemAndAmount<T>
     {
         public T Item => item;
