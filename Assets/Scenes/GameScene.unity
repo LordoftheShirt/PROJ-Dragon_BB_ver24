@@ -157,7 +157,7 @@ MonoBehaviour:
   placeResources: 0
   seed: 21
   terrainSize: 1000
-  treeToPlace: {fileID: 919132149155446097, guid: edb0db62d1a6a264699cb3fb530b1c0d, type: 3}
+  treeToPlace: {fileID: 5205664436387648233, guid: 2688d08625e41274b930cafb8970bd44, type: 3}
   objToPlace2: {fileID: 919132149155446097, guid: 2cf61b3a092437f4080bf59db195d619, type: 3}
   objToPlace3: {fileID: 919132149155446097, guid: 46d7b6de10f156e4088012935285f8bb, type: 3}
   house: {fileID: 976564111}
