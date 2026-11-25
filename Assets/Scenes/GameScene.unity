@@ -1014,6 +1014,19 @@ PrefabInstance:
       propertyPath: sleepAnimationGroup
       value: 
       objectReference: {fileID: 1788084277}
+    - target: {fileID: 4668340064921089612, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
+      propertyPath: m_text
+      value: 'Additional Controls:
+
+
+        * Tab - Open Task Log
+
+        * M -
+        Map (must be crafted)
+
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 6954188683299399319, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
       propertyPath: m_Name
       value: '[PH]House'
