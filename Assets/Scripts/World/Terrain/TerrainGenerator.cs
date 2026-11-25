@@ -46,21 +46,15 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Object to place references")]
     //decorative objects to place
     [SerializeField]
-    private GameObject objToPlace;
+    private GameObject treeToPlace;
     [SerializeField]
     private GameObject objToPlace2;
     [SerializeField]
     private GameObject objToPlace3;
     private GameObject objContainer; //holds all decorative gameobjects in the inspector
 
-
-    [SerializeField]
-    private GameObject[] resources; //mitt gamla sätt att sätta ut resources ##############################
-    private GameObject resourceContainer; //holds all spawner gameobjects in the inspector (for resources)
-
-    [SerializeField]
-    private ResourceClusterSpawner rcspawner;
-    private GameObject spawnerContainer; //holds all spawner gameobjects in the inspector (for resources)
+    private GameObject resourceContainer; //holds all cluster gameobjects in the inspector (for resources)
+    private ResourceClusterSpawner resourceClusterSpawner;
 
     [SerializeField]
     private GameObject house;
@@ -173,6 +167,8 @@ public class TerrainGenerator : MonoBehaviour
         biomeSnowfields = new Snowfields();
         biomeCrystalIcefields = new CrystalIcefields();
         biomeRockyHighlands = new RockyHighlands();
+
+        resourceClusterSpawner = this.GetComponent<ResourceClusterSpawner>();
     }
 
     void Update()
@@ -185,7 +181,7 @@ public class TerrainGenerator : MonoBehaviour
 
         if (placeDecorations)
         {
-            PlaceThings();
+            PlaceDecorations();
             placeDecorations = false;
         }
 
@@ -233,10 +229,9 @@ public class TerrainGenerator : MonoBehaviour
         CreateColors();
         UpdateMesh();
 
-        //PlaceThings();
-
         PlaceResources();
 
+        PlaceDecorations();
     }
 
     private void CreateBiomes()
@@ -619,21 +614,17 @@ public class TerrainGenerator : MonoBehaviour
         //gameObject.transform.localScale = new Vector3(xSize * zSize, xSize * zSize, xSize * zSize);
     }
 
-    private void PlaceThings()
+    private void PlaceDecorations()
     {
-        Destroy(objContainer);
-
-
-        objContainer = new GameObject("Object Container"); //för att hålla det clean i inspectorn
-        if (objToPlace == null)
+        if (treeToPlace == null)
         {
             Debug.LogWarning("The Object to place 'objToPlace' on " + this.gameObject.name + " is NULL! It needs a gameobject to have anything to place.");
             return;
         }
 
-        //note: vid en stor map aka många objekt bör de probably delas in i mindre chunks, där bara vissa är aktiva åt gången?
+        Destroy(objContainer);
+        objContainer = new GameObject("Object Container"); //för att hålla det clean i inspectorn
 
-        Vector3 origoOffset = new Vector3(-(xSize / 2), 0, -(xSize / 2));
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
@@ -644,63 +635,35 @@ public class TerrainGenerator : MonoBehaviour
                 {
                     i++;
                     continue;
-
                 }
 
 
 
                 //olika saker beroende på biome   PLACHOLDER SKA SE FINARE UT!!!!!
-                GameObject obj = objToPlace;
+                GameObject obj = treeToPlace;
 
-                //sätter ut träd beroende på höjdskillnad
-                //idee för biom där dips är gröna
-                /*
-                if (vertices[i].y < minTerrainHeight + (maxTerrainHeight/3))
+                Renderer r = obj.GetComponent<Renderer>(); //kommer ta as mycket kraft
+                if (r != null) 
                 {
-                    //25% ish Chans
-                    if (UnityEngine.Random.Range(1, 101) < 2)
-                        Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
-
-                }*/
-
+                    obj.GetComponent<Renderer>().sharedMaterial.color = Color.red;
+                }
+                
                 
                 float perlin = Mathf.PerlinNoise(x * .3f, z * .3f);
+                int pos2 = (z * xSize) + x;
 
-
-                
-                if (biomeMap[i] == 2)
+                //OBS, biomemap måste använda pos2, medan vertices måste använda i!!!!
+                //sätter ut träd i plains biomen
+                if (biomeMap[pos2] == 0)
                 {
-                    obj = objToPlace2;
-
-                    if (perlin > 0.85f)
+                    if (perlin > 0.05f)
                     {
 
-                        //2% ish Chans
-                        if(UnityEngine.Random.Range(1, 101) < 2)
-                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
-                    }
-                }
-                else if (biomeMap[i] == 3)
-                {
-                    //obj = objToPlace3;
-
-                    if (perlin > 0.55f)
-                    {
                         //2% ish Chans
                         if (UnityEngine.Random.Range(1, 101) < 2)
-                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
+                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), obj.transform.rotation, objContainer.transform);
                     }
                 }
-                else
-                {
-                    if (perlin > 0.75f)
-                    {
-                        //25% ish Chans
-                        if (UnityEngine.Random.Range(1, 101) < 25)
-                            Instantiate(obj, vertices[i] + new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f)), transform.rotation, objContainer.transform);
-                    }
-                }
-                
 
                 i++;
             }
@@ -744,16 +707,20 @@ public class TerrainGenerator : MonoBehaviour
 
     private void PlaceResources()
     {
-        if(resources == null || resources.Length == 0) { return; }
+        if (resourceClusterSpawner == null)
+        {
+            Debug.LogError("resourceClusterSpawner on " + this.name + " is unnassigned, put the resourceclusterspawner-script on the terrain gameobject!");
+            return;
+        }
 
         Destroy(resourceContainer);
         resourceContainer = new GameObject("resourceContainer");
+
 
         //GÅ IGENOM BIOMER
         foreach (Vector2Int pos in pointPositions)
         {
             //skapa array med de saker som spawnern ska spawna, och skicka med
-
             int amountOfResourceClustersToSpawn = UnityEngine.Random.Range(1, 3);
             ResourceType[] resourcesToSpawn = new ResourceType[amountOfResourceClustersToSpawn];
 
@@ -762,59 +729,28 @@ public class TerrainGenerator : MonoBehaviour
             Vector3 vecPos = new Vector3(pos.x - xSize / 2, 0, pos.y - zSize / 2);
             for (int j = 0; j< amountOfResourceClustersToSpawn; j++)
             {
-                
-
                 int resource = -1;
 
                 //kan simplifiera detta om jag gör enums av biomerna så jag inte behöver ha if, utan bara kan skicka med biomeMap[i] i GetWeightedResource()
                 if (biomeMap[i] == 0)
                 {
                     resource = GetWeightedResource(biomeSnowfields);
-                    //Instantiate(resources[0], vecPos, transform.rotation);
                 }
                 else if (biomeMap[i] == 1)
                 {
                     resource = GetWeightedResource(biomeCrystalIcefields);
-                    //Instantiate(resources[1], vecPos, transform.rotation);
                 }
                 else if(biomeMap[i] == 2)
                 {
                     resource = GetWeightedResource(biomeRockyHighlands);
-                    //Instantiate(resources[2], vecPos, transform.rotation);
                 }
 
-                //Debug.Log("sätter ut en resource, vald resource;" + resource);
                 if (resource == -1) //SENTINEL
                 { continue; }
 
                 resourcesToSpawn[j] = (ResourceType)resource;
             }
-
-
-            if(rcspawner == null)
-            {
-                Debug.LogError("rcspawner on " + this.name + " is unnassigned, assign the resourceclusterspawner!");
-            }
-
-            rcspawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vecPos, resourceContainer.transform);
-
-            
-
-
-
-            /*
-            Vector3 offset = new Vector3(0, 3, 0); //new Vector3(UnityEngine.Random.Range(-0.8f, 0.8f), UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.8f, 0.8f))
-            Vector3 offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
-
-            Instantiate(resources[resource], vertices[i] + offset, transform.rotation, resourceContainer.transform);
-            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
-            offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
-            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
-            offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
-            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);
-            offset2 = new Vector3(UnityEngine.Random.Range(0, 5), 0, UnityEngine.Random.Range(0, 5));
-            Instantiate(resources[resource], vertices[i] + offset2, transform.rotation, resourceContainer.transform);*/
-
+            resourceClusterSpawner.SpawnResourceClusterWithSpecificResource(resourcesToSpawn, vecPos, resourceContainer.transform);
         }
     }
 
