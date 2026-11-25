@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,14 +17,33 @@ public class MiniMapManager : MonoBehaviour
     [Tooltip("The scale factor for the minimap. If its a larger value, the minimap will be more zoomed out. Ex: 5 means a map in 1:5 scale")]
     [SerializeField] private float scale = 110;
     [SerializeField] private float xRotation = 90;
-    [SerializeField] private bool isUnlocked = false;
-
+    [SerializeField] private Item mapItem;
+    [SerializeField] private GameObject mapPrompt;
+    public bool IsUnlocked => Inventory.Instance.HasItem(mapItem);
 
     private float size = 0.9f;
     float yRotation = 180;
 
     private bool isOpen;
     private List<GameObject> mapObjects = new List<GameObject>();
+
+    private void OnEnable()
+    {
+        Inventory.OnItemChanged += OnItemChanged;
+    }
+
+    private void OnDisable()
+    {
+        Inventory.OnItemChanged -= OnItemChanged;
+    }
+
+    private void OnItemChanged(Item item, int count, int change)
+    {
+        if (item == mapItem && change > 0)
+        {
+            mapPrompt.SetActive(true);
+        }
+    }
 
     public void CreateMap()
     {
@@ -47,12 +68,15 @@ public class MiniMapManager : MonoBehaviour
 
     public void ActiveteOrDeactivateMap(InputAction.CallbackContext context)
     {
-        if (!isUnlocked) return;
-        Debug.Log("presed map");
+        if (!IsUnlocked) return;
+        Debug.Log("pressed map");
+
+        mapPrompt.SetActive(false);
+
         if (isOpen)
         {
             isOpen = false;
-            ViewMap(isOpen);          
+            ViewMap(isOpen);
         }
         else
         {
@@ -96,7 +120,4 @@ public class MiniMapManager : MonoBehaviour
     private float CalculateObjectCordinate(float mapCordinate, float cabbinCordinate, float objectCordinate) { return mapCordinate - ((cabbinCordinate - objectCordinate) / scale); }
 
     public void SetMapScale(float newScale) { scale = newScale; }
-
-    public void UnlockMap() { isUnlocked = true; }
-
 }

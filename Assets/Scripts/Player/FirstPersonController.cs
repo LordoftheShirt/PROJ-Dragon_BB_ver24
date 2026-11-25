@@ -93,6 +93,7 @@ namespace StarterAssets
 
         private CharacterController _controller;
         private GameObject _mainCamera;
+        private PlayerUpgrades _upgrades;
 
         private const float _threshold = 0.01f;
 
@@ -106,6 +107,8 @@ namespace StarterAssets
 
         private void Start()
         {
+            GameCursor.Visible = true;
+
             _controller = GetComponent<CharacterController>();
         
 
@@ -129,6 +132,8 @@ namespace StarterAssets
 
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            _upgrades = PlayerUpgrades.Instance;
         }
 
 		private void Update()
@@ -181,6 +186,7 @@ namespace StarterAssets
             bool isSprinting = _sprintAction != null && _sprintAction.IsPressed();
 
             float targetSpeed = isSprinting ? SprintSpeed : MoveSpeed;
+            targetSpeed *= 1 + _upgrades.SpeedBoost;
 
             if (_moveInput == Vector2.zero) targetSpeed = 0.0f;
 
@@ -221,7 +227,7 @@ namespace StarterAssets
 
             // Our current move speed is our bobbing modifier
             // Divide by walk speed to make the walk speed the regular 1 modifier value
-            float modifier = _speed / MoveSpeed;
+            float modifier = _speed / MoveSpeed * Mathf.Lerp(1f, 0.5f, _upgrades.SpeedBoost);
             camModifier.BobbingModifier = modifier;
             camModifier.SwayModifier = modifier;
         }

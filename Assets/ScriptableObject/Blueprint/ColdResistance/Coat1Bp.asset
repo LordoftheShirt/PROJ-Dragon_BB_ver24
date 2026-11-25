@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be5e87555a9682340840bc06f14b89f5, type: 3}
+  m_Name: Coat1Bp
+  m_EditorClassIdentifier: Assembly-CSharp::Blueprint
+  result: {fileID: 11400000, guid: 99f06829f3206ac4ca2f0f917c115fa6, type: 2}
+  resultAmount: 1
+  category: 1
+  ingredients:
+  - type: 1
+    amount: 4
+  - type: 0
+    amount: 15
+  itemRequirements: []
+  sortingOrder: 0

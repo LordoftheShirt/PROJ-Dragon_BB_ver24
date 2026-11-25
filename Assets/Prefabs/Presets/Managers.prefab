@@ -146,7 +146,7 @@ MonoBehaviour:
   - {fileID: 8927763020995527257, guid: b5dc5471b6fec2046845a412e3227169, type: 3}
   scale: 110
   xRotation: 70
-  isUnlocked: 1
+  mapItem: {fileID: 11400000, guid: 07b95e624a31f6249b5fc4e691f952bd, type: 2}
 --- !u!114 &5046293295825093072
 MonoBehaviour:
   m_ObjectHideFlags: 0

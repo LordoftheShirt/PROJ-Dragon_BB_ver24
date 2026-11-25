@@ -10,16 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be5e87555a9682340840bc06f14b89f5, type: 3}
-  m_Name: SpikeBoots2Bp
+  m_Name: Speed5Bp
   m_EditorClassIdentifier: Assembly-CSharp::Blueprint
-  result: {fileID: 11400000, guid: 780b5a52e4b081f4ca75150fbbf8e6c8, type: 2}
+  result: {fileID: 11400000, guid: dd73f30b8fa3e2b4f98409878e8f917c, type: 2}
   resultAmount: 1
   category: 0
   ingredients:
-  - type: 0
-    amount: 100
   - type: 1
-    amount: 2
+    amount: 15
+  - type: 3
+    amount: 3
+  - type: 4
+    amount: 10
+  - type: 5
+    amount: 3
   itemRequirements:
-  - {fileID: 11400000, guid: 0673b85629455b44c989b3b3a0735f39, type: 2}
-  sortingOrder: 5
+  - {fileID: 11400000, guid: 5849285f86329ab45a0deb72a36db07a, type: 2}
+  sortingOrder: 20

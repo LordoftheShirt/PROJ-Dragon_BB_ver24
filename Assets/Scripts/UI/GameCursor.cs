@@ -21,6 +21,19 @@ public class GameCursor : SingletonPersistent<GameCursor>
         set => radialSlider.fillAmount = value;
     }
 
+    public static bool Visible
+    {
+        get => _visible;
+        set
+        {
+            if (_visible == value) return;
+
+            _visible = value;
+            Instance.graphic.gameObject.SetActive(value);
+        }
+    }
+    private static bool _visible;
+
     [SerializeField] private Graphic graphic;
     private Material _mat;
     [SerializeField] private Image radialSlider;
@@ -33,6 +46,9 @@ public class GameCursor : SingletonPersistent<GameCursor>
         graphic.material = _mat;
 
         _mat.SetFloat(INVERT_PROP, 1);
+
+        _visible = false;
+        graphic.gameObject.SetActive(false);
 
         //graphic.gameObject.SetActive(false);
     }

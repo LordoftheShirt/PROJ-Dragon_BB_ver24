@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class CraftingUI : Singleton<CraftingUI>
@@ -42,6 +43,9 @@ public class CraftingUI : Singleton<CraftingUI>
 
     [Space]
     [SerializeField] private ResourceUISlot resourceSlotTemplate;
+
+    [Space]
+    [SerializeField] private InputActionReference closeInput;
 
     private BlueprintCategory _currentCategory;
     private int _categoryAmount;
@@ -104,6 +108,13 @@ public class CraftingUI : Singleton<CraftingUI>
         resourceSlotTemplate.gameObject.SetActive(false);
 
         mainPanel.SetActive(false);
+
+        closeInput.action.performed += OnCloseInput;
+    }
+
+    private void OnDestroy()
+    {
+        closeInput.action.performed -= OnCloseInput;
     }
 
     public void ChangeCategory(BlueprintCategory category)
@@ -131,6 +142,8 @@ public class CraftingUI : Singleton<CraftingUI>
 
     public void Open()
     {
+        GameCursor.Visible = false;
+
         mainPanel.SetActive(true);
 
         scrollRect.verticalNormalizedPosition = 0;
@@ -175,9 +188,16 @@ public class CraftingUI : Singleton<CraftingUI>
 
     public void Close()
     {
+        GameCursor.Visible = true;
+
         InputMapManager.Instance.EnablePlayerMap();
         mainPanel.SetActive(false);
 
         InputMapManager.Instance.EnablePlayerMap();
+    }
+
+    private void OnCloseInput(InputAction.CallbackContext ctx)
+    {
+        Close();
     }
 }

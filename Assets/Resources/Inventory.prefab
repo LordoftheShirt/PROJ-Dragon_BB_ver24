@@ -44,12 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0911a811beb05824da143d486522a899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  startingResources: []
-  startingItems:
-  - item: {fileID: 11400000, guid: 06c8a16f3bd240e44844fdc1d428b560, type: 2}
-    count: 5
-  - item: {fileID: 11400000, guid: ad830811d290cec4e988a47b4db9759d, type: 2}
-    count: 1
+  startingItems: []
   blueprintsUnlocked:
   - {fileID: 11400000, guid: da4c0846a62a85e4a81f34e9b603b5e7, type: 2}
   - {fileID: 11400000, guid: 198f58c0930dd7c44a36491461fe13bc, type: 2}

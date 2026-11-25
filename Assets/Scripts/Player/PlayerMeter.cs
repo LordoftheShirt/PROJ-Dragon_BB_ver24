@@ -17,8 +17,11 @@ public class PlayerMeter : MonoBehaviour
 
     private float warmthDecayRate;
 
+    private PlayerUpgrades _upgrades;
+
     void Start()
     {
+        _upgrades = PlayerUpgrades.Instance;
         //ResetMeter();
     }
 
@@ -28,7 +31,6 @@ public class PlayerMeter : MonoBehaviour
         if (!PauseRealtimeDecay)
         {
             Decay();
-
 
             if(currentHealth <= 0)
             {
@@ -46,8 +48,10 @@ public class PlayerMeter : MonoBehaviour
 
     void Decay()
     {
+        float resistance = 1 + _upgrades.ColdResistBoost;
+
         // when DecayRate is 1, it takes 100 seconds to go from 100 to 0. when DecayRate is 2, it takes 50 seconds. when DecayRate is 0.5, it takes 200 seconds.
-        currentWarmth -= warmthDecayRate * Time.deltaTime;
+        currentWarmth -= warmthDecayRate / resistance * Time.deltaTime;
 
         // Frost damage
         if (currentWarmth <= 0)

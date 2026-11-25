@@ -18,6 +18,8 @@ public class Item : ScriptableObject
     public virtual int MaxStackSize => maxStackSize;
     public bool UnlimitedStackSize => maxStackSize <= 0;
 
+    public ItemComponent[] ItemComponents => itemComponents;
+
     [SerializeField] private Sprite icon;
     [SerializeField] private Color color = Color.clear;
     [SerializeField] private Color backgroundColor = Color.clear;

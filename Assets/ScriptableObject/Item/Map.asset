@@ -16,8 +16,6 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 0}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   itemName: Map
-  description: It's a map, what exactly will this do? (PLACEHOLDER)
+  description: A handy map that will show resource locations.
   maxStackSize: 1
-  durability: 0
-  canBeBroughtOnExpeditions: 0
-  equipmentSlot: 0
+  itemComponents: []

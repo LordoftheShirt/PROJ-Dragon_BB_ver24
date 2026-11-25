@@ -6,11 +6,6 @@ public class BuildPlacerComponent : ItemComponent
 
     [SerializeField] private Building building;
 
-    public override void Use()
-    {
-        
-    }
-
     public override void Select()
     {
         switch (building)
