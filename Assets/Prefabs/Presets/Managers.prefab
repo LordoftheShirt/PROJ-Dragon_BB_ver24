@@ -138,12 +138,12 @@ MonoBehaviour:
   playerMap: {fileID: 0}
   cabbinTokenPrefab: {fileID: 8927763020995527257, guid: 80a3259bf3d8a5249a5a5c33f17d54f9, type: 3}
   mapObjectTokenPrefabs:
-  - {fileID: 8927763020995527257, guid: b96d4b376b86f7340944111d75fb04fb, type: 3}
-  - {fileID: 8927763020995527257, guid: b81f3964c42b8154b9522a7f94630f21, type: 3}
-  - {fileID: 8927763020995527257, guid: f851d76eec9ecdf42a0aad3535d27dcf, type: 3}
-  - {fileID: 8927763020995527257, guid: f851d76eec9ecdf42a0aad3535d27dcf, type: 3}
-  - {fileID: 8927763020995527257, guid: e7dfec01531074f439b5e0eb0632c259, type: 3}
-  - {fileID: 8927763020995527257, guid: 22c56b808835140438e05710ffad3000, type: 3}
+  - {fileID: 8927763020995527257, guid: 283bbd23989106a4695c8fbf5d46180a, type: 3}
+  - {fileID: 8927763020995527257, guid: 817f2b967b8c25c4080a1b7e195edd31, type: 3}
+  - {fileID: 8927763020995527257, guid: 889b915bb1ee04f4384c41893977fcfd, type: 3}
+  - {fileID: 8927763020995527257, guid: b213b24ddaac8b14c8fb45ab1aca4277, type: 3}
+  - {fileID: 8927763020995527257, guid: e5e80d7e9e702764990c4e79af8c7c84, type: 3}
+  - {fileID: 8927763020995527257, guid: b5dc5471b6fec2046845a412e3227169, type: 3}
   scale: 110
   xRotation: 180
 --- !u!114 &5046293295825093072
