@@ -623,7 +623,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         Destroy(objContainer);
-        objContainer = new GameObject("Object Container"); //för att hålla det clean i inspectorn
+        objContainer = new GameObject("Decorations Container"); //för att hålla det clean i inspectorn
 
 
         for (int i = 0, z = 0; z <= zSize; z++)
@@ -714,7 +714,19 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         Destroy(resourceContainer);
-        resourceContainer = new GameObject("resourceContainer");
+        resourceContainer = new GameObject("Resource Container");
+
+        //ENSURE CRITICAL RESOURCES NEAR CENTRE
+        ResourceType[] criticalResourcesToSpawn = new ResourceType[3];
+        criticalResourcesToSpawn[0] = ResourceType.Wood;
+        criticalResourcesToSpawn[1] = ResourceType.Wood;
+        criticalResourcesToSpawn[2] = ResourceType.Wood;
+        resourceClusterSpawner.SpawnResourceClusterWithSpecificResource(criticalResourcesToSpawn, new Vector3(20, 20, 10), resourceContainer.transform);
+
+        criticalResourcesToSpawn[0] = ResourceType.Scrap;
+        criticalResourcesToSpawn[1] = ResourceType.Scrap;
+        criticalResourcesToSpawn[2] = ResourceType.Scrap;
+        resourceClusterSpawner.SpawnResourceClusterWithSpecificResource(criticalResourcesToSpawn, new Vector3(-20, 20, -10), resourceContainer.transform);
 
 
         //GÅ IGENOM BIOMER
