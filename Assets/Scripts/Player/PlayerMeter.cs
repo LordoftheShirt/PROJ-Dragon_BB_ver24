@@ -65,7 +65,7 @@ public class PlayerMeter : MonoBehaviour
     public void Die()
     {
         ReferenceManager.Instance.gameManager.ResetWorld();
-        ReferenceManager.Instance.gameManager.ResetResources();
+        ReferenceManager.Instance.gameManager.ResetTemporaryResources();
     }
 
     public void ResetMeter()

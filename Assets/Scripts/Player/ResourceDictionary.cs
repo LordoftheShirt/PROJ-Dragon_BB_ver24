@@ -26,23 +26,31 @@ public class ResourceDictionary
         OnChanged?.Invoke(resourceType, Dictionary[resourceType], change);
     }
 
-    public void RemoveResource(ResourceType resourceType, int change)
+    public int RemoveResource(ResourceType resourceType, int change)
     {
         if (change <= 0)
         {
             Debug.LogWarning($"Attempted to remove {change} of \"{resourceType.GetDisplayString()}\" from inventory. Count must be greater than 0.");
-            return;
+            return 0;
         }
 
         if (Dictionary.ContainsKey(resourceType))
         {
+            int countBefore = Dictionary[resourceType];
+            if (countBefore < change)
+            {
+                change = countBefore;
+            }
+
             Dictionary[resourceType] -= change;
 
             // Cannot fall below 0
+            /*
             if (Dictionary[resourceType] <= 0)
             {
                 Dictionary[resourceType] = 0;
             }
+            */
         }
         else
         {
@@ -50,6 +58,8 @@ public class ResourceDictionary
         }
 
         OnChanged?.Invoke(resourceType, Dictionary[resourceType], change);
+
+        return change;
     }
 
     public int GetResource(ResourceType resourceType)
@@ -64,5 +74,13 @@ public class ResourceDictionary
         Dictionary[resourceType] = newCount;
 
         OnChanged?.Invoke(resourceType, newCount, newCount - oldCount);
+    }
+
+    public ResourceDictionary()
+    {
+        foreach (ResourceType type in ResourceTypeUtil.GetAllResourceTypes())
+        {
+            Dictionary[type] = 0;
+        }
     }
 }

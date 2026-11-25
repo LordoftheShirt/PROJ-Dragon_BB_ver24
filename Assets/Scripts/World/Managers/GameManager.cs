@@ -25,14 +25,9 @@ public class GameManager : MonoBehaviour
         BuildingPlacer.Instance?.ResetBuildings();
     }
 
-    public void ResetResources()
+    public void ResetTemporaryResources()
     {
-        Inventory.Instance.SetResource(ResourceType.Scrap, 0);
-        Inventory.Instance.SetResource(ResourceType.Wood, 0);
-        Inventory.Instance.SetResource(ResourceType.Fabric, 0);
-        Inventory.Instance.SetResource(ResourceType.Magnet, 0);
-        Inventory.Instance.SetResource(ResourceType.Crystal, 0);
-        Inventory.Instance.SetResource(ResourceType.Tech, 0);
+        Inventory.Instance.RemoveAllTemporaryResources();
     }
 
     public void ResetWorld()
