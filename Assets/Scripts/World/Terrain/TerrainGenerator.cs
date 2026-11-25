@@ -130,8 +130,8 @@ public class TerrainGenerator : MonoBehaviour
 
     class Snowfields : Biome
     {
-        override public int ChanceForScrapMetal { get { return 50; } }
-        override public int ChanceForPlanks { get { return 50; } }
+        override public int ChanceForScrapMetal { get { return 25; } }
+        override public int ChanceForPlanks { get { return 70; } }
         override public int ChanceForFabric { get { return 50; } }
         override public int ChanceForMagnets { get { return 10; } }
         override public int ChanceForElectronics { get { return 0; } }
@@ -141,23 +141,23 @@ public class TerrainGenerator : MonoBehaviour
 
     class CrystalIcefields : Biome
     {
-        override public int ChanceForScrapMetal { get { return 0; } }
+        override public int ChanceForScrapMetal { get { return 10; } }
         override public int ChanceForPlanks { get { return 0; } }
         override public int ChanceForFabric { get { return 0; } }
-        override public int ChanceForMagnets { get { return 50; } }
-        override public int ChanceForElectronics { get { return 50; } }
-        override public int ChanceForThermalCrystals { get { return 20; } }
+        override public int ChanceForMagnets { get { return 25; } }
+        override public int ChanceForElectronics { get { return 30; } }
+        override public int ChanceForThermalCrystals { get { return 40; } }
 
     }
 
     class RockyHighlands : Biome
     {
-        override public int ChanceForScrapMetal { get { return 0; } }
-        override public int ChanceForPlanks { get { return 10; } }
-        override public int ChanceForFabric { get { return 10; } }
-        override public int ChanceForMagnets { get { return 0; } }
-        override public int ChanceForElectronics { get { return 50; } }
-        override public int ChanceForThermalCrystals { get { return 50; } }
+        override public int ChanceForScrapMetal { get { return 55; } }
+        override public int ChanceForPlanks { get { return 20; } }
+        override public int ChanceForFabric { get { return 30; } }
+        override public int ChanceForMagnets { get { return 50; } }
+        override public int ChanceForElectronics { get { return 35; } }
+        override public int ChanceForThermalCrystals { get { return 10; } }
 
     }
 
@@ -330,13 +330,13 @@ public class TerrainGenerator : MonoBehaviour
                 }
                 else if (dist < biomeMiddleRadius)
                 {
-                    //biome ice crystal fields
-                    biome = 1;
+                    //biome highlands
+                    biome = 2;
                 }
                 else
                 {
-                    //biome highlands
-                    biome = 2;
+                    //biome ice crystal fields
+                    biome = 1;
                 }
 
                 //biome = possibleBiomes[UnityEngine.Random.Range(0, possibleBiomes.Length)];
@@ -499,9 +499,10 @@ public class TerrainGenerator : MonoBehaviour
         absValue += Mathf.PerlinNoise((x + newNoise) * .06f, (z + newNoise) * .06f) * (scale / 4);
         if (absValue > 15f)
         {
-            //absValue = noise.snoise(new float2(z * .03f, x * .03f));
-            //absValue += scale / 2;
+            absValue = noise.snoise(new float2(z * .03f, x * .03f));
+            absValue = 1;
         }
+
 
 
         //PERLIN
@@ -533,7 +534,7 @@ public class TerrainGenerator : MonoBehaviour
         int pos2 = (z * xSize) + x;
         BiomePercent bp = biomeMapPercentages[pos2];
         if (bp != null) 
-            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * ((perlin * perlin2) / 4)) + (bp.pBiome3 * ((perlin * perlin3)/2));
+            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * ((perlin * absValue) )) + (bp.pBiome3 * ((perlin * perlin3)/2));
 
 
 
