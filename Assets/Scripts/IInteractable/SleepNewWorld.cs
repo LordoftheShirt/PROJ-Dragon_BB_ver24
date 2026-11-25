@@ -7,22 +7,20 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
     [SerializeField] private float sleepAnimationSpeed;
 
     private float sleepAnimationTime;
-    bool inAnimation = false;
-    bool sleeping = false;
+    private bool inAnimation = false;
+    private bool sleeping = false;
+
+    private bool isSleepingAtHome = true;
 
     public void Interact()
     {
-        if (sleeping) return;
-
-        gameObject.GetComponent<SquashAndStretch>().Animate();
-        sleepAnimationTime = 0;
-        inAnimation = true;
-        sleeping = true;
-        sleepAnimationGroup.alpha = 0.5f;
-
-        if (BuildingPlacer.Instance != null)
+        if(isSleepingAtHome)
         {
-            BuildingPlacer.Instance.ResetBuildings();
+            HomeSleep();
+        }
+        else
+        {
+            // tent-sleep logic could go here; FixedUpdate would primarily need editing.
         }
     }
 
@@ -55,5 +53,24 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
     public string GetDescription()
     {
         return "Sleep (Generate New World)";
+    }
+
+    private void HomeSleep()
+    {
+        if (sleeping) return;
+
+        gameObject.GetComponent<SquashAndStretch>().Animate();
+        sleepAnimationTime = 0;
+        inAnimation = true;
+        sleeping = true;
+        sleepAnimationGroup.alpha = 0.5f;
+
+        if (BuildingPlacer.Instance != null)
+        {
+            BuildingPlacer.Instance.ResetBuildings();
+        }
+
+        if (Hotbar.SelectedSlot.HasValue)
+            Hotbar.Instance.SetSelectedSlot(null, false);
     }
 }

@@ -210,8 +210,12 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
         }
     }
 
+    // unselects equipped item in hotbar upon right click
     private void OnCancelBuild(InputAction.CallbackContext context)
     {
+        if (Hotbar.SelectedSlot.HasValue)
+            Hotbar.Instance.SetSelectedSlot(null, false);
+
         UpdateCurrentGhost(null);
     }
 
@@ -253,6 +257,11 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
             return Instantiate(build, hitinfo.point, buildRotation, buildingHolder.transform);
         }
+        
+        // added in case the raycast (when spawning the preview build) never hits anything.
+        if(build == fireKitGhostPrefab || build == tentGhostPrefab)
+            return Instantiate(build, buildingHolder.transform.position, Quaternion.identity, buildingHolder.transform);
+
         return null;
     }
 
