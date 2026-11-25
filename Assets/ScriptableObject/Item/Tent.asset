@@ -18,7 +18,7 @@ MonoBehaviour:
   itemName: Tent
   description: A placeable tent you can use once to sleep through the night. Requires
     an external heat source nearby, like a campfire, to use.
-  maxStackSize: 2
+  maxStackSize: 1
   itemComponents:
   - {fileID: 8997766889715887651}
 --- !u!114 &8997766889715887651

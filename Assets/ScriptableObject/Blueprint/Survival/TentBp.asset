@@ -16,9 +16,11 @@ MonoBehaviour:
   resultAmount: 1
   category: 3
   ingredients:
-  - type: 0
-    amount: 8
   - type: 1
-    amount: 2
+    amount: 10
+  - type: 0
+    amount: 5
+  - type: 2
+    amount: 20
   itemRequirements: []
   sortingOrder: 10

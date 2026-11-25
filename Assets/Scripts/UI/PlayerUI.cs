@@ -32,6 +32,8 @@ public class PlayerUI : Singleton<PlayerUI>
     private ResourceUISlot[] _resourceUISlots;
 
     [Header("Compass")]
+    [SerializeField] private Item compassItem;
+    [SerializeField] private GameObject compass;
     [SerializeField] private RectTransform compassNeedle;
     private Transform _playerTransform;
 
@@ -69,6 +71,23 @@ public class PlayerUI : Singleton<PlayerUI>
 
         UpdateHP();
         UpdateWarmth();
+
+        compass.SetActive(Inventory.Instance.HasItem(compassItem));
+
+        Inventory.OnItemChanged += OnItemChanged;
+    }
+
+    private void OnDestroy()
+    {
+        Inventory.OnItemChanged -= OnItemChanged;
+    }
+
+    private void OnItemChanged(Item item, int count, int change)
+    {
+        if (item == compassItem)
+        {
+            compass.SetActive(true);
+        }
     }
 
     private void LateUpdate()

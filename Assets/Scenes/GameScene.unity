@@ -297,6 +297,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 976564112}
     - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: mapPrompt
+      value: 
+      objectReference: {fileID: 1788084278}
+    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: playerMap
       value: 
       objectReference: {fileID: 1788084274}
@@ -1399,6 +1403,11 @@ GameObject:
 --- !u!225 &1788084277 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 6918849021560763628, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+  m_PrefabInstance: {fileID: 1788084273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1788084278 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 202659186965177175, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
   m_PrefabInstance: {fileID: 1788084273}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1923164825 stripped

@@ -16,7 +16,7 @@ MonoBehaviour:
   resultAmount: 1
   category: 3
   ingredients:
-  - type: 0
+  - type: 1
     amount: 1
   itemRequirements: []
   sortingOrder: 0

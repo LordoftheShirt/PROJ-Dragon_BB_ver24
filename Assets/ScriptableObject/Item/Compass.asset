@@ -10,16 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3262106d0c224344e9c3e83572c36a47, type: 3}
-  m_Name: SpikeBoots
+  m_Name: Compass
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  icon: {fileID: 21300000, guid: 2b6398b033e9bff43a43ca5ba02ad915, type: 3}
-  color: {r: 1, g: 1, b: 1, a: 0}
+  icon: {fileID: 21300000, guid: 01d6076b0a420ad4e9a704bbb5298ce0, type: 3}
+  color: {r: 0, g: 0, b: 0, a: 0}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
-  itemName: Spike Boots
-  description: Makes you run 10% faster
-  maxStackSize: 0
-  durability: 0
-  canBeBroughtOnExpeditions: 0
-  equipmentSlot: 1
-  useType: 
+  itemName: Compass
+  description: Shows the current direction you're facing.
+  maxStackSize: 1
   itemComponents: []

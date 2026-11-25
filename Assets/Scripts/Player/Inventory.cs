@@ -283,6 +283,21 @@ public class Inventory : SingletonPersistent<Inventory>
         }
     }
 
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (UnityEngine.InputSystem.Keyboard.current.f10Key.wasPressedThisFrame)
+        {
+            Debug.Log("F10 debug feature activated! Adding 99 to every resource");
+
+            foreach (var type in ResourceTypeUtil.GetAllResourceTypes())
+            {
+                AddResource(type, 99);
+            }
+        }
+    }
+#endif
+
     [Serializable]
     public class SerializableItemAndAmount<T>
     {
