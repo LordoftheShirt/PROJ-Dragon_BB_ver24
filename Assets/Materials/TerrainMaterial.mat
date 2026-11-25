@@ -131,15 +131,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture1:
-        m_Texture: {fileID: 2800000, guid: bfddf8147733003499aae5aa711b3a83, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7af753fb1e283fb488e00ae98a933045, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2:
-        m_Texture: {fileID: 2800000, guid: bfddf8147733003499aae5aa711b3a83, type: 3}
+        m_Texture: {fileID: 2800000, guid: fc8ac532867a89c46baced111ee48fc6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture3:
-        m_Texture: {fileID: 2800000, guid: bfddf8147733003499aae5aa711b3a83, type: 3}
+        m_Texture: {fileID: 2800000, guid: 620860269fae3e7439aca03004d2360e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture4:
