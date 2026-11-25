@@ -33,6 +33,7 @@ public class CraftingUIRequirement : MonoBehaviour
     public int RequiredAmount { get; set; }
     public ResourceType Type { get; set; }
     public Item Item { get; set; }
+    public Sprite Icon { get => icon.sprite; set => icon.sprite = value; }
 
     private void SetColor(Color color, Color backgroundColor)
     {

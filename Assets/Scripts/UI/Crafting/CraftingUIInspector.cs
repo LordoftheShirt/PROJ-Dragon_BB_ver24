@@ -73,6 +73,7 @@ public class CraftingUIInspector : MonoBehaviour
             ResourceType type = pair.Type;
             requirement.Name = type.GetDisplayString(pair.Amount != 1);
             requirement.Type = type;
+            requirement.Icon = EnumStyle.GetResourceIcon(type);
             requirement.RequiredAmount = pair.Amount;
         }
 
@@ -84,6 +85,7 @@ public class CraftingUIInspector : MonoBehaviour
 
                 requirement.Name = itemRequirement.Name;
                 requirement.Item = itemRequirement;
+                requirement.Icon = itemRequirement.Icon;
                 requirement.RequiredAmount = 1;
             }
         }
