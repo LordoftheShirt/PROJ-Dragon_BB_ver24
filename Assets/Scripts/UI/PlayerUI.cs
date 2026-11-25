@@ -111,7 +111,7 @@ public class PlayerUI : Singleton<PlayerUI>
     {
         Vector3 playerForward = _playerTransform.forward;
         playerForward.y = 0;
-        float angleToNorth = Vector3.SignedAngle(Vector3.forward, playerForward, Vector3.up);
+        float angleToNorth = Vector3.SignedAngle(Vector3.right, playerForward, Vector3.up);
         compassNeedle.localRotation = Quaternion.Euler(0, 0, -angleToNorth);
     }
 

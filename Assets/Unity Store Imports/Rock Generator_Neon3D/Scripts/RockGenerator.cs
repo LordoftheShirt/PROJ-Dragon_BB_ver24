@@ -15,8 +15,8 @@ namespace RockGenerator_Neon3D
         public bool hdrp;
         public bool builtIn;
 
-        private string localSavePath = "";
-        private string localSavePathMaterial = "";
+        //private string localSavePath = "";
+        //private string localSavePathMaterial = "";
 
         public bool stopRotate;
         public bool generate;
@@ -69,8 +69,8 @@ namespace RockGenerator_Neon3D
                 Debug.Log("Please choose the render pipeline you are using!");
             }
 
-            localSavePath = "Assets/Rock Generator_Neon3D/Saved Rocks/";
-            localSavePathMaterial = "Assets/Rock Generator_Neon3D/Saved Rocks/Materials/";
+            //localSavePath = "Assets/Rock Generator_Neon3D/Saved Rocks/";
+            //localSavePathMaterial = "Assets/Rock Generator_Neon3D/Saved Rocks/Materials/";
 
         }
 
@@ -103,11 +103,12 @@ namespace RockGenerator_Neon3D
                 generate = false;
             }
 
+            /*
             if (saveRock)
             {
                     SavedRocks();
                     saveRock = false;
-            }
+            } */
 
             //rockMaterials.sharedMaterials[0].color = rockColor;
 
@@ -141,7 +142,7 @@ namespace RockGenerator_Neon3D
             rockMaterials.SetBlendShapeWeight(14, Random.Range(0.0f, 100.0f));
             rockMaterials.SetBlendShapeWeight(15, Random.Range(0.0f, 100.0f));
         }
-
+        /*
         public void SavedRocks()
         {
             if (savedRockName != "")
@@ -192,6 +193,6 @@ namespace RockGenerator_Neon3D
         {
             saveRock = true;
         }
-
+        */
     }
 }
