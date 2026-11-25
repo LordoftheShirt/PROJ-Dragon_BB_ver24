@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5154549285613285378}
   - component: {fileID: 2539998780471795202}
+  - component: {fileID: 1357107021937582847}
   m_Layer: 0
   m_Name: Forest_Rock_Generator 3
   m_TagString: Untagged
@@ -108,3 +109,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0, y: 0.6999456, z: 0.013798773}
     m_Extent: {x: 1.3842497, y: 0.6989922, z: 0.84248227}
   m_DirtyAABB: 0
+--- !u!65 &1357107021937582847
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6900308108451524643}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.7684991, y: 1.3979844, z: 1.6849644}
+  m_Center: {x: -1.5541915e-16, y: 0.6999456, z: 0.013798772}
