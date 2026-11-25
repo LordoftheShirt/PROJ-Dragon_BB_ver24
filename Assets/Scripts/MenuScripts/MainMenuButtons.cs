@@ -5,6 +5,7 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void LoadLevel(int index)
     {
+        Debug.Log("Loading: " + index);
         SceneManager.LoadScene(index);
     }
 
