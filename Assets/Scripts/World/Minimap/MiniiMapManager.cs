@@ -20,6 +20,7 @@ public class MiniMapManager : MonoBehaviour
     private float size = 0.9f;
 
     private bool isOpen;
+    private bool isUnlocked = false;
     private List<GameObject> mapObjects = new List<GameObject>();
 
     public void CreateMap()
@@ -38,15 +39,14 @@ public class MiniMapManager : MonoBehaviour
             //Debug.Log((int)node.GetResourceType());
             if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
                 Instantiate(mapObjectTokenPrefabs[(int)node.GetResourceType()], mapObjectPosition, playerMap.rotation, playerMap);
-
-            Debug.Log("prefab: " + mapObjectTokenPrefabs[(int)node.GetResourceType()] + " type: " + node.GetResourceType());
         }
-
+        ViewMap(false);
         mapObjects.Clear();
     }
 
     public void ActiveteOrDeactivateMap(InputAction.CallbackContext context)
     {
+        if (!isUnlocked) return;
         Debug.Log("presed map");
         if (isOpen)
         {
@@ -95,5 +95,7 @@ public class MiniMapManager : MonoBehaviour
     private float CalculateObjectCordinate(float mapCordinate, float cabbinCordinate, float objectCordinate) { return mapCordinate - ((cabbinCordinate - objectCordinate) / scale); }
 
     public void SetMapScale(float newScale) { scale = newScale; }
+
+    public void UnlockMap() { isUnlocked = true; }
 
 }

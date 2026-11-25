@@ -12,13 +12,18 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        if (sleeping) return;
+
         gameObject.GetComponent<SquashAndStretch>().Animate();
         sleepAnimationTime = 0;
         inAnimation = true;
         sleeping = true;
         sleepAnimationGroup.alpha = 0.5f;
 
-        BuildingPlacer.Instance?.ResetBuildings();
+        if (BuildingPlacer.Instance != null)
+        {
+            BuildingPlacer.Instance.ResetBuildings();
+        }
     }
 
     private void FixedUpdate()
@@ -35,6 +40,7 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
             {
                 sleepAnimationTime = 0;
                 sleeping = false;
+                Inventory.Instance.ConvertTemporaryResourcesToPermanent();
                 ReferenceManager.Instance.gameManager.ResetWorld();
             }
         }

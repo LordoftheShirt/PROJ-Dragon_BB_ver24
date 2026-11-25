@@ -76,7 +76,7 @@ public class InputMapManager : SingletonPersistent<InputMapManager>
     {
         if (playerMap == null)
         {
-            Debug.Log("PlayerMap is null");
+            //Debug.Log("PlayerMap is null");
             return false;
         }
 

@@ -30,6 +30,8 @@ public class HotbarSlot : MonoBehaviour
     private Material _selectionOutlineMaterial;
     private Vector2 _selectedOutlineThickness;
     private Vector2 _unselectedOutlineThickness;
+    private Item _item;
+    private bool _oldIsDisabled;
 
     private void Start()
     {
@@ -91,16 +93,29 @@ public class HotbarSlot : MonoBehaviour
         };
     }
 
-    public void Set(Item item)
+    public void SetColor(Item item)
     {
         TryMakeMaterials();
 
-        Color color = item == null || item.Color.a <= 0 ? defaultColor : item.Color;
-        Color backgroundColor = item == null || item.BackgroundColor.a <= 0 ? defaultBackgroundColor : item.BackgroundColor;
+        _item = item;
+        UpdateColor(true);
+    }
 
-        if (item != null)
+    public void UpdateColor(bool forced = false)
+    {
+        int count = Inventory.Instance.GetItemAmount(_item);
+
+        bool isDisabled = count <= 0;
+
+        if (!forced && isDisabled == _oldIsDisabled) return;
+        _oldIsDisabled = isDisabled;
+
+        Color color = isDisabled ? EnumStyle.DisabledColor : (_item == null || _item.Color.a <= 0 ? defaultColor : _item.Color);
+        Color backgroundColor = isDisabled ? EnumStyle.DisabledBackgroundColor : (_item == null || _item.BackgroundColor.a <= 0 ? defaultBackgroundColor : _item.BackgroundColor);
+
+        if (_item != null)
         {
-            icon.sprite = item.Icon;
+            icon.sprite = _item.Icon;
             icon.gameObject.SetActive(true);
         }
         else
