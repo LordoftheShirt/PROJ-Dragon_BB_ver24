@@ -125,6 +125,16 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "OpenTaskLog",
+                    "type": "Button",
+                    "id": "8a059d9a-74e8-44ac-b8d2-a87efd52d1f3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -631,6 +641,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e063c30f-e28a-4527-8074-90e0faeb250f",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenTaskLog",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
