@@ -196,7 +196,11 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 920607f6499aea84387a2592fbf4804a, type: 2}
+      objectReference: {fileID: 2100000, guid: d5c9b739f947c034aa28c0d2a46591c1, type: 2}
+    - target: {fileID: -5754084199372789682, guid: abc40b893891afa48b12cb14a002245b, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -5053925668127403250, guid: 8b6ea10b2dcebae43b585410f55a2de0, type: 3}
     - target: {fileID: 919132149155446097, guid: abc40b893891afa48b12cb14a002245b, type: 3}
       propertyPath: m_Name
       value: StoneResource
