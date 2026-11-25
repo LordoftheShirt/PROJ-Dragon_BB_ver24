@@ -169,7 +169,7 @@ public class CraftingUI : Singleton<CraftingUI>
             _blueprintUIMap[blueprint.Category].Add(newBlueprint);
         }
 
-        inspector.SelectBlueprint(null);
+        inspector.SelectBlueprint(null, true);
         ChangeCategory(_currentCategory);
     }
 
