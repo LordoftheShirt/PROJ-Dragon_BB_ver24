@@ -10,10 +10,14 @@ public class EnumStyle : SingletonPersistent<EnumStyle>
     public static Color[] ResourceColors => Instance.resourceColors;
     public static Color[] ResourceBackgroundColors => Instance.resourceBackgroundColors;
     public static Sprite[] BlueprintCategoryIcons => Instance.blueprintCategoryIcons;
+    public static Color DisabledColor => Instance.disabledColor;
+    public static Color DisabledBackgroundColor => Instance.disabledBackgroundColor;
     [SerializeField] private Sprite[] resourceIcons;
     [SerializeField] private Color[] resourceColors;
     [SerializeField] private Color[] resourceBackgroundColors;
     [SerializeField] private Sprite[] blueprintCategoryIcons;
+    [SerializeField] private Color disabledColor;
+    [SerializeField] private Color disabledBackgroundColor;
 
     public static Sprite GetResourceIcon(int index)
     {
