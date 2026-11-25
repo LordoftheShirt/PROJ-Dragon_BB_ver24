@@ -224,13 +224,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlagPlacer
   buildRange: 8
   maxSurfaceAngle: 45
+  flagGhostPrefab: {fileID: 6518008617702779116, guid: 27ea202b520d04b4dbd96f4f5213552f, type: 3}
   flagPrefab: {fileID: 1143922573743967422, guid: a2c4809533aee094a93ac1e2763f39ed, type: 3}
   fireKitGhostPrefab: {fileID: 2120276930775436328, guid: 105e0c7074071db40b5a54c9b19441df, type: 3}
   fireKitPrefab: {fileID: 2120276930775436328, guid: c27fda38277a0ea478e6d52eb82ea29c, type: 3}
   tentGhostPrefab: {fileID: 8845116247779368566, guid: bcb204d9bd8310f47be558f330ea6167, type: 3}
   tentPrefab: {fileID: 8845116247779368566, guid: b5a1f753ab063dc448ee4b0edc835170, type: 3}
   placedExplosion: {fileID: 4006051852673508161, guid: f42ac1c73bb8d5047920ff52ab922c91, type: 3}
-  matUnplaceable: {fileID: 2100000, guid: 811429db88686e541843d5cf6ce2d8d5, type: 2}
+  matUnplaceable: {fileID: 2100000, guid: be83220420ccd324fa2ccae0042b42f8, type: 2}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
@@ -283,6 +284,7 @@ MonoBehaviour:
   LookActionName: Player/Look
   JumpActionName: Player/Jump
   SprintActionName: Player/Sprint
+  OpenMapActionName: Player/OpenMap
   camModifier: {fileID: 0}
   footstepSFX:
     Guid:

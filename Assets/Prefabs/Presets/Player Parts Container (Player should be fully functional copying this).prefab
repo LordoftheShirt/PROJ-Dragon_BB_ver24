@@ -2990,7 +2990,6 @@ GameObject:
   - component: {fileID: 2045993950105186454}
   - component: {fileID: 3177194266743354480}
   - component: {fileID: 1828009793053654021}
-  - component: {fileID: 2966129678204893403}
   m_Layer: 6
   m_Name: Map
   m_TagString: Untagged
@@ -3070,28 +3069,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2966129678204893403
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8755189787445513613}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8832093350719081759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4729,10 +4706,6 @@ PrefabInstance:
       propertyPath: interactionText
       value: 
       objectReference: {fileID: 5525102732225790164}
-    - target: {fileID: 7413844506479627764, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
-      propertyPath: matUnplaceable
-      value: 
-      objectReference: {fileID: 2100000, guid: 3e59660e964b8b24999e958c1ac8b2c5, type: 2}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: camModifier
       value: 

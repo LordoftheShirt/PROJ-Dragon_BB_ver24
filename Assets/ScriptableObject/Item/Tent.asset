@@ -19,7 +19,22 @@ MonoBehaviour:
   description: A placeable tent you can use once to sleep through the night. Requires
     an external heat source nearby, like a campfire, to use.
   maxStackSize: 2
-  durability: 0
-  canBeBroughtOnExpeditions: 1
-  equipmentSlot: 0
-  useType: TentUse, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  itemComponents:
+  - {fileID: 8997766889715887651}
+--- !u!114 &8997766889715887651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5bb4d30c6451414c8aaa1188511e382, type: 3}
+  m_Name: BuildPlacerComponent
+  m_EditorClassIdentifier: Assembly-CSharp::BuildPlacerComponent
+  expandedInEditor: 1
+  orderInEditor: 0
+  item: {fileID: 11400000}
+  disableOnStart: 0
+  building: 2

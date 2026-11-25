@@ -157,17 +157,9 @@ MonoBehaviour:
   placeResources: 0
   seed: 21
   terrainSize: 1000
-  objToPlace: {fileID: 919132149155446097, guid: edb0db62d1a6a264699cb3fb530b1c0d, type: 3}
+  treeToPlace: {fileID: 919132149155446097, guid: edb0db62d1a6a264699cb3fb530b1c0d, type: 3}
   objToPlace2: {fileID: 919132149155446097, guid: 2cf61b3a092437f4080bf59db195d619, type: 3}
   objToPlace3: {fileID: 919132149155446097, guid: 46d7b6de10f156e4088012935285f8bb, type: 3}
-  resources:
-  - {fileID: 8689415650351826161, guid: 1d81c88337b70a24f82cd823c71307a5, type: 3}
-  - {fileID: 8689415650351826161, guid: ad1f82760e2f46648ad5bd7f1a54b9c6, type: 3}
-  - {fileID: 8689415650351826161, guid: ce682c1fb91a9b843a82e59e0fa1bdba, type: 3}
-  - {fileID: 5933196674494083239, guid: 816c3b3be5aa7d84d81f9c12c2964dfc, type: 3}
-  - {fileID: 8907059878829624906, guid: f18b8d95c793ba241a0e20a3299926ff, type: 3}
-  - {fileID: 1055412442946892537, guid: 3ea1a47eaae8a8b46b64a997b44a4153, type: 3}
-  rcspawner: {fileID: 100107755}
   house: {fileID: 976564111}
   biomeBlendRadius: 4
   biomeInnerRadius: 200
@@ -1239,7 +1231,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 881193398301843028, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -60.000122
+      value: -59.999573
       objectReference: {fileID: 0}
     - target: {fileID: 1593804173212233310, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_SizeDelta.x
