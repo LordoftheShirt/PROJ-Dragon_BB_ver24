@@ -28,9 +28,7 @@ public class CraftingUI : Singleton<CraftingUI>
 
     private static readonly BlueprintComparer _blueprintComparer = new();
 
-#if UNITY_EDITOR
     [SerializeField] private bool debugMode;
-#endif
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private CraftingUICategory categoryTemplate;
     private CraftingUICategory[] _categories;
@@ -160,9 +158,7 @@ public class CraftingUI : Singleton<CraftingUI>
 
         // Create blueprints
         List<Blueprint> blueprints =
-#if UNITY_EDITOR
             debugMode ? AssetStorage.GetAssetsOfType<Blueprint>().ToList() :
-#endif
             Inventory.BlueprintsUnlocked;
 
         blueprints.Sort(_blueprintComparer);
