@@ -184,7 +184,7 @@ public class Inventory : SingletonPersistent<Inventory>
         Items.Clear();
     }
 
-    public void SetItem(Item item, int count)
+    public void SetItemAmount(Item item, int count)
     {
         Items.TryGetValue(item, out int oldCount);
         int newCount;
@@ -221,7 +221,7 @@ public class Inventory : SingletonPersistent<Inventory>
         return Items.ContainsKey(item) && Items[item] >= count;
     }
 
-    public int GetItem(Item item)
+    public int GetItemAmount(Item item)
     {
         if (item == null) return 0;
         if (Items.TryGetValue(item, out int result))

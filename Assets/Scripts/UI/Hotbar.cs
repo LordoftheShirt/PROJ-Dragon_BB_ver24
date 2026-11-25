@@ -182,8 +182,8 @@ public class Hotbar : Singleton<Hotbar>
         else
         {
             slot.Enable();
-            slot.Set(item);
-            slot.SetCountText(_inventory.GetItem(item).ToString());
+            slot.SetColor(item);
+            slot.SetCountText(_inventory.GetItemAmount(item).ToString());
         }
     }
 
@@ -220,7 +220,9 @@ public class Hotbar : Singleton<Hotbar>
             // UPDATE ITEM!
             if (_items[i] == item)
             {
-                _slots[i].SetCountText(count.ToString());
+                HotbarSlot slot = _slots[i];
+                slot.SetCountText(count.ToString());
+                slot.UpdateColor();
                 return;
             }
         }

@@ -28,7 +28,7 @@ public class Blueprint : ScriptableObject
     {
         Inventory inv = Inventory.Instance;
 
-        if (result != null && !result.UnlimitedStackSize && inv.GetItem(result) >= result.MaxStackSize)
+        if (result != null && !result.UnlimitedStackSize && inv.GetItemAmount(result) >= result.MaxStackSize)
         {
             return false;
         }
