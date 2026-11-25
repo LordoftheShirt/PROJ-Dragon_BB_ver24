@@ -14,11 +14,12 @@ public class MiniMapManager : MonoBehaviour
     [Header("Settings")]
     [Tooltip("The scale factor for the minimap. If its a larger value, the minimap will be more zoomed out. Ex: 5 means a map in 1:5 scale")]
     [SerializeField] private float scale = 110;
-    [SerializeField] private float xRotation = 180;
+    [SerializeField] private float xRotation = 90;
     [SerializeField] private bool isUnlocked = false;
 
 
     private float size = 0.9f;
+    float yRotation = 180;
 
     private bool isOpen;
     private List<GameObject> mapObjects = new List<GameObject>();
@@ -64,7 +65,7 @@ public class MiniMapManager : MonoBehaviour
     {
         if (showMap)
         {
-            playerMap.localRotation = Quaternion.Euler(90, xRotation, playerMap.rotation.z);
+            playerMap.localRotation = Quaternion.Euler(xRotation, yRotation, playerMap.rotation.z);
             playerMap.gameObject.SetActive(showMap);
         }
         else

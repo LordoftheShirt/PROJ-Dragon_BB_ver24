@@ -145,7 +145,8 @@ MonoBehaviour:
   - {fileID: 8927763020995527257, guid: e5e80d7e9e702764990c4e79af8c7c84, type: 3}
   - {fileID: 8927763020995527257, guid: b5dc5471b6fec2046845a412e3227169, type: 3}
   scale: 110
-  xRotation: 180
+  xRotation: 70
+  isUnlocked: 1
 --- !u!114 &5046293295825093072
 MonoBehaviour:
   m_ObjectHideFlags: 0
