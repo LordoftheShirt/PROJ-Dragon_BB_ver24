@@ -19,7 +19,7 @@ MonoBehaviour:
   - type: 0
     amount: 15
   - type: 2
-    amount: 5
+    amount: 3
   itemRequirements:
   - {fileID: 11400000, guid: 99f06829f3206ac4ca2f0f917c115fa6, type: 2}
   sortingOrder: 5

@@ -37,6 +37,10 @@ public class PlayerUI : Singleton<PlayerUI>
     [SerializeField] private RectTransform compassNeedle;
     private Transform _playerTransform;
 
+    [Header("Day Counter")]
+    [SerializeField] private TMP_Text dayCounter;
+    private string _dayCounterFormat;
+
     private DayNightManager _dayNightManager;
 
     private void Start()
@@ -75,6 +79,10 @@ public class PlayerUI : Singleton<PlayerUI>
         compass.SetActive(Inventory.Instance.HasItem(compassItem));
 
         Inventory.OnItemChanged += OnItemChanged;
+
+        _dayCounterFormat = dayCounter.text;
+        UpdateDayCounter();
+        SleepNewWorld.OnSleep += OnSleep;
     }
 
     private void OnDestroy()
@@ -131,5 +139,15 @@ public class PlayerUI : Singleton<PlayerUI>
         float time = Mathf.Max(_dayNightManager.DayTimer, 0);
         TimeSpan span = TimeSpan.FromSeconds(time);
         stormTimeText.text = string.Format(_stormTimeFormat, span.ToString(STORM_TIME_FORMAT));
+    }
+
+    private void OnSleep(int day)
+    {
+        UpdateDayCounter();
+    }
+
+    private void UpdateDayCounter()
+    {
+        dayCounter.text = string.Format(_dayCounterFormat, SleepNewWorld.DayNumber);
     }
 }

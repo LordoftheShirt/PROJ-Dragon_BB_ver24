@@ -19,6 +19,6 @@ MonoBehaviour:
   - type: 1
     amount: 5
   - type: 2
-    amount: 5
+    amount: 2
   itemRequirements: []
   sortingOrder: 0
