@@ -717,15 +717,15 @@ public class TerrainGenerator : MonoBehaviour
         resourceContainer = new GameObject("Resource Container");
 
         //ENSURE CRITICAL RESOURCES NEAR CENTRE
-        ResourceType[] criticalResourcesToSpawn = new ResourceType[3];
+        ResourceType[] criticalResourcesToSpawn = new ResourceType[2];
         criticalResourcesToSpawn[0] = ResourceType.Wood;
         criticalResourcesToSpawn[1] = ResourceType.Wood;
-        criticalResourcesToSpawn[2] = ResourceType.Wood;
+        //criticalResourcesToSpawn[2] = ResourceType.Wood;
         resourceClusterSpawner.SpawnResourceClusterWithSpecificResource(criticalResourcesToSpawn, new Vector3(20, 20, 10), resourceContainer.transform);
 
         criticalResourcesToSpawn[0] = ResourceType.Scrap;
         criticalResourcesToSpawn[1] = ResourceType.Scrap;
-        criticalResourcesToSpawn[2] = ResourceType.Scrap;
+        //criticalResourcesToSpawn[2] = ResourceType.Scrap;
         resourceClusterSpawner.SpawnResourceClusterWithSpecificResource(criticalResourcesToSpawn, new Vector3(-20, 20, -10), resourceContainer.transform);
 
 
