@@ -20,6 +20,7 @@ public class MiniMapManager : MonoBehaviour
     private float size = 0.9f;
 
     private bool isOpen;
+    private bool isUnlocked = false;
     private List<GameObject> mapObjects = new List<GameObject>();
 
     public void CreateMap()
@@ -62,6 +63,7 @@ public class MiniMapManager : MonoBehaviour
 
     private void ViewMap(bool showMap)
     {
+        if(!isUnlocked) return;
         if (showMap)
         {
             playerMap.localRotation = Quaternion.Euler(90, xRotation, playerMap.rotation.z);
@@ -95,5 +97,7 @@ public class MiniMapManager : MonoBehaviour
     private float CalculateObjectCordinate(float mapCordinate, float cabbinCordinate, float objectCordinate) { return mapCordinate - ((cabbinCordinate - objectCordinate) / scale); }
 
     public void SetMapScale(float newScale) { scale = newScale; }
+
+    public void UnlockMap() { isUnlocked = true; }
 
 }
