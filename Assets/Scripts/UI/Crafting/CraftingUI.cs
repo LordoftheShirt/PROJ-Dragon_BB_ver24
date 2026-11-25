@@ -40,6 +40,9 @@ public class CraftingUI : Singleton<CraftingUI>
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private CraftingUIInspector inspector;
 
+    [Space]
+    [SerializeField] private ResourceUISlot resourceSlotTemplate;
+
     private BlueprintCategory _currentCategory;
     private int _categoryAmount;
 
@@ -85,9 +88,20 @@ public class CraftingUI : Singleton<CraftingUI>
             _categories[i] = newCategory;
         }
 
+        // Create resource slots
+        ResourceType[] resourceTypes = ResourceTypeUtil.GetAllResourceTypes();
+        foreach (ResourceType resourceType in resourceTypes)
+        {
+            ResourceUISlot slot = Instantiate(resourceSlotTemplate, resourceSlotTemplate.transform.parent);
+            slot.Type = resourceType;
+
+            slot.gameObject.SetActive(true);
+        }
+
         // Hide templates
         categoryTemplate.gameObject.SetActive(false);
         blueprintTemplate.gameObject.SetActive(false);
+        resourceSlotTemplate.gameObject.SetActive(false);
 
         mainPanel.SetActive(false);
     }
