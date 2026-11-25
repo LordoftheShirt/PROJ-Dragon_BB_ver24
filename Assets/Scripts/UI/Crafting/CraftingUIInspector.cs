@@ -71,7 +71,7 @@ public class CraftingUIInspector : MonoBehaviour
             var requirement = CreateRequirement();
 
             ResourceType type = pair.Type;
-            requirement.Name = type.GetDisplayString(true);
+            requirement.Name = type.GetDisplayString(pair.Amount != 1);
             requirement.Type = type;
             requirement.RequiredAmount = pair.Amount;
         }

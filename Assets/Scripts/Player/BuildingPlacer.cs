@@ -6,10 +6,13 @@ using UnityEngine.InputSystem;
 // A raycast you place on the camera; it looks for IInteractable objects.
 public class BuildingPlacer : Singleton<BuildingPlacer>
 {
+    public ConsumablesManager Consumables => ConsumablesManager.Instance;
+
     [SerializeField] private float buildRange = 8f;
     [SerializeField] private float maxSurfaceAngle = 45f; // Maximum angle from the up vector that is considered a valid surface for placement.
 
     [Header("Flag")]
+    [SerializeField] private GameObject flagGhostPrefab;
     [SerializeField] private GameObject flagPrefab;
 
     [Header("Fire Kit")]
@@ -84,37 +87,74 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
         PreviewGhostLocation();
 
+        bool canPlace = true;
+
         // prevents ghosts from being placed if it's the wrong material.
         if (rendCurrentMat != null && matUnplaceable != null && rendCurrentMat.sharedMaterial == matUnplaceable)
         {
-            holdTimer = 0f;
+            canPlace = false;
         }
-
 
         // When preview build is active and the player is holding the confirm build button, this counts until holdToPlaceSec is reached, at which point the build is placed.
         if (isHoldingBuild)
         {
-            holdTimer += Time.deltaTime;
+            // Flag is placed instantly, no hold needed
+            if (canPlace && currentGhost.CompareTag(flagGhostPrefab.tag))
+            {
+                if (PlaceBuild(flagPrefab, Consumables.GetCurrentFlags()) != null)
+                {
+                    Consumables.UseFlag();
 
-            if(currentGhost == null)
+                    // Flag doesn't remove its ghost unless this was the last flag you placed
+                    if (Consumables.GetCurrentFlags() <= 0)
+                    {
+                        Destroy(currentGhost);
+                        currentGhost = null;
+
+                        UnselectHotbar();
+                    }
+
+                    isHoldingBuild = false;
+                    holdTimer = 0f;
+                    return;
+                }
+            }
+
+            if (canPlace)
+            {
+                holdTimer += Time.deltaTime;
+            }
+            else
+            {
+                holdTimer = 0;
+            }
+
+            if (currentGhost == null)
             {
                 isHoldingBuild = false;
                 holdTimer = 0f;
                 return;
             }
 
-            if (holdTimer >= holdToPlaceSec)
+            if (canPlace && holdTimer >= holdToPlaceSec)
             {
                 if (currentGhost.CompareTag(fireKitGhostPrefab.tag))
                 {
-                    if (PlaceBuild(fireKitPrefab, ConsumablesManager.Instance.GetCurrentFirekits(), true) != null)
-                        ConsumablesManager.Instance.UseFirekit();
+                    if (PlaceBuild(fireKitPrefab, Consumables.GetCurrentFirekits(), true) != null)
+                    {
+                        Consumables.UseFirekit();
+                        if (Consumables.GetCurrentFirekits() <= 0) UnselectHotbar();
+                    }
                 }
                 else if (currentGhost.CompareTag(tentGhostPrefab.tag))
                 {
-                    if (PlaceBuild(tentPrefab, ConsumablesManager.Instance.GetCurrentTents(), true) != null)
-                        ConsumablesManager.Instance.UseTent();
+                    if (PlaceBuild(tentPrefab, Consumables.GetCurrentTents(), true) != null)
+                    {
+                        Consumables.UseTent();
+                        if (Consumables.GetCurrentTents() <= 0) UnselectHotbar();
+                    }
                 }
+
                 Destroy(currentGhost);
                 currentGhost = null;
 
@@ -124,24 +164,31 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
         }
     }
 
-
+    /*
     // Place the flag instantly.
     public void PlaceFlag()
     {
         RemoveGhost();
 
-        if (PlaceBuild(flagPrefab, ConsumablesManager.Instance.GetCurrentFlags()) != null)
-            ConsumablesManager.Instance.UseFlag();
+        if (PlaceBuild(flagPrefab, Consumables.GetCurrentFlags()) != null)
+            Consumables.UseFlag();
+    }
+    */
+
+    // Flag has a ghost but is placed down instantly and doesn't need to be held down unlike the other builds
+    public void SetGhostToFlag()
+    {
+        UpdateCurrentGhost(flagGhostPrefab, Consumables.GetCurrentFlags());
     }
 
     public void SetGhostToFireKit()
     {
-        UpdateCurrentGhost(fireKitGhostPrefab, ConsumablesManager.Instance.GetCurrentFirekits());
+        UpdateCurrentGhost(fireKitGhostPrefab, Consumables.GetCurrentFirekits());
     }
 
     public void SetGhostToTent()
     {
-        UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        UpdateCurrentGhost(tentGhostPrefab, Consumables.GetCurrentTents());
     }
 
     public void RemoveGhost()
@@ -164,7 +211,10 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
             {
                 float surfaceAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
 
-                currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal);
+                Vector3 lookPos = builderSource.position - hitinfo.point;
+                lookPos.y = 0;
+
+                currentGhost.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitinfo.normal) * Quaternion.LookRotation(lookPos);
                 currentGhost.transform.position = hitinfo.point;
 
                 // changes the ghost's material; its material determines whether it should be allowed to be placed or not.
@@ -213,10 +263,15 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     // unselects equipped item in hotbar upon right click
     private void OnCancelBuild(InputAction.CallbackContext context)
     {
-        if (Hotbar.SelectedSlot.HasValue)
-            Hotbar.Instance.SetSelectedSlot(null, false);
+        UnselectHotbar();
 
         UpdateCurrentGhost(null);
+    }
+
+    private void UnselectHotbar()
+    {
+        if (Hotbar.SelectedSlot.HasValue)
+            Hotbar.Instance.SetSelectedSlot(null, false);
     }
 
     // returns the placed build object if successful.
@@ -238,7 +293,6 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
             return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);
         }
 
-
         Ray placementRange = new Ray(builderSource.position, builderSource.forward);
         if (Physics.Raycast(placementRange, out RaycastHit hitinfo, buildRange))
         {
@@ -259,7 +313,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
         }
         
         // added in case the raycast (when spawning the preview build) never hits anything.
-        if(build == fireKitGhostPrefab || build == tentGhostPrefab)
+        if(build == flagGhostPrefab || build == fireKitGhostPrefab || build == tentGhostPrefab)
             return Instantiate(build, buildingHolder.transform.position, Quaternion.identity, buildingHolder.transform);
 
         return null;
@@ -324,7 +378,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
         placeFireKitAction.performed += OnPlaceFireKitKey;
 
-        placeTentAction.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        placeTentAction.performed += (context) => UpdateCurrentGhost(tentGhostPrefab, Consumables.GetCurrentTents());
         */
 
         confirmBuildAction.started += OnConfirmBuild;
@@ -340,7 +394,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
         placeFireKitAction.performed -= OnPlaceFireKitKey;
 
-        placeTentAction.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, ConsumablesManager.Instance.GetCurrentTents());
+        placeTentAction.performed -= (context) => UpdateCurrentGhost(tentGhostPrefab, Consumables.GetCurrentTents());
         */
         confirmBuildAction.started += OnConfirmBuild;
         confirmBuildAction.canceled += OnConfirmBuild;
