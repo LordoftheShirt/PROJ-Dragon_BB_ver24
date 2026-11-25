@@ -140,34 +140,6 @@ PrefabInstance:
       propertyPath: playerMap
       value: 
       objectReference: {fileID: 1708144431}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: mapObjectTokenPrefabs.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'mapObjectTokenPrefabs.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8927763020995527257, guid: b96d4b376b86f7340944111d75fb04fb, type: 3}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'mapObjectTokenPrefabs.Array.data[1]'
-      value: 
-      objectReference: {fileID: 8927763020995527257, guid: b81f3964c42b8154b9522a7f94630f21, type: 3}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'mapObjectTokenPrefabs.Array.data[2]'
-      value: 
-      objectReference: {fileID: 8927763020995527257, guid: f851d76eec9ecdf42a0aad3535d27dcf, type: 3}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'mapObjectTokenPrefabs.Array.data[3]'
-      value: 
-      objectReference: {fileID: 8927763020995527257, guid: f851d76eec9ecdf42a0aad3535d27dcf, type: 3}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'mapObjectTokenPrefabs.Array.data[4]'
-      value: 
-      objectReference: {fileID: 8927763020995527257, guid: e7dfec01531074f439b5e0eb0632c259, type: 3}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: 'mapObjectTokenPrefabs.Array.data[5]'
-      value: 
-      objectReference: {fileID: 8927763020995527257, guid: 22c56b808835140438e05710ffad3000, type: 3}
     - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: cabbin
       value: 

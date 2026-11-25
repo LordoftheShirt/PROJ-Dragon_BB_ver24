@@ -99,7 +99,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: ceeea9beb0b9c5843915ebc84bd903c8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: -876546973899608171, guid: 30fa68ce467463643a86b839ca0eb195, type: 3}
+      objectReference: {fileID: 2100000, guid: 09ad2c89003c39d46b2be97894fc3b1c, type: 2}
     - target: {fileID: 919132149155446097, guid: ceeea9beb0b9c5843915ebc84bd903c8, type: 3}
       propertyPath: m_Name
       value: Fireplace

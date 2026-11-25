@@ -18,7 +18,22 @@ MonoBehaviour:
   itemName: Campfire
   description: A placeable fireplace that'll warm you up for a bit.
   maxStackSize: 3
-  durability: 0
-  canBeBroughtOnExpeditions: 1
-  equipmentSlot: 0
-  useType: CampfireUse, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  itemComponents:
+  - {fileID: 8879471440412955595}
+--- !u!114 &8879471440412955595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5bb4d30c6451414c8aaa1188511e382, type: 3}
+  m_Name: BuildPlacerComponent
+  m_EditorClassIdentifier: Assembly-CSharp::BuildPlacerComponent
+  expandedInEditor: 1
+  orderInEditor: 0
+  item: {fileID: 11400000}
+  disableOnStart: 0
+  building: 1
