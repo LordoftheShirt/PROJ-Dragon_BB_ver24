@@ -93,7 +93,7 @@ public class CraftingUIInspector : MonoBehaviour
         requirementsText.text = text;
 
         Item result = _currentBlueprint.Result;
-        amountText.text = result == null || result.UnlimitedStackSize ? "" : $"You have:\n{inv.GetItem(result)}/{result.MaxStackSize}";
+        amountText.text = result == null || result.UnlimitedStackSize ? "" : $"You have:\n{inv.GetItemAmount(result)}/{result.MaxStackSize}";
 
         craftButton.interactable = _currentBlueprint.CanCraft();
     }

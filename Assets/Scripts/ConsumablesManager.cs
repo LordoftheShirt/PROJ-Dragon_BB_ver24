@@ -38,7 +38,7 @@ public class ConsumablesManager : SingletonPersistent<ConsumablesManager>
     public int GetCurrentFlags() => GetItemCount(flagItem);
     public int GetCurrentTents() => GetItemCount(tentItem);
     public int GetCurrentFirekits() => GetItemCount(firekitItem);
-    public int GetItemCount(Item item) => _inv.GetItem(item);
+    public int GetItemCount(Item item) => _inv.GetItemAmount(item);
 
     private void Start()
     {
