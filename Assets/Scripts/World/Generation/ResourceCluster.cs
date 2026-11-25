@@ -1,4 +1,5 @@
 using Mono.Cecil;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ResourceCluster : MonoBehaviour
@@ -10,13 +11,13 @@ public class ResourceCluster : MonoBehaviour
     public void SpawnResources(ResourceNode resourcePrefab, ResourceType resourceType)
     {
         Vector3 spawnPosition;
-        float spawnXRotation;
-        float spawnZRotation;
+        //float spawnXRotation;
+        //float spawnZRotation;
         maxResourceAmount = -1;
 
         do
         {
-            spawnXRotation = spawnZRotation = 0;
+            //spawnXRotation = spawnZRotation = 0;
 
             //Selects position
             Vector2 randomPosition = Random.insideUnitCircle * clusterRadius;
@@ -35,13 +36,16 @@ public class ResourceCluster : MonoBehaviour
                 else
                     spawnPosition = new Vector3(spawnPosition.x, spawnPosition.y + dist, spawnPosition.z);
 
-                spawnXRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.forward);
-                spawnZRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.right);
+                //spawnXRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.forward);
+                //spawnZRotation = Vector3.SignedAngle(Vector3.down, hitInfo.normal, Vector3.right);
             }
 
             // Se till så att rotationen matchar normalen i heightmappen, ev gör metod som ser till att normalen är realistisk
             ResourceNode resource = Instantiate(resourcePrefab, spawnPosition, Quaternion.identity, transform);
-            resource.transform.rotation = Quaternion.Euler(spawnXRotation, 0, spawnZRotation);
+
+            //resource.transform.rotation = Quaternion.Euler(spawnXRotation, 0, spawnZRotation);
+            // EDIT: byte ut med den ovan med den under; ger varje grej en random riktning.
+            resource.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal) * Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
             if (maxResourceAmount == -1)
                 maxResourceAmount = resource.GetMaxResourceAmountPerCluster();
