@@ -1372,7 +1372,7 @@ GameObject:
   - component: {fileID: 7723768102096451180}
   m_Layer: 0
   m_Name: '[PH]House'
-  m_TagString: Untagged
+  m_TagString: ResourceSpawnIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2243,6 +2243,10 @@ PrefabInstance:
     - target: {fileID: 908400883003837817, guid: 98a747935ace2904cb11f4769a4da544, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1268874576096516111, guid: 98a747935ace2904cb11f4769a4da544, type: 3}
+      propertyPath: sleepAnimationSpeed
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4379105103369741910, guid: 98a747935ace2904cb11f4769a4da544, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

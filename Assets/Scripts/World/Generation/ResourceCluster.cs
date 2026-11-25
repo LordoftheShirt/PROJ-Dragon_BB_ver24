@@ -23,9 +23,13 @@ public class ResourceCluster : MonoBehaviour
 
             spawnPosition = transform.position + new Vector3(randomPosition.x, 0, randomPosition.y);
             
-            if (Physics.Raycast(new Vector3(spawnPosition.x, 50, spawnPosition.z), Vector3.down, out RaycastHit hitInfo, 150))
+            if (Physics.Raycast(new Vector3(spawnPosition.x, 100, spawnPosition.z), Vector3.down, out RaycastHit hitInfo, 200))
             {
+                if (hitInfo.collider.tag == "ResourceSpawnIgnore")
+                    break;
+
                 float dist = Vector3.Distance(hitInfo.point, spawnPosition);
+
                 if (hitInfo.point.y <= spawnPosition.y)
                     spawnPosition = new Vector3(spawnPosition.x, spawnPosition.y - dist, spawnPosition.z);
                 else

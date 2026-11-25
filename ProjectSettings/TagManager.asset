@@ -8,6 +8,8 @@ TagManager:
   - GhostFireKit
   - GhostTent
   - WorldUI
+  - FxTemporaire
+  - ResourceSpawnIgnore
   layers:
   - Default
   - TransparentFX

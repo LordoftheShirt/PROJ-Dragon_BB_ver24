@@ -833,6 +833,50 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2332743185978758688, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332743185978758688, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332743185978758688, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332743185978758688, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2332743185978758688, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570746429032723206, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570746429032723206, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570746429032723206, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570746429032723206, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570746429032723206, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2570746429032723206, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2770240588887316460, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -867,6 +911,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3600735466530754045, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722946358917779789, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722946358917779789, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722946358917779789, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722946358917779789, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722946358917779789, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6156626788824462016, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
@@ -1620,21 +1684,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3582778394893153377, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
-      propertyPath: sleepAnimationTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3582778394893153377, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
       propertyPath: sleepAnimationGroup
       value: 
       objectReference: {fileID: 1584275727}
-    - target: {fileID: 3582778394893153377, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
-      propertyPath: sleepAnimationImage
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3582778394893153377, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
-      propertyPath: sleepAnimationSpeed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6954188683299399319, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
       propertyPath: m_Name
       value: '[PH]House'

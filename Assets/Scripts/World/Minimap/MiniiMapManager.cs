@@ -39,15 +39,14 @@ public class MiniMapManager : MonoBehaviour
             //Debug.Log((int)node.GetResourceType());
             if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
                 Instantiate(mapObjectTokenPrefabs[(int)node.GetResourceType()], mapObjectPosition, playerMap.rotation, playerMap);
-
-            Debug.Log("prefab: " + mapObjectTokenPrefabs[(int)node.GetResourceType()] + " type: " + node.GetResourceType());
         }
-
+        ViewMap(false);
         mapObjects.Clear();
     }
 
     public void ActiveteOrDeactivateMap(InputAction.CallbackContext context)
     {
+        if (!isUnlocked) return;
         Debug.Log("presed map");
         if (isOpen)
         {
@@ -63,7 +62,6 @@ public class MiniMapManager : MonoBehaviour
 
     private void ViewMap(bool showMap)
     {
-        if(!isUnlocked) return;
         if (showMap)
         {
             playerMap.localRotation = Quaternion.Euler(90, xRotation, playerMap.rotation.z);
