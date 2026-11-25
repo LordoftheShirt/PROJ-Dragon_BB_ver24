@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceNode
   resourceMin: 1
   resourceMax: 2
-  maxResourceAmountPerCluster: 5
+  maxResourceAmountPerCluster: 3
 --- !u!114 &-4748577932034810107
 MonoBehaviour:
   m_ObjectHideFlags: 0

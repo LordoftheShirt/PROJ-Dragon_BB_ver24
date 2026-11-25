@@ -508,7 +508,7 @@ public class TerrainGenerator : MonoBehaviour
 
         float perlin2 = Mathf.PerlinNoise((x + newNoise) * .005f, (z + newNoise) * .005f) * scale/2;
 
-        float perlin3 = Mathf.PerlinNoise((x + newNoise) * .005f, (z + newNoise) * .005f) * (scale/2);
+        float perlin3 = Mathf.PerlinNoise((x + newNoise) * .005f, (z + newNoise) * .005f) * 5;
 
 
         //SIMPLEX
@@ -529,7 +529,7 @@ public class TerrainGenerator : MonoBehaviour
         int pos2 = (z * xSize) + x;
         BiomePercent bp = biomeMapPercentages[pos2];
         if (bp != null) 
-            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * ((perlin * absValue) )) + (bp.pBiome3 * ((perlin * perlin3)/2));
+            y = (bp.pBiome1 * perlin) + (bp.pBiome2 * ((perlin * absValue) )) + (bp.pBiome3 * ((perlin * perlin3)));
 
 
 
