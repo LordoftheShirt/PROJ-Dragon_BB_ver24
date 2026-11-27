@@ -54,8 +54,8 @@ public class CraftingUICategory : MonoBehaviour
             return;
         }
 
-        bg.DOColor(col, 0.1f);
-        icon.DOColor(invCol, 0.1f);
-        text.DOColor(invCol, 0.1f);
+        bg.DOColor(col, 0.1f).SetUpdate(true);
+        icon.DOColor(invCol, 0.1f).SetUpdate(true);
+        text.DOColor(invCol, 0.1f).SetUpdate(true);
     }
 }

@@ -1710,7 +1710,38 @@ MonoBehaviour:
   hpText: {fileID: 5722222671671980684}
   warmthBar: {fileID: 1621089935655165147}
   warmthText: {fileID: 5852101440876780053}
+  stormTimeIcon: {fileID: 2655103884735280010}
   stormTimeText: {fileID: 279751012471627578}
+  stormTimeGradient:
+    serializedVersion: 2
+    key0: {r: 0.90588236, g: 0.95686275, b: 1, a: 1}
+    key1: {r: 0.90588236, g: 0.95686275, b: 1, a: 1}
+    key2: {r: 1, g: 0.65512764, b: 0, a: 0}
+    key3: {r: 1, g: 0.4651919, b: 0, a: 0}
+    key4: {r: 1, g: 0, b: 0, a: 0}
+    key5: {r: 1, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 32768
+    ctime2: 39321
+    ctime3: 49151
+    ctime4: 58982
+    ctime5: 65535
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 6
+    m_NumAlphaKeys: 2
   resourceUISlotTemplate: {fileID: 7776752754895079487}
   compassItem: {fileID: 11400000, guid: b5afa17c58beab0408777e00d841df83, type: 2}
   compass: {fileID: 4360443207256676009}
@@ -6116,8 +6147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: -876546973899608171, guid: 8f6046935b79f3a42976922eb17caed2, type: 3}
+  m_Color: {r: 0.90588236, g: 0.95686275, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

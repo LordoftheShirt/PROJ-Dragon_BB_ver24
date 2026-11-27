@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +25,12 @@ public class PlayerUI : Singleton<PlayerUI>
     private PlayerMeter _meter;
 
     [Space]
+    [SerializeField] private Image stormTimeIcon;
     [SerializeField] private TMP_Text stormTimeText;
     private string _stormTimeFormat;
+    [SerializeField] private Gradient stormTimeGradient;
+    private bool _stormTimerOutOfTime;
+    private Coroutine _stormTimerOutOfTimeAnim;
 
     [Space]
     [SerializeField] private ResourceUISlot resourceUISlotTemplate;
@@ -114,7 +119,7 @@ public class PlayerUI : Singleton<PlayerUI>
         Vector3 playerForward = _playerTransform.forward;
         playerForward.y = 0;
         float angleToNorth = Vector3.SignedAngle(Vector3.forward, playerForward, Vector3.up);
-        compassNeedle.localRotation = Quaternion.Euler(0, 0, angleToNorth);
+        compassNeedle.localRotation = Quaternion.Euler(0, 0, -angleToNorth);
     }
 
     private void UpdateWorldTemp()
@@ -141,6 +146,45 @@ public class PlayerUI : Singleton<PlayerUI>
         float time = Mathf.Max(_dayNightManager.DayTimer, 0);
         TimeSpan span = TimeSpan.FromSeconds(time);
         stormTimeText.text = string.Format(_stormTimeFormat, span.ToString(STORM_TIME_FORMAT));
+
+        Color color = stormTimeGradient.Evaluate(1 - (time / _dayNightManager.DayDuration));
+        stormTimeText.color = color;
+        stormTimeIcon.color = color;
+
+        if (time <= 0 && !_stormTimerOutOfTime)
+        {
+            _stormTimerOutOfTime = true;
+            _stormTimerOutOfTimeAnim = StartCoroutine(StormTimerOutOfTimeAnim());
+        }
+        else if (time > 0 && _stormTimerOutOfTime)
+        {
+            _stormTimerOutOfTime = false;
+
+            stormTimeText.gameObject.SetActive(true);
+            stormTimeIcon.gameObject.SetActive(true);
+
+            if (_stormTimerOutOfTimeAnim != null) StopCoroutine(_stormTimerOutOfTimeAnim);
+        }
+    }
+
+    private IEnumerator StormTimerOutOfTimeAnim()
+    {
+        void Set(bool enable)
+        {
+            stormTimeText.gameObject.SetActive(enable);
+            stormTimeIcon.gameObject.SetActive(enable);
+        }
+
+        WaitForSeconds sec1 = new WaitForSeconds(0.5f);
+        WaitForSeconds sec2 = new WaitForSeconds(0.375f);
+
+        while (true)
+        {
+            Set(true);
+            yield return sec1;
+            Set(false);
+            yield return sec2;
+        }
     }
 
     private void OnResetWorld()
