@@ -1,3 +1,4 @@
+using DebugTools;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -283,20 +284,181 @@ public class Inventory : SingletonPersistent<Inventory>
         }
     }
 
-#if UNITY_EDITOR
-    private void Update()
+    #region Resources Debug Commands
+    [DebugCommand("Technically not infinite, just adds 9999 to every resource", DisplayName = "AddInfiniteResources")]
+    public static void AddInfiniteResourcesDebug()
     {
-        if (UnityEngine.InputSystem.Keyboard.current.f10Key.wasPressedThisFrame)
+        foreach (var type in ResourceTypeUtil.GetAllResourceTypes())
         {
-            Debug.Log("F10 debug feature activated! Adding 99 to every resource");
-
-            foreach (var type in ResourceTypeUtil.GetAllResourceTypes())
-            {
-                AddResource(type, 99);
-            }
+            Instance.AddResource(type, 9999);
         }
     }
-#endif
+
+    [DebugCommand("Sets all resources to 0", DisplayName = "RemoveAllResources")]
+    public static void RemoveAllResourcesDebug()
+    {
+        Instance.RemoveAllTemporaryResources();
+        Instance.RemoveAllPermanentResources();
+    }
+
+    [DebugCommand(DisplayName = "AddResource")]
+    public static void AddResourceDebug(string type, int amount)
+    {
+        ResourceType resourceType;
+
+        if (Enum.TryParse(typeof(ResourceType), type, true, out object result))
+        {
+            resourceType = (ResourceType)result;
+        }
+        else
+        {
+            type = type.ToLower();
+
+            switch (type)
+            {
+                case "scraps":
+                case "metal":
+                case "metals":
+                case "metalscrap":
+                case "metalscraps":
+                    resourceType = ResourceType.Scrap;
+                    break;
+
+                case "woods":
+                case "plank":
+                case "planks":
+                    resourceType = ResourceType.Wood;
+                    break;
+
+                case "fabrics":
+                case "cloth":
+                case "cloths":
+                case "clothing":
+                case "cotton":
+                case "cottons":
+                    resourceType = ResourceType.Fabric;
+                    break;
+
+                case "magnets":
+                    resourceType = ResourceType.Magnet;
+                    break;
+
+                case "techs":
+                case "technology":
+                case "elec":
+                case "electronic":
+                case "electronics":
+                    resourceType = ResourceType.Tech;
+                    break;
+
+                case "crystals":
+                case "thermalcrystal":
+                case "thermalcrystals":
+                case "gem":
+                case "gems":
+                    resourceType = ResourceType.Crystal;
+                    break;
+
+                default:
+                    return;
+            }
+        }
+
+        Instance.AddResource(resourceType, amount);
+    }
+    #endregion
+
+    #region Item Debug Commands
+    [DebugCommand("Will print out a log with the name of every item in the game", DisplayName = "ListAllItems", CloseDebugConsole = false)]
+    public static void ListAllItemsDebug()
+    {
+        string result = "List of all items in the game:\n";
+
+        foreach (Item item in AssetStorage.GetAssetsOfType<Item>())
+        {
+            if (item == null) return;
+
+            result += item.Name.Replace(" ", "") + "\n";
+        }
+
+        Debug.Log(result.Trim());
+    }
+
+    [DebugCommand(DisplayName = "AddItem")]
+    public static void AddItemDebug(string name, int amount = 1)
+    {
+        Item item = GetItem(name);
+
+        if (item == null) return;
+
+        Instance.AddItem(item, amount);
+        Debug.Log("Added " + amount + " " + item.Name + " to the inventory");
+    }
+
+    [DebugCommand(DisplayName = "RemoveItem")]
+    public static void RemoveItemDebug(string name, int amount = 1)
+    {
+        Item item = GetItem(name);
+
+        if (item == null) return;
+
+        Instance.RemoveItem(item, amount);
+        Debug.Log("Removed " + amount + " " + item.Name + " from the inventory");
+    }
+
+    [DebugCommand(DisplayName = "RemoveAllItems")]
+    public static void RemoveAllItemsDebug()
+    {
+        foreach (Item item in AssetStorage.GetAssetsOfType<Item>())
+        {
+            Instance.RemoveAllItem(item);
+        }
+        Debug.Log("Removed all items from inventory");
+    }
+
+    private static Item GetItem(string name)
+    {
+        name = name.Trim();
+
+        bool IsMatch(string s) => s.Replace(" ", "").Equals(name, StringComparison.OrdinalIgnoreCase);
+
+        foreach (Item item in AssetStorage.GetAssetsOfType<Item>())
+        {
+            if (IsMatch(item.Name) || IsMatch(item.name))
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    [DebugCommand("Items that have a ItemUpgrade component is considered an Upgrade", DisplayName = "AddAllUpgrades")]
+    public static void AddAllUpgrades()
+    {
+        foreach (Item item in AssetStorage.GetAssetsOfType<Item>())
+        {
+            if (item.HasItemComponent<ItemUpgrade>())
+            {
+                Instance.AddItem(item);
+            }
+        }
+        Debug.Log("Added all upgrade items to inventory");
+    }
+
+    [DebugCommand("Items that have a ItemUpgrade component is considered an Upgrade", DisplayName = "RemoveAllUpgrades")]
+    public static void RemoveAllUpgrades()
+    {
+        foreach (Item item in AssetStorage.GetAssetsOfType<Item>())
+        {
+            if (item.HasItemComponent<ItemUpgrade>())
+            {
+                Instance.RemoveAllItem(item);
+            }
+        }
+        Debug.Log("Removed all upgrade items from inventory");
+    }
+    #endregion
 
     [Serializable]
     public class SerializableItemAndAmount<T>

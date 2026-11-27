@@ -1,8 +1,10 @@
+using DebugTools;
 using UnityEngine;
 
 public class PlayerMeter : MonoBehaviour
 {
-    public bool PauseRealtimeDecay = false;
+    public static bool GodMode { get; set; } = false;
+
     private float maxWarmth = 100f;
     private float maxHealth = 100f;
     private float currentWarmth;
@@ -28,7 +30,7 @@ public class PlayerMeter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PauseRealtimeDecay)
+        if (!GodMode)
         {
             Decay();
 
@@ -74,6 +76,8 @@ public class PlayerMeter : MonoBehaviour
 
     public void Die()
     {
+        if (GodMode) return;
+
         ReferenceManager.Instance.gameManager.ResetWorld();
         ReferenceManager.Instance.gameManager.ResetTemporaryResources();
     }
@@ -89,4 +93,11 @@ public class PlayerMeter : MonoBehaviour
     public float GetMaxHealth() { return maxHealth; }
     public float GetCurrentWarmth() { return currentWarmth; }
     public float GetCurrentHealth() { return currentHealth; }
+
+    [DebugCommand("Toggles God Mode (invincibility)", DisplayName = "GodMode")]
+    public static void ToggleGodMode()
+    {
+        GodMode = !GodMode;
+        Debug.Log("Turned GodMode " + (GodMode ? "on" : "off"));
+    }
 }
