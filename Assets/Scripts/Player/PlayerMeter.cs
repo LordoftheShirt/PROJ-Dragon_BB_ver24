@@ -24,7 +24,7 @@ public class PlayerMeter : MonoBehaviour
     void Start()
     {
         _upgrades = PlayerUpgrades.Instance;
-        //ResetMeter();
+        ResetMeter();
     }
 
     // Update is called once per frame
@@ -78,6 +78,7 @@ public class PlayerMeter : MonoBehaviour
     {
         if (GodMode) return;
 
+        ReferenceManager.Instance.gameManager.IncreaseDay();
         ReferenceManager.Instance.gameManager.ResetWorld();
         ReferenceManager.Instance.gameManager.ResetTemporaryResources();
     }
@@ -86,7 +87,6 @@ public class PlayerMeter : MonoBehaviour
     {
         currentWarmth = maxWarmth;
         currentHealth = maxHealth;
-        
     }
 
     public float GetMaxWarmth() { return maxWarmth; }

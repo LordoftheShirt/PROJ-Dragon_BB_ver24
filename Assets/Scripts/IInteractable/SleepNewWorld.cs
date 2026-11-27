@@ -4,9 +4,6 @@ using UnityEngine.UI;
 
 public class SleepNewWorld : MonoBehaviour, IInteractable
 {
-    public static int DayNumber { get; private set; } = 1;
-    public static Action<int> OnSleep { get; set; }
-
     [SerializeField] private CanvasGroup sleepAnimationGroup;
     [SerializeField] private float sleepAnimationSpeed;
 
@@ -42,11 +39,9 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
             {
                 sleepAnimationTime = 0;
                 sleeping = false;
-                DayNumber++;
                 Inventory.Instance.ConvertTemporaryResourcesToPermanent();
+                ReferenceManager.Instance.gameManager.IncreaseDay();
                 ReferenceManager.Instance.gameManager.ResetWorld();
-
-                OnSleep?.Invoke(DayNumber);
             }
         }
         else

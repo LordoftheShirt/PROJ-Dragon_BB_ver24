@@ -1,16 +1,22 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static int DayNumber { get; private set; } = 1;
+    public static Action OnChangeDay { get; set; }
+
     private void Awake()
     {
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 90;
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return null;
+
         ResetWorld();
     }
 
@@ -28,6 +34,18 @@ public class GameManager : MonoBehaviour
     public void ResetTemporaryResources()
     {
         Inventory.Instance.RemoveAllTemporaryResources();
+    }
+
+    public void IncreaseDay()
+    {
+        DayNumber++;
+        OnChangeDay?.Invoke();
+    }
+
+    public void ResetDay()
+    {
+        DayNumber = 0;
+        OnChangeDay?.Invoke();
     }
 
     public void ResetWorld()

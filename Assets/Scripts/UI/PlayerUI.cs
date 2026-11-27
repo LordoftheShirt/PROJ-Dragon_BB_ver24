@@ -81,13 +81,15 @@ public class PlayerUI : Singleton<PlayerUI>
         Inventory.OnItemChanged += OnItemChanged;
 
         _dayCounterFormat = dayCounter.text;
+
         UpdateDayCounter();
-        SleepNewWorld.OnSleep += OnSleep;
+        GameManager.OnChangeDay += OnResetWorld;
     }
 
     private void OnDestroy()
     {
         Inventory.OnItemChanged -= OnItemChanged;
+        GameManager.OnChangeDay -= OnResetWorld;
     }
 
     private void OnItemChanged(Item item, int count, int change)
@@ -141,13 +143,13 @@ public class PlayerUI : Singleton<PlayerUI>
         stormTimeText.text = string.Format(_stormTimeFormat, span.ToString(STORM_TIME_FORMAT));
     }
 
-    private void OnSleep(int day)
+    private void OnResetWorld()
     {
         UpdateDayCounter();
     }
 
     private void UpdateDayCounter()
     {
-        dayCounter.text = string.Format(_dayCounterFormat, SleepNewWorld.DayNumber);
+        dayCounter.text = string.Format(_dayCounterFormat, GameManager.DayNumber);
     }
 }
