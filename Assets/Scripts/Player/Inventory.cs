@@ -19,6 +19,8 @@ public class Inventory : SingletonPersistent<Inventory>
     [SerializeField] private List<Blueprint> blueprintsUnlocked = new();
 
     #region Resources
+    public static ChangeDelegate<ResourceType> OnResourceTemporaryChanged { get => _temporaryResources.OnChanged; set => _temporaryResources.OnChanged = value; }
+    public static ChangeDelegate<ResourceType> OnResourcePermanentChanged { get => _permanentResources.OnChanged; set => _permanentResources.OnChanged = value; }
     public static ChangeDelegate<ResourceType> OnResourceChanged { get; set; }
     public void AddResource(ResourceType resourceType, int change)
     {
@@ -36,7 +38,9 @@ public class Inventory : SingletonPersistent<Inventory>
 
         OnResourceChanged?.Invoke(resourceType, GetResource(resourceType), change);
     }
-    public int GetResource(ResourceType resourceType) => _temporaryResources.GetResource(resourceType) + _permanentResources.GetResource(resourceType);
+    public int GetResource(ResourceType resourceType) => GetResourceTemporary(resourceType) + GetResourcePermanent(resourceType);
+    public int GetResourceTemporary(ResourceType resourceType) => _temporaryResources.GetResource(resourceType);
+    public int GetResourcePermanent(ResourceType resourceType) => _permanentResources.GetResource(resourceType);
     private void SetResource(ResourceDictionary dictionary, ResourceDictionary otherDictionary, ResourceType resourceType, int count)
     {
         int oldCount = dictionary.GetResource(resourceType);
@@ -72,11 +76,15 @@ public class Inventory : SingletonPersistent<Inventory>
         {
             PermanentResources[pair.Key] += pair.Value;
             types.Add(pair.Key);
+
+            OnResourcePermanentChanged?.Invoke(pair.Key, PermanentResources[pair.Key], pair.Value);
         }
 
         foreach (var type in types)
         {
+            int count = TemporaryResources[type];
             TemporaryResources[type] = 0;
+            OnResourceTemporaryChanged?.Invoke(type, 0, -count);
         }
 
         // No amount was actually changed so don't bother with the invoking OnResourceChanged

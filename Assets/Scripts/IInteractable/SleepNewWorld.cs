@@ -39,7 +39,6 @@ public class SleepNewWorld : MonoBehaviour, IInteractable
             {
                 sleepAnimationTime = 0;
                 sleeping = false;
-                Inventory.Instance.ConvertTemporaryResourcesToPermanent();
                 ReferenceManager.Instance.gameManager.IncreaseDay();
                 ReferenceManager.Instance.gameManager.ResetWorld();
             }
