@@ -22,7 +22,6 @@ public class MiniMapManager : MonoBehaviour
     public bool IsUnlocked => Inventory.Instance.HasItem(mapItem);
 
     private float size = 0.9f;
-    float yRotation = 180;
 
     private bool isOpen;
     private List<GameObject> mapObjects = new List<GameObject>();
@@ -59,7 +58,7 @@ public class MiniMapManager : MonoBehaviour
             //Later implement instantiation for POIs.
             ResourceNode node = mapObject.GetComponent<ResourceNode>();
             //Debug.Log((int)node.GetResourceType());
-            if(Vector3.Distance(playerMap.position, mapObjectPosition) < size)
+            if (Vector3.Distance(playerMap.position, mapObjectPosition) < size)
                 Instantiate(mapObjectTokenPrefabs[(int)node.GetResourceType()], mapObjectPosition, playerMap.rotation, playerMap);
         }
         ViewMap(false);
@@ -89,7 +88,7 @@ public class MiniMapManager : MonoBehaviour
     {
         if (showMap)
         {
-            playerMap.localRotation = Quaternion.Euler(xRotation, yRotation, playerMap.rotation.z);
+            playerMap.localRotation = Quaternion.Euler(xRotation, playerMap.rotation.y, playerMap.rotation.z);
             playerMap.gameObject.SetActive(showMap);
         }
         else

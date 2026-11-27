@@ -137,13 +137,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1616118373}
     - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: mapPrompt
+      value: 
+      objectReference: {fileID: 1251519620}
+    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: playerMap
       value: 
       objectReference: {fileID: 1708144431}
-    - target: {fileID: 3058454260273352574, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
-      propertyPath: isUnlocked
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7486441974095233042, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: cabbin
       value: 
@@ -168,6 +168,18 @@ PrefabInstance:
       propertyPath: directionalLight
       value: 
       objectReference: {fileID: 2114283754330233425}
+    - target: {fileID: 8243468339349818222, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: coldChange.m_Curve.Array.data[1].time
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8243468339349818222, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: coldChange.m_Curve.Array.data[0].value
+      value: -0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 8243468339349818222, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
+      propertyPath: coldChange.m_Curve.Array.data[3].value
+      value: -0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8548032252553464606, guid: c9e628e92a7a2464ab26047302690b60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 473.80524
@@ -962,6 +974,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1056411027}
   m_CullTransparentMesh: 1
+--- !u!1 &1251519620 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8689415650351826161, guid: 4d66e5989a2ed8b4e9cad2ca9106384c, type: 3}
+  m_PrefabInstance: {fileID: 6318498900153189657}
+  m_PrefabAsset: {fileID: 0}
 --- !u!225 &1584275727 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 6918849021560763628, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
@@ -2027,7 +2044,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7396622418518431438, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6331673503341241128, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5413398293320237273, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1743807069100517929, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 67b41601fc463e74980590e4dffbac3a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
