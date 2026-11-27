@@ -340,6 +340,8 @@ public class Inventory : SingletonPersistent<Inventory>
                     break;
 
                 case "magnets":
+                case "magnetite":
+                case "magnetites":
                     resourceType = ResourceType.Magnet;
                     break;
 
@@ -385,7 +387,10 @@ public class Inventory : SingletonPersistent<Inventory>
     }
 
     [DebugCommand(DisplayName = "AddItem")]
-    public static void AddItemDebug(string name, int amount = 1)
+    public static void AddItemDebug(string name) => AddItemDebug(name, 1);
+
+    [DebugCommand(DisplayName = "AddItem")]
+    public static void AddItemDebug(string name, int amount)
     {
         Item item = GetItem(name);
 

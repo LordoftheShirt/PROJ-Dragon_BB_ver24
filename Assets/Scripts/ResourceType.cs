@@ -53,7 +53,7 @@ public static class ResourceTypeUtil
                 return "Fabric";
 
             case ResourceType.Magnet:
-                return plural ? "Magnets" : "Magnet";
+                return "Magnetite";
 
             case ResourceType.Tech:
                 return plural ? "Electronics" : "Electronic";
