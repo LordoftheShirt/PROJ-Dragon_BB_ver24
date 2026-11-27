@@ -292,7 +292,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
             // SFX for tent and fireplace here.
 
-            if (placedExplosion != null)
+            if ((build == fireKitPrefab || build == tentPrefab) && placedExplosion != null)
                 Instantiate(placedExplosion, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);
 
             return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);

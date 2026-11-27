@@ -141,6 +141,7 @@ public class CraftingUI : Singleton<CraftingUI>
     public void Open()
     {
         GameCursor.Visible = false;
+        Time.timeScale = 0;
 
         mainPanel.SetActive(true);
 
@@ -185,6 +186,7 @@ public class CraftingUI : Singleton<CraftingUI>
     public void Close()
     {
         GameCursor.Visible = true;
+        Time.timeScale = 1;
 
         InputMapManager.Instance.EnablePlayerMap();
         mainPanel.SetActive(false);
@@ -194,6 +196,8 @@ public class CraftingUI : Singleton<CraftingUI>
 
     private void OnCloseInput(InputAction.CallbackContext ctx)
     {
+        if (!IsOpen) return;
+
         Close();
     }
 }

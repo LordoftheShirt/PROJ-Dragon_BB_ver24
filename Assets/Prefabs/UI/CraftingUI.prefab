@@ -1582,7 +1582,7 @@ MonoBehaviour:
   scrollRect: {fileID: 5040587609638161568}
   inspector: {fileID: 5458049561723814201}
   resourceSlotTemplate: {fileID: 5931797787321957121}
-  closeInput: {fileID: -5439025943508940422, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  closeInput: {fileID: 5488155884945983907, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &4936833555294659698
 GameObject:
   m_ObjectHideFlags: 0
