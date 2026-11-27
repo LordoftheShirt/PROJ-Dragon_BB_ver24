@@ -23,8 +23,8 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="2.8284271"
-     inkscape:cx="130.10765"
-     inkscape:cy="140.18392"
+     inkscape:cx="163.69522"
+     inkscape:cy="157.50804"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -34,7 +34,8 @@
   <path
      d="M 80,134 63,80 80,96 97,80 Z"
      fill="#f2fcff"
-     id="path1" />
+     id="path1"
+     style="display:none" />
   <path
      d="M 80,26 63,80 80,64 97,80 Z"
      fill="#79a8c3"
