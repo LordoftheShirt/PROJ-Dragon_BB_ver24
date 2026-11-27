@@ -1,10 +1,11 @@
+using DebugTools;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HouseChest : MonoBehaviour, IInteractable
+public class HouseChest : MonoBehaviour, IInteractable, IComponentDebugGUI
 {
     [SerializeField] private Transform chestRoof;
     private PlayerUI _playerUI;
@@ -75,33 +76,38 @@ public class HouseChest : MonoBehaviour, IInteractable
 
         Camera cam = Camera.main;
 
-        float time = 0;
-
-        void Set(float t)
+        Vector2 ScreenPos()
         {
-            time = t;
-
             Vector2 pos = cam.WorldToViewportPoint(transform.position);
 
             Vector2 halfScreenSize = _canvasScaler.referenceResolution / 2f;
-            Vector2 screenPoint = new(
+            return new(
                 Mathf.LerpUnclamped(-halfScreenSize.x, halfScreenSize.x, pos.x),
                 Mathf.LerpUnclamped(-halfScreenSize.y, halfScreenSize.y, pos.y)
                 );
-
-            for (int i = 0; i < length; i++)
-            {
-                RectTransform rect = rects[i];
-                rect.localPosition = Vector3.Lerp(startPos[i], screenPoint, t);
-                rect.localRotation = Quaternion.Slerp(startRot[i], Quaternion.identity, t);
-
-                rect.localScale = Vector2.Lerp(Vector2.one, Vector2.zero, Mathf.Max(0, t - 0.5f) * 2);
-            }
         }
 
+        void Set(int i, float t, ref float time)
+        {
+            time = t;
+
+            RectTransform rect = rects[i];
+            rect.localPosition = Vector3.Lerp(startPos[i], ScreenPos(), t);
+            rect.localRotation = Quaternion.Slerp(startRot[i], Quaternion.identity, t);
+
+            rect.localScale = Vector2.Lerp(Vector2.one, Vector2.zero, Mathf.Max(0, t - 0.5f) * 2);
+        }
+
+        float delayBetween = 0.05f;
         float duration = 0.5f;
-        DOTween.To(() => time, Set, 1, duration).SetEase(Ease.InSine);
-        yield return new WaitForSeconds(duration);
+        for (int i = 0; i < length; i++)
+        {
+            float time = 0;
+            int index = i;
+            DOTween.To(() => time, (t) => Set(index, t, ref time), 1, duration).SetDelay(index * delayBetween).SetEase(Ease.InSine);
+        }
+
+        yield return new WaitForSeconds(duration + delayBetween * (length - 1));
 
         chestRoof.DOLocalRotateQuaternion(Quaternion.Euler(-90, 0, 0), 1).SetEase(Ease.OutBounce);
 
@@ -116,5 +122,13 @@ public class HouseChest : MonoBehaviour, IInteractable
     public string GetDescription()
     {
         return "Store resources";
+    }
+
+    public void OnDebugGUI()
+    {
+        using (new DisableGUIScope(true))
+        {
+            DebugGUI.Property("Pos", Camera.main.WorldToViewportPoint(transform.position));
+        }
     }
 }

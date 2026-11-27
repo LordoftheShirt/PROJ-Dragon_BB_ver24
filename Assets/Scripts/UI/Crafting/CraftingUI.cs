@@ -140,6 +140,9 @@ public class CraftingUI : Singleton<CraftingUI>
 
     public void Open()
     {
+        if (_isOpen) return;
+        _isOpen = true;
+
         GameCursor.Visible = false;
         Time.timeScale = 0;
 
@@ -185,19 +188,18 @@ public class CraftingUI : Singleton<CraftingUI>
 
     public void Close()
     {
+        if (!_isOpen) return;
+        _isOpen = false;
+
         GameCursor.Visible = true;
         Time.timeScale = 1;
 
         InputMapManager.Instance.EnablePlayerMap();
         mainPanel.SetActive(false);
-
-        InputMapManager.Instance.EnablePlayerMap();
     }
 
     private void OnCloseInput(InputAction.CallbackContext ctx)
     {
-        if (!IsOpen) return;
-
         Close();
     }
 }
