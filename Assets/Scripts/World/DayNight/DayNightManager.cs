@@ -60,14 +60,15 @@ public class DayNightManager : MonoBehaviour
             ChangeTemprature(coldMultiplyer, UpdateTemprature(nightTempraturePreset));
             return;
         }
-        ChangeTemprature(coldMultiplyer, UpdateTemprature(coldChange.Evaluate(dayTimer / dayDuration) * 10));
+        ChangeTemprature(coldMultiplyer, UpdateTemprature(coldChange.Evaluate(1 - (dayTimer / dayDuration)) * 10));
     }
 
     private void ChangeTemprature(float oldChange, float newChange)
     {
         if (oldChange != newChange)        
             ReferenceManager.Instance.playerMeter.ChangeWarmthDecayrate(newChange);
-        coldMultiplyer = newChange;
+        else
+            coldMultiplyer = newChange;
     }
 
     private float UpdateTemprature(float newTemp)
