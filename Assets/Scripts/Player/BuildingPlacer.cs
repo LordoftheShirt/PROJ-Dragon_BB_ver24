@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -29,13 +30,14 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     [SerializeField] private GameObject placedExplosion;
 
     [Header("Material (Optional)")]
+    [SerializeField] private Material matPlaceable;
     [SerializeField] private Material matUnplaceable;
 
     [Header("LayerMask")]
     [SerializeField] private LayerMask whatIsGround;
 
-    private Material matPlaceable;
-    private Renderer rendCurrentMat;
+    private Renderer[] ghostRenderers;
+    private bool validPlacement;
 
     private float holdToPlaceSec = 1f;
     
@@ -87,21 +89,13 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
         PreviewGhostLocation();
 
-        bool canPlace = true;
-
-        // prevents ghosts from being placed if it's the wrong material.
-        if (rendCurrentMat != null && matUnplaceable != null && rendCurrentMat.sharedMaterial == matUnplaceable)
-        {
-            canPlace = false;
-        }
-
         // When preview build is active and the player is holding the confirm build button, this counts until holdToPlaceSec is reached, at which point the build is placed.
         if (isHoldingBuild)
         {
             // Flag is placed instantly, no hold needed
-            if (canPlace && currentGhost.CompareTag(flagGhostPrefab.tag))
+            if (validPlacement && currentGhost.CompareTag(flagGhostPrefab.tag))
             {
-                if (PlaceBuild(flagPrefab, Consumables.GetCurrentFlags()) != null)
+                if (PlaceBuild(flagPrefab, Consumables.GetCurrentFlags(), true) != null)
                 {
                     Consumables.UseFlag();
 
@@ -120,7 +114,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
                 }
             }
 
-            if (canPlace)
+            if (validPlacement)
             {
                 holdTimer += Time.deltaTime;
             }
@@ -136,14 +130,13 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
                 return;
             }
 
-            if (canPlace && holdTimer >= holdToPlaceSec)
+            if (validPlacement && holdTimer >= holdToPlaceSec)
             {
                 if (currentGhost.CompareTag(fireKitGhostPrefab.tag))
                 {
                     if (PlaceBuild(fireKitPrefab, Consumables.GetCurrentFirekits(), true) != null)
                     {
                         Consumables.UseFirekit();
-                        if (Consumables.GetCurrentFirekits() <= 0) UnselectHotbar();
                     }
                 }
                 else if (currentGhost.CompareTag(tentGhostPrefab.tag))
@@ -151,10 +144,10 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
                     if (PlaceBuild(tentPrefab, Consumables.GetCurrentTents(), true) != null)
                     {
                         Consumables.UseTent();
-                        if (Consumables.GetCurrentTents() <= 0) UnselectHotbar();
                     }
                 }
 
+                UnselectHotbar();
                 Destroy(currentGhost);
                 currentGhost = null;
 
@@ -201,9 +194,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
     {
         if (currentGhost != null && !isHoldingBuild)
         {
-
             Ray placementRange = new Ray(builderSource.position, builderSource.forward);
-
 
             // CURRENT BUG 1: must prevent the ghost mesh from clipping into walls.
             // CURRENT BUG 2: must prevent object stacking (need a way to tell "whatIsGround"); this is a problem for the placeBuild() function as well.
@@ -218,21 +209,35 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
                 currentGhost.transform.position = hitinfo.point;
 
                 // changes the ghost's material; its material determines whether it should be allowed to be placed or not.
+                bool isValidAngle = surfaceAngle <= maxSurfaceAngle;
+                bool isGroundLayer = (whatIsGround.value & (1 << hitinfo.collider.gameObject.layer)) != 0;
+
+                validPlacement = isValidAngle && isGroundLayer;
 
                 if (matPlaceable != null && matUnplaceable != null)
                 {
-                    bool isValidAngle = surfaceAngle <= maxSurfaceAngle;
-                    bool isGroundLayer = (whatIsGround.value & (1 << hitinfo.collider.gameObject.layer)) != 0;
-
-                    if (isValidAngle && isGroundLayer)
+                    void SetMaterial(Material mat)
                     {
-                        if (rendCurrentMat.sharedMaterial != matPlaceable)
-                            rendCurrentMat.sharedMaterial = matPlaceable;
+                        foreach (Renderer rend in ghostRenderers)
+                        {
+                            List<Material> list = new();
+                            int length = rend.sharedMaterials.Length;
+                            for (int i = 0; i < length; i++)
+                            {
+                                list.Add(mat);
+                            }
+
+                            rend.SetSharedMaterials(list);
+                        }
+                    }
+
+                    if (validPlacement)
+                    {
+                        SetMaterial(matPlaceable);
                     }
                     else
                     {
-                        if (rendCurrentMat.sharedMaterial != matUnplaceable)
-                            rendCurrentMat.sharedMaterial = matUnplaceable;
+                        SetMaterial(matUnplaceable);
                     }
                 }
             }
@@ -287,7 +292,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
             // SFX for tent and fireplace here.
 
-            if (placedExplosion != null)
+            if ((build == fireKitPrefab || build == tentPrefab) && placedExplosion != null)
                 Instantiate(placedExplosion, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);
 
             return Instantiate(build, currentGhost.transform.position, currentGhost.transform.rotation, buildingHolder.transform);
@@ -364,8 +369,7 @@ public class BuildingPlacer : Singleton<BuildingPlacer>
 
         if (currentGhost != null)
         {
-            rendCurrentMat = currentGhost.GetComponentInChildren<Renderer>();
-            matPlaceable = rendCurrentMat.sharedMaterial;
+            ghostRenderers = currentGhost.GetComponentsInChildren<Renderer>();
         }
 
     }

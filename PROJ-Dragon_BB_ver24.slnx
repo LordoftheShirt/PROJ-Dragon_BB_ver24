@@ -1,4 +1,5 @@
 ﻿<Solution>
+  <Project Path="DebugTools.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unified.Universal.Blur.csproj" />
   <Project Path="Coffee.UIEffect.csproj" />
@@ -11,6 +12,7 @@
   <Project Path="Unity.StarterAssets.Editor.csproj" />
   <Project Path="DOTween.Modules.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="Unity.StarterAssets.csproj" />
   <Project Path="FMODUnityResonance.csproj" />
   <Project Path="URPWizard.csproj" />
