@@ -11,14 +11,20 @@ public class HouseChest : MonoBehaviour, IInteractable, IComponentDebugGUI
     private PlayerUI _playerUI;
     private Canvas _canvas;
     private CanvasScaler _canvasScaler;
+    private Collider _collider;
 
     private bool _puttingResources;
+    private Vector2 _actualScreenPos;
+    private Vector2 _screenPos;
+    private bool _onScreen;
 
     private void Start()
     {
         _playerUI = PlayerUI.Instance;
         _canvas = _playerUI.GetComponentInParent<Canvas>(true);
         _canvasScaler = _playerUI.GetComponentInParent<CanvasScaler>(true);
+
+        _collider = GetComponentInChildren<Collider>(true);
     }
 
     public void Interact()
@@ -55,9 +61,9 @@ public class HouseChest : MonoBehaviour, IInteractable, IComponentDebugGUI
         inv.ConvertTemporaryResourcesToPermanent();
 
         chestRoof.DOKill();
-        chestRoof.DOLocalRotateQuaternion(Quaternion.Euler(-180, 0, 0), 1).SetEase(Ease.OutSine);
+        chestRoof.DOLocalRotateQuaternion(Quaternion.Euler(-180, 0, 0), 1).SetEase(Ease.OutSine).SetUpdate(true);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSecondsRealtime(0.5f);
 
         foreach (RectTransform rect in rects)
         {
@@ -74,25 +80,12 @@ public class HouseChest : MonoBehaviour, IInteractable, IComponentDebugGUI
             startRot[i] = rect.localRotation;
         }
 
-        Camera cam = Camera.main;
-
-        Vector2 ScreenPos()
-        {
-            Vector2 pos = cam.WorldToViewportPoint(transform.position);
-
-            Vector2 halfScreenSize = _canvasScaler.referenceResolution / 2f;
-            return new(
-                Mathf.LerpUnclamped(-halfScreenSize.x, halfScreenSize.x, pos.x),
-                Mathf.LerpUnclamped(-halfScreenSize.y, halfScreenSize.y, pos.y)
-                );
-        }
-
         void Set(int i, float t, ref float time)
         {
             time = t;
 
             RectTransform rect = rects[i];
-            rect.localPosition = Vector3.Lerp(startPos[i], ScreenPos(), t);
+            rect.localPosition = Vector3.Lerp(startPos[i], _screenPos, t);
             rect.localRotation = Quaternion.Slerp(startRot[i], Quaternion.identity, t);
 
             rect.localScale = Vector2.Lerp(Vector2.one, Vector2.zero, Mathf.Max(0, t - 0.5f) * 2);
@@ -104,7 +97,7 @@ public class HouseChest : MonoBehaviour, IInteractable, IComponentDebugGUI
         {
             float time = 0;
             int index = i;
-            DOTween.To(() => time, (t) => Set(index, t, ref time), 1, duration).SetDelay(index * delayBetween).SetEase(Ease.InSine);
+            DOTween.To(() => time, (t) => Set(index, t, ref time), 1, duration).SetDelay(index * delayBetween).SetEase(Ease.InSine).SetUpdate(true);
         }
 
         yield return new WaitForSeconds(duration + delayBetween * (length - 1));
@@ -124,11 +117,39 @@ public class HouseChest : MonoBehaviour, IInteractable, IComponentDebugGUI
         return "Store resources";
     }
 
+    private void LateUpdate()
+    {
+        if (!_puttingResources) return;
+
+        Camera cam = Camera.main;
+
+        _onScreen = IsVisibleFrom(_collider.bounds, cam);
+
+        if (!_onScreen) return;
+
+        Vector2 pos = cam.WorldToViewportPoint(transform.position);
+
+        Vector2 halfScreenSize = _canvasScaler.referenceResolution / 2f;
+        _actualScreenPos = new(
+            Mathf.LerpUnclamped(-halfScreenSize.x, halfScreenSize.x, pos.x),
+            Mathf.LerpUnclamped(-halfScreenSize.y, halfScreenSize.y, pos.y)
+            );
+
+        _screenPos = Vector2.Lerp(_screenPos, _actualScreenPos, 25 * Time.unscaledDeltaTime);
+    }
+
+    public bool IsVisibleFrom(Bounds bounds, Camera camera)
+    {
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
+        return GeometryUtility.TestPlanesAABB(planes, bounds);
+    }
+
     public void OnDebugGUI()
     {
         using (new DisableGUIScope(true))
         {
-            DebugGUI.Property("Pos", Camera.main.WorldToViewportPoint(transform.position));
+            DebugGUI.Property("V", Camera.main.WorldToViewportPoint(transform.position));
+            DebugGUI.Property("S", Camera.main.WorldToScreenPoint(transform.position));
         }
     }
 }
