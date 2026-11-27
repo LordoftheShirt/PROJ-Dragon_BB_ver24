@@ -36,6 +36,8 @@ public class PlayerUI : Singleton<PlayerUI>
     [SerializeField] private ResourceUISlot resourceUISlotTemplate;
     private ResourceUISlot[] _resourceUISlots;
 
+    public ResourceUISlot[] ResourceUISlots => _resourceUISlots;
+
     [Header("Compass")]
     [SerializeField] private Item compassItem;
     [SerializeField] private GameObject compass;

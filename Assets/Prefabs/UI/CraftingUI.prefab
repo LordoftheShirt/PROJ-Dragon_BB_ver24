@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22c3c1c97fb99f4e8979bb1610f6d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceUISlot
+  mode: 2
   sdfGraphic: {fileID: 0}
   colorGraphics:
   - {fileID: 8715900581075771814}
