@@ -387,10 +387,10 @@ public class Inventory : SingletonPersistent<Inventory>
     }
 
     [DebugCommand(DisplayName = "AddItem")]
-    public static void AddItemDebug(string name) => AddItemDebug(name, 1);
+    public static void AddItemDebug(string name) => AddItemsDebug(name, 1);
 
-    [DebugCommand(DisplayName = "AddItem")]
-    public static void AddItemDebug(string name, int amount)
+    [DebugCommand(DisplayName = "AddItems")]
+    public static void AddItemsDebug(string name, int amount)
     {
         Item item = GetItem(name);
 

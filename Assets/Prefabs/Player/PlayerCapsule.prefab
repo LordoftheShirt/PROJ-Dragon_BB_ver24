@@ -232,6 +232,7 @@ MonoBehaviour:
   tentGhostPrefab: {fileID: 8845116247779368566, guid: bcb204d9bd8310f47be558f330ea6167, type: 3}
   tentPrefab: {fileID: 8845116247779368566, guid: b5a1f753ab063dc448ee4b0edc835170, type: 3}
   placedExplosion: {fileID: 4006051852673508161, guid: f42ac1c73bb8d5047920ff52ab922c91, type: 3}
+  matPlaceable: {fileID: 2100000, guid: 09ad2c89003c39d46b2be97894fc3b1c, type: 2}
   matUnplaceable: {fileID: 2100000, guid: be83220420ccd324fa2ccae0042b42f8, type: 2}
   whatIsGround:
     serializedVersion: 2
