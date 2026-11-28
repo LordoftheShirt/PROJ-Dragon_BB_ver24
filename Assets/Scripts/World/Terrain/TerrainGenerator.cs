@@ -64,7 +64,7 @@ public class TerrainGenerator : MonoBehaviour
     #region biome specific settings
     [Header("Biome Settings")]
     [Tooltip("This determines how much the biomes will blend. For no blending use 0.")]
-    [Range(0, 10)]
+    [Range(0, 20)]
     public int biomeBlendRadius = 5;
 
     public int biomeInnerRadius = 200;
@@ -85,6 +85,7 @@ public class TerrainGenerator : MonoBehaviour
     private int[,] biomes;
     private int[] biomeMap;
     private BiomePercent[] biomeMapPercentages;
+    float[,] biomeBlendingWeightMatrix;
 
     class BiomePercent
     {
@@ -160,16 +161,61 @@ public class TerrainGenerator : MonoBehaviour
 
     void Start()
     {
+        InitTerrainGeneration();
+
+    }
+
+
+    //initializes the values that will be used during the terrain generation
+    private void InitTerrainGeneration()
+    {
+        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        Debug.Log("Initializing terraing values...");
+        stopwatch.Start();
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        //CreateNewMap();
 
         biomeSnowfields = new Snowfields();
         biomeCrystalIcefields = new CrystalIcefields();
         biomeRockyHighlands = new RockyHighlands();
 
         resourceClusterSpawner = this.GetComponent<ResourceClusterSpawner>();
+
+        InitBiomeBlendingMatrix();
+
+        stopwatch.Stop();
+        Debug.Log("Initializing done...\nTime taken to initialize: " + (stopwatch.Elapsed));
+        stopwatch.Reset();
+
     }
+
+    private void InitBiomeBlendingMatrix()
+    {
+        biomeBlendingWeightMatrix = new float[biomeBlendRadius * 2 + 1, biomeBlendRadius * 2 + 1];
+
+        //kollar Moore's neighbourhood runt cellen
+        //och samlar ihop vilka biomer vi har
+        for (int a = -biomeBlendRadius; a < biomeBlendRadius + 1; a++)
+        {
+            for (int b = -biomeBlendRadius; b < biomeBlendRadius + 1; b++)
+            {
+                //använd cells distans från mittpunkten för att räkna utt dens weight
+                //distans = använda pythagoras,  c = roten ur ((a*a) + (b*b)
+                float c = Mathf.Sqrt((a * a) + (b * b));
+
+                if (c > biomeBlendRadius)
+                    continue;
+
+                c = c == 0 ? 1 : c; //sätt c = 1 om c = 0, annars c = c
+
+                float weight = 1 / c;
+
+                biomeBlendingWeightMatrix[a + biomeBlendRadius, b + biomeBlendRadius] = weight;
+            }
+        }
+    }
+
 
     void Update()
     {
@@ -220,9 +266,13 @@ public class TerrainGenerator : MonoBehaviour
             Debug.LogWarning("ChunkSize is too small on " + this.gameObject.name + " it needs to be larger than 0.");
             return;
         }
+
+        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        stopwatch.Start();
+
+
         zSize = xSize = terrainSize;
         centerPoint = terrainSize / 2;
-
 
         CreateMeshShape();
         CreateTriangles();
@@ -232,6 +282,10 @@ public class TerrainGenerator : MonoBehaviour
         PlaceResources();
 
         PlaceDecorations();
+
+        stopwatch.Stop();
+        Debug.Log("Time taken to generate terrain: " + (stopwatch.Elapsed));
+        stopwatch.Reset();
     }
 
     private void CreateBiomes()
@@ -343,12 +397,10 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
+
+
     private void BlendBiomes()
     {
-        int minBlendLength = 0 - biomeBlendRadius;
-        int maxBlendLength = biomeBlendRadius + 1;
-
-
         //create temporary map with the size of the biomeMap
         //int[] tBiomeMap = new int[biomeMap.Length];
         BiomePercent[] tBiomeMap = new BiomePercent[biomeMap.Length];
@@ -360,75 +412,94 @@ public class TerrainGenerator : MonoBehaviour
             {
                 int pos = x * xSize + z;
 
-                //get this biome
-                //int biome = biomeMap[pos];
-
-
-                int biome1Count = 0;
-                int biome2Count = 0;
-                int biome3Count = 0;
-                float divideLength = 0;
+                float biome1Weight = 0;
+                float biome2Weight = 0;
+                float biome3Weight = 0;
+                float divideWeight = 0;
 
                 //kollar Moore's neighbourhood runt cellen
                 //och samlar ihop vilka biomer vi har
-                for (int a = minBlendLength; a < maxBlendLength; a++)
+                for (int a = -biomeBlendRadius; a < biomeBlendRadius + 1; a++)
                 {
-                    for (int b = minBlendLength; b < maxBlendLength; b++)
+                    for (int b = -biomeBlendRadius; b < biomeBlendRadius + 1; b++)
                     {
+                        if (Mathf.Abs(a) + Mathf.Abs(b) > biomeBlendRadius + 2)
+                            continue;
+
                         int tX = x + a;
                         int tZ = z + b;
                         int tPos = (tX * xSize) + tZ;
 
-                        if (tX < 0 || tZ < 0 || tPos >= biomeMap.Length )
+                        if (tX < 0 || tZ < 0 || tPos >= biomeMap.Length)
                         {
-                            //Debug.Log("skipped saving this position " + tPos + " x: "  + x  + " z: " + z);
                             continue;
                         }
 
-
+                        //float weight = LinearBiomeWeight();
+                        //float weight = GaussianLikeBiomeWeight(a, b);
+                        float weight = GaussianLikeBiomeWeightFromMatrix(a, b);
 
                         int tBiome = biomeMap[tPos];
 
-                        if(tBiome  == 0)
-                        {
-                            biome1Count++;
-                        }
-                        else if(tBiome == 1)
-                        {
-                             biome2Count++;
-                        }
+                        if (tBiome == 0)
+                            biome1Weight += weight;
+                        else if (tBiome == 1)
+                            biome2Weight += weight;
                         else
-                        {
-                            biome3Count++;
-                        }
-                        divideLength++;
+                            biome3Weight += weight;
+                        
+                        divideWeight += weight;
+
                     }
                 }
 
-
-
-
                 //räknar ut procenten för varje biom
-                if(divideLength == 0)
-                    divideLength = 1;
-                float pBiome1 = biome1Count / (float)divideLength;
-                float pBiome2 = biome2Count / (float)divideLength;
-                float pBiome3 = biome3Count / (float)divideLength;
+                if (divideWeight == 0)
+                    divideWeight = 1;
+                float pBiome1 = biome1Weight / (float)divideWeight;
+                float pBiome2 = biome2Weight / (float)divideWeight;
+                float pBiome3 = biome3Weight / (float)divideWeight;
 
 
                 //och lägg till detta i arrayen
-
-                BiomePercent biomePercent = new BiomePercent(pBiome1,pBiome2,pBiome3);
+                BiomePercent biomePercent = new BiomePercent(pBiome1, pBiome2, pBiome3);
 
                 if (pos >= 0 && pos < biomeMap.Length)
                     tBiomeMap[pos] = biomePercent;
             }
         }
 
-        //set biomeMap = tempMap
         biomeMapPercentages = tBiomeMap;
     }
 
+
+    #region biome blending modes
+    private float GaussianLikeBiomeWeightFromMatrix(int a, int b)
+    {
+        return biomeBlendingWeightMatrix[a + biomeBlendRadius, b + biomeBlendRadius];
+    }
+
+
+    private float GaussianLikeBiomeWeight(int a, int b)
+    {
+        //använd cells distans från mittpunkten för att räkna utt dens weight
+        //distans = använda pythagoras,  c = roten ur ((a*a) + (b*b)
+        float c = Mathf.Sqrt((a * a) + (b * b));
+        c = c == 0 ? 1 : c; //sätt c = 1 om c = 0, annars c = c
+
+        //test 1: 
+        //formel: float weight = 1 / c;
+        float weight = 1 / c;
+        return weight;
+    }
+
+
+    private float LinearBiomeWeight()
+    {
+        return 1;
+    }
+
+    #endregion
 
     private void CreateMeshShape()
     {
@@ -638,17 +709,9 @@ public class TerrainGenerator : MonoBehaviour
                 }
 
 
-
                 //olika saker beroende på biome   PLACHOLDER SKA SE FINARE UT!!!!!
                 GameObject obj = treeToPlace;
 
-                Renderer r = obj.GetComponent<Renderer>(); //kommer ta as mycket kraft
-                if (r != null) 
-                {
-                    obj.GetComponent<Renderer>().sharedMaterial.color = Color.red;
-                }
-                
-                
                 float perlin = Mathf.PerlinNoise(x * .3f, z * .3f);
                 int pos2 = (z * xSize) + x;
 

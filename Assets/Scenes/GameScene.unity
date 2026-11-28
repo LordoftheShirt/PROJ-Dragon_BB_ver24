@@ -161,7 +161,7 @@ MonoBehaviour:
   objToPlace2: {fileID: 919132149155446097, guid: 2cf61b3a092437f4080bf59db195d619, type: 3}
   objToPlace3: {fileID: 919132149155446097, guid: 46d7b6de10f156e4088012935285f8bb, type: 3}
   house: {fileID: 976564111}
-  biomeBlendRadius: 10
+  biomeBlendRadius: 20
   biomeInnerRadius: 200
   biomeMiddleRadius: 350
   voronoiGridSize: 8
@@ -1277,7 +1277,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 881193398301843028, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -59.99939
+      value: -59.99951
       objectReference: {fileID: 0}
     - target: {fileID: 1593804173212233310, guid: 3984a9baca6651e40bfc7254de9bca2b, type: 3}
       propertyPath: m_SizeDelta.x
